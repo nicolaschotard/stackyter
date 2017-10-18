@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 """Run a jupyter at CC-IN2P3, setup the LSST stack, and display it localy."""
 
+
+import sys
 import subprocess
 from argparse import ArgumentParser
 from argparse import ArgumentDefaultsHelpFormatter
@@ -36,26 +38,23 @@ if __name__ == '__main__':
                         " (>v13) must be set up on centos7 (cca7).")
     args = parser.parse_args()
 
+    # Check if a configuration file is given
     if args.config is not None:
         config = yaml.load(open(args.config, 'r'))
-        default = vars(parser.parse_args([]))
-        useropt = vars(parser.parse_args())
-        diffopt = {k: v for k, v in useropt.items() if useropt[k] != default[k]}
-        default.update(config)
-        default.update(diffopt)
-        for k, v in default.items():
-            setattr(args, k, v)
-    print(vars(args))
-    qs
-    #print(parser.parse_args(list(default)))
-    
+        for opt, val in args._get_kwargs():
+            # only keep option value from the config file
+            # if the user has not set it up from command line
+            if opt in config and '--' + opt not in sys.argv:
+                setattr(args, opt, config[opt])
+
+    # A proper username is actually the only mandatory thing we need
     if args.username is None:
         raise IOError("Option 'username' is mandatory.")
 
-    #asasas
-    packages = ["pipe_tasks", "display_ds9",  "obs_subaru",
-                "jointcal", "display_matplotlib -t nchotard"]
+    # Make sure that we have a list (even empty) for packages
+    args.packages = args.packages if isinstance(args.packages, list) else args.packages.split(",")
 
+    # Start building the command line that will be launched at CC-IN2P3
     # Open the ssh tunnel to a CC-IN2P3 host
 #    cmd = "xdg-open http://localhost:20001/tree &\n"
     cmd = "ssh -tt -L 20001:localhost:20002 %s@%s.in2p3.fr << EOF\n" % \
@@ -66,7 +65,7 @@ if __name__ == '__main__':
 
     # Setup the lsst stack and packages
     cmd += "source /sps/lsst/software/lsst_distrib/%s/loadLSST.bash\n" % args.vstack
-    cmd += ''.join(["setup %s\n" % package for package in packages])
+    cmd += ''.join(["setup %s\n" % package for package in args.packages])
 
     # Add local libraries to the PATH and PYTHOPATh
     cmd += 'export PYTHONPATH="/sps/lsst/dev/nchotard/demo/python3/lib/python3.6/site-packages:\$PYTHONPATH"\n'
@@ -76,7 +75,7 @@ if __name__ == '__main__':
     cmd += "cd %s\n" % args.workdir
 
     # Launch jupyter
-    cmd += "jupyter %s --no-browser --port=20002 --ip=127.0.0.1\n" % args.jupyter
+    cmd += 'jupyter %s --no-browser --port=20002 --ip=127.0.0.1\n' % args.jupyter
 
     # Make sure we can kill it properly
     cmd += "kill -9 `ps | grep jupyter | awk '{print $1}'`\n"
