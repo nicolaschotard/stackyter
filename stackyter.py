@@ -82,7 +82,7 @@ if __name__ == '__main__':
     cmd += "while [[ \$servers != *'127.0.0.1:20002'* ]]; do sleep 1; servers=\`jupyter notebook list\`; echo \$servers; done\n"
     cmd += "export servers=\`jupyter notebook list | grep '127.0.0.1:20002'\`\n"
     cmd += "export TOKEN=\`echo \$servers | sed 's/\//\\n/g' | grep token | sed 's/ /\\n/g' | grep token \`\n"
-    cmd += "echo http://localhost:20001/\$TOKEN\n"  # print that in color with a nice message
+    cmd += "echo -e '\\x1B[01;94m    Copy/paste this URL into your browser to run the notebook localy 'http://localhost:20001/\$TOKEN' \\x1B[0m'\n"
 
     # Go back to the jupyter server
     cmd += 'fg\n'
