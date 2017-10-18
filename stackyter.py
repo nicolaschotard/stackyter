@@ -75,9 +75,19 @@ if __name__ == '__main__':
     cmd += "cd %s\n" % args.workdir
 
     # Launch jupyter
-    cmd += 'jupyter %s --no-browser --port=20002 --ip=127.0.0.1\n' % args.jupyter
+    cmd += 'jupyter %s --no-browser --port=20002 --ip=127.0.0.1 &\n' % args.jupyter
 
-    # Make sure we can kill it properly
+    # Get the token number and print out the right web page to open
+    cmd += "export servers=\`jupyter notebook list\`\n"
+    cmd += "while [[ \$servers != *'127.0.0.1:20002'* ]]; do sleep 1; servers=\`jupyter notebook list\`; echo \$servers; done\n"
+    cmd += "export servers=\`jupyter notebook list | grep '127.0.0.1:20002'\`\n"
+    cmd += "export TOKEN=\`echo \$servers | sed 's/\//\\n/g' | grep token | sed 's/ /\\n/g' | grep token \`\n"
+    cmd += "echo http://localhost:20001/\$TOKEN\n"  # print that in color with a nice message
+
+    # Go back to the jupyter server
+    cmd += 'fg\n'
+
+    # And make sure we can kill it properly
     cmd += "kill -9 `ps | grep jupyter | awk '{print $1}'`\n"
 
     # Close
