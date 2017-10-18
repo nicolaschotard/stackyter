@@ -1,9 +1,11 @@
-# stackyter
+stackyter
+=========
+
 LSST stack + Jupyter = stackyter
 
+Available options and usage
+===========================
 
-Available options and usage::
-  
   usage: stackyter.py [options]
 
   Run Jupyter on CC-IN2P3, setup the LSST stack, and display it localy.
