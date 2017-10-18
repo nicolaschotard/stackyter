@@ -3,8 +3,7 @@ stackyter
 
 LSST stack + Jupyter = stackyter
 
-Available options and usage
-===========================
+**Available options and usage**::
 
   usage: stackyter.py [options]
 
