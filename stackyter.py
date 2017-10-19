@@ -20,7 +20,7 @@ if __name__ == '__main__':
     parser.add_argument('--config',
                         help='Configuration file containing a set of option values. '
                         'The content of this file will be overwritten by any given'
-                        ' command line option values shown below.')
+                        ' command line options.')
     parser.add_argument('--username', help='Your CC-IN2P3 user name. Mandatory '
                         'either from command line or in the configuration file.')
     parser.add_argument("--workdir", default='\$HOME',
@@ -33,8 +33,8 @@ if __name__ == '__main__':
     parser.add_argument("--jupyter", default="notebook",
                         help="Either launch a jupiter notebook or a jupyter lab.")
     parser.add_argument("--cca", default="cca7",
-                        help="Either connecte to ccage or cca7. ccage might be used"
-                        " for old version of the stack, whereas all newer version"
+                        help="Either connect to ccage or cca7. ccage might be used"
+                        " for old versions of the stack, whereas all newer versions"
                         " (>v13) must be set up on centos7 (cca7).")
     args = parser.parse_args()
 
@@ -56,7 +56,6 @@ if __name__ == '__main__':
 
     # Start building the command line that will be launched at CC-IN2P3
     # Open the ssh tunnel to a CC-IN2P3 host
-#    cmd = "xdg-open http://localhost:20001/tree &\n"
     cmd = "ssh -tt -L 20001:localhost:20002 %s@%s.in2p3.fr << EOF\n" % \
           (args.username, args.cca)
 
@@ -71,6 +70,7 @@ if __name__ == '__main__':
     cmd += 'export PYTHONPATH="/sps/lsst/dev/nchotard/demo/python3/lib/python3.6/site-packages:\$PYTHONPATH"\n'
     cmd += 'export PATH="/sps/lsst/dev/nchotard/demo/python3/bin:\$PATH:"\n'
     cmd += 'export JUPYTERLAB_DIR="/sps/lsst/dev/nchotard/demo/python3/share/jupyter/lab"\n'
+
     # Move to the working directory
     cmd += "cd %s\n" % args.workdir
 
