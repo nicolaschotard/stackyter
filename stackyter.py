@@ -11,7 +11,13 @@ import yaml
 
 if __name__ == '__main__':
 
-    description = """Run Jupyter on CC-IN2P3, setup the LSST stack, and display it localy."""
+    description = """Run Jupyter on CC-IN2P3, setup the LSST stack, and display it localy.
+
+    This script will allow you to run a jupyter notebook (or lab) at CC-IN2P3 while displaying it
+    localy in your favorite brower. It is mainly intended to help LSST members to interact with the
+    datasets already available at CC-IN2P3 using Python. But setting up the LSST stack is not mandatory,
+    making this script useful in other (LSST) contexts.
+    """
     prog = "stackyter.py"
     usage = """%s [options]""" % prog
 
@@ -25,8 +31,9 @@ if __name__ == '__main__':
                         'either from command line or in the configuration file.')
     parser.add_argument("--workdir", default='\$HOME',
                         help="Your working directory at CC-IN2P3")
-    parser.add_argument("--vstack", default='w_2017_38',
-                        help="Version of the stack you want to setup up.")
+    parser.add_argument("--vstack",
+                        help="Version of the stack you want to setup up."
+                        " If not given, the LSST stack will not be set up.")
     parser.add_argument("--packages", default=None,
                         help="A list of packages you want to setup. Coma separated"
                         " from command line, or a list in the config file.")
@@ -62,14 +69,16 @@ if __name__ == '__main__':
     # Print the hostname; for the record
     cmd += "hostname\n"
 
-    # Setup the lsst stack and packages
-    cmd += "source /sps/lsst/software/lsst_distrib/%s/loadLSST.bash\n" % args.vstack
-    cmd += ''.join(["setup %s\n" % package for package in args.packages])
+    # Setup the lsst stack and packages if a version of the stack if given
+    if args.vtack is not None:
+        cmd += "source /sps/lsst/software/lsst_distrib/%s/loadLSST.bash\n" % args.vstack
+        cmd += ''.join(["setup %s\n" % package for package in args.packages])
 
-    # Add local libraries to the PATH and PYTHOPATh
+    # Add local libraries to the PATH and PYTHONPATH
     cmd += 'export PYTHONPATH="/sps/lsst/dev/nchotard/demo/python3/lib/python3.6/site-packages:\$PYTHONPATH"\n'
     cmd += 'export PATH="/sps/lsst/dev/nchotard/demo/python3/bin:\$PATH:"\n'
-    cmd += 'export JUPYTERLAB_DIR="/sps/lsst/dev/nchotard/demo/python3/share/jupyter/lab"\n'
+    if args.jupyter == 'lab':
+        cmd += 'export JUPYTERLAB_DIR="/sps/lsst/dev/nchotard/demo/python3/share/jupyter/lab"\n'
 
     # Move to the working directory
     cmd += "cd %s\n" % args.workdir

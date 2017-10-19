@@ -12,7 +12,7 @@ README = '/'.join(os.path.realpath(__file__).split('/')[:-1]) + '/README.rst'
 VERSION = '/'.join(os.path.realpath(__file__).split('/')[:-1]) + '/version.py'
 
 # Package name
-NAME = 'extinctions'
+NAME = 'stackyter'
 
 # Scripts (in scripts/)
 SCRIPTS = ["stackyter.py"]
