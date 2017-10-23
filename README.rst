@@ -14,6 +14,7 @@ Usage
 -----
 
 ::
+   
    stackyter.py [options]
 
 The configuration file can contain any (or all) options available
