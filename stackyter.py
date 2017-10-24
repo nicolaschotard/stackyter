@@ -93,11 +93,11 @@ if __name__ == '__main__':
     # First get the runing version of python
     cmd += "export VPY=\`ls /sps/lsst/software/lsst_distrib/%s/python/"  % args.vstack + \
            " | egrep -o 'miniconda[2,3]' | egrep -o '[2,3]'\`\n"
-    cmd += "echo \$VPY\n"
-    
+    cmd += "if [ \$VPY -eq 2 ]; then export FVPY=2.7; else export FVPY=3.6; fi\n"
+
     # Use default paths to make sure that jupyter is available
     if args.libs is None:
-        args.libs = ['/sps/lsst/dev/nchotard/demo/python\$VPY/lib/python\$PYTHON_VER/site-packages']
+        args.libs = ['/sps/lsst/dev/nchotard/demo/python\$VPY/lib/python\$FVPY/site-packages']
     if args.bins is None:
         args.bins = ["/sps/lsst/dev/nchotard/demo/python\$VPY/bin"]
     for lib in args.libs:
@@ -125,13 +125,14 @@ if __name__ == '__main__':
 
     # Get the token number and print out the right web page to open
     cmd += "export servers=\`jupyter notebook list\`\n"
+    # If might have to wait a little bit until the server is actually running...
     cmd += "while [[ \$servers != *'127.0.0.1:20002'* ]]; " + \
            "do sleep 1; servers=\`jupyter notebook list\`; echo \$servers; done\n"
     cmd += "export servers=\`jupyter notebook list | grep '127.0.0.1:20002'\`\n"
     cmd += "export TOKEN=\`echo \$servers | sed 's/\//\\n/g' | " + \
            "grep token | sed 's/ /\\n/g' | grep token \`\n"
-    cmd += "echo -e '\\x1B[01;92m    Copy/paste this URL into your browser to " + \
-           "run the notebook localy 'http://localhost:20001/\$TOKEN' \\x1B[0m'\n"
+    cmd += "printf '\\n    Copy/paste this URL into your browser to run the notebook" + \
+           " localy \n\\x1B[01;92m       'http://localhost:20001/\$TOKEN' \\x1B[0m\\n\\n'\n"
 
     # Go back to the jupyter server
     cmd += 'fg\n'
