@@ -12,7 +12,7 @@ with open(path.join(here, "README.rst")) as readme:
     long_description = readme.read()
 
 # Get __version__ from version.py without importing package itself.    
-with open(path.join(here, "version.py")) as version:
+with open(path.join(here, "version.txt")) as version:
     version_number = version.read().split('"')[1]
 
 # Package name
