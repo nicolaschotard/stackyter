@@ -19,8 +19,8 @@ Usage
 
 The configuration file can contain any (or all) options available
 through command line. An example of such a file can be found `here
-<example_config.yaml>`_. The only option that you **must** use is the
-`--username` option.
+<https://github.com/nicolaschotard/stackyter/blob/master/example_config.yaml>`_. The
+only option that you **must** use is the `--username` option.
 
 
 Options
