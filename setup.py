@@ -5,15 +5,11 @@
 from os import path
 from setuptools import setup
 
-here = path.abspath(path.dirname(__file__))
+VERSION = "0.5"
 
 # Long description loaded from the README
-with open(path.join(here, "README.rst")) as readme:
+with open(path.join(path.abspath(path.dirname(__file__)), "README.rst")) as readme:
     long_description = readme.read()
-
-# Get __version__ from version.py without importing package itself.    
-with open(path.join(here, "version.txt")) as version:
-    version_number = version.read().split('"')[1]
 
 # Package name
 NAME = 'stackyter'
@@ -29,7 +25,7 @@ CLASSIFIERS = ['Development Status :: 3 - Alpha',
                'Topic :: Scientific/Engineering :: Astronomy']
 
 setup(name=NAME,
-      version=version_number,
+      version=VERSION,
       description=("Local display of a jupyter notebook running at CC-IN2P3"),
       license="MIT",
       classifiers=CLASSIFIERS,

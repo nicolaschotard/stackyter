@@ -18,9 +18,9 @@ Usage
    stackyter.py [options]
 
 The configuration file can contain any (or all) options available
-through command line. An exemple of such a file can be found `here
-<config.yaml>`_. The only option that you **must** use, and which is
-actually not optional, is the `--username` option.
+through command line. An example of such a file can be found `here
+<example_config.yaml>`_. The only option that you **must** use is the
+`--username` option.
 
 
 Options
@@ -89,7 +89,7 @@ Version 2 (2.7) and 3 (>3.4) are available for almost all weeklies, with followi
 Use the LSST stack
 ------------------
 
-Many exemples on how to use the LSST stack and how to work with its
+Many examples on how to use the LSST stack and how to work with its
 outputs are presented `here
 <https://github.com/nicolaschotard/lsst_drp_analysis/tree/master/stack>`_.
 
