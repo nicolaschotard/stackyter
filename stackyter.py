@@ -68,7 +68,7 @@ if __name__ == '__main__':
 
     # A valid username (and the corresponding password) is actually the only mandatory thing we need
     if args.username is None:
-        raise IOError("Option 'username' is mandatory.")
+        raise IOError("You must give you CC-IN2P3 username through the '--username' option.")
 
     # Make sure that we have a list (even empty) for packages
     args.packages = string_to_list(args.packages)

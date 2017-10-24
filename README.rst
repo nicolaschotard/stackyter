@@ -4,11 +4,11 @@ stackyter
 LSST stack + Jupyter = stackyter
 
 This script will allow you to run a jupyter notebook (or lab) at
-CC-IN2P3 while displaying it localy in your favorite brower. It is
-mainly intended to help LSST members to interact with the datasets
-already available at CC-IN2P3 using Python. But setting up the
-LSST stack is not mandatory, making this script useful in other
-(LSST) contexts.
+CC-IN2P3 while displaying it localy in your local brower. It is mainly
+intended to help LSST members to interact with the datasets already
+available at CC-IN2P3 using Python. But setting up the LSST stack is
+not mandatory, making this script useful in other (LSST) contexts
+where a Jupyter notebook is needed.
 
 Usage
 -----
@@ -19,7 +19,8 @@ Usage
 
 The configuration file can contain any (or all) options available
 through command line. An exemple of such a file can be found `here
-<config.yaml>`_.
+<config.yaml>`_. The only option that you **must** use, and which is
+actually not optional, is the `--username` option.
 
 
 Options
@@ -74,11 +75,16 @@ A few of them that you might want to use are::
 These versions (and all the others) have been built under CentOS7, and
 must be used under a compatible system (CentOS7 or Ubuntu). To connect
 to a CentOS7 machine on CC-IN2P3, use cca7 instead of ccage (default
-value of this script.
+value of this script).
 
-For versions of the weeklies older than `w_2017_27`, the python 2
-version was named `w_2017_??`, while the python 3 version was named
-`w_2017_py3`.
+Version 2 (2.7) and 3 (>3.4) are available for almost all weeklies, with following nomencalture:
+
+- for weeklies < `w_2017_27`:
+  - Python 2 -> `w_2017_??`
+  - Python 3 -> `w_2017_??_py3`
+- for weeklies >= `w_2017_27`:
+  - Python 2 -> `w_2017_??_py2`
+  - Python 3 -> `w_2017_??`
 
 Use the LSST stack
 ------------------
@@ -87,8 +93,9 @@ Many exemples on how to use the LSST stack and how to work with its
 outputs are presented `here
 <https://github.com/nicolaschotard/lsst_drp_analysis/tree/master/stack>`_.
 
-Data set have already been created using the LSST stack, and their
-output are already available for analaysis, or to play with:
+A few data sets have already been created using the LSST stack, and
+their outputs are already available for analaysis at different places
+on CC-IN2P3:
 
 - SXDS data from HSC: `/sps/lsst/dev/lsstprod/hsc/SXDS/output`
 - CFHT data (containing clusters): `/sps/lsst/data/clusters`
