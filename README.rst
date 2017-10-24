@@ -40,19 +40,24 @@ Options
                        given, the LSST stack will not be set up. (E.g. v13.0,
                        w_2017_42 or w_2017_42_py2) (default: None)
   --packages PACKAGES  A list of packages you want to setup. Coma separated
-                       from command line, or a list in the config file.
-                       (default: None)
+                       from command line, or a list in the config file. You
+                       can use the `lsst_distrib` package to set up all
+                       available packages from a given distrib. (default:
+                       None)
   --jupyter JUPYTER    Either launch a jupiter notebook or a jupyter lab.
                        (default: notebook)
   --cca CCA            Either connect to ccage or cca7. ccage might be used
                        for old or local install of the stack, whereas all
-                       newer versions (> v13.0, installed for the LSST group)
+                       newer versions (>= v13.0, installed for the LSST group)
                        must be set up on centos7 (cca7). (default: cca7)
-  --libs LIBS          Path(s) to local Python librairies (must contains the
-                       lib and bin directories). Will be added to your PATH
-                       and PYTHONPATH. Coma separated to add more than one
+  --libs LIBS          Path(s) to local Python librairies. Will be added to
+                       your PYTHONPATH. Coma separated to add more than one
                        paths, or a list in the config file. A default path for
                        jupyter will be choose if not given. (default: None)
+  --bins BINS          Path(s) to local binaries. Will be added to your PATH.
+                       Coma separated to add more than one paths, or a list in
+                       the config file. A default path for jupyter will be
+                       choose if not given. (default: None)
   --labpath LABPATH    You must provide the path in which jupyterlab has been
                        installed in case it differs from the (first) path you
                        gave to the --libs option. A default path for
