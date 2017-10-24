@@ -2,14 +2,18 @@
 
 """Setup script."""
 
-import os
+from os import path
 from setuptools import setup
 
-# Long description loaded from the README
-README = '/'.join(os.path.realpath(__file__).split('/')[:-1]) + '/README.rst'
+here = path.abspath(path.dirname(__file__))
 
-# Get __version__ from version.py without importing package itself.
-VERSION = '/'.join(os.path.realpath(__file__).split('/')[:-1]) + '/version.py'
+# Long description loaded from the README
+with open(path.join(here, "README.rst")) as readme:
+    long_description = readme.read()
+
+# Get __version__ from version.py without importing package itself.    
+with open(path.join(here, "version.py")) as version:
+    version_number = version.read().split('"')[1]
 
 # Package name
 NAME = 'stackyter'
@@ -25,7 +29,7 @@ CLASSIFIERS = ['Development Status :: 3 - Alpha',
                'Topic :: Scientific/Engineering :: Astronomy']
 
 setup(name=NAME,
-      version=open(VERSION).read().split('"')[1],
+      version=version_number,
       description=("Local display of a jupyter notebook running at CC-IN2P3"),
       license="MIT",
       classifiers=CLASSIFIERS,
@@ -33,5 +37,5 @@ setup(name=NAME,
       author="Nicolas Chotard",
       author_email="nchotard@in2p3.fr",
       scripts=SCRIPTS,
-      long_description=open(README).read(),
+      long_description=long_description
      )
