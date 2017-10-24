@@ -35,15 +35,15 @@ if __name__ == '__main__':
                         " If not given, the LSST stack will not be set up."
                         " (E.g. v13.0, w_2017_42 or w_2017_42_py2)")
     parser.add_argument("--packages", default=None,
-                        help="A list of packages you want to setup. Coma separated"
-                        " from command line, or a list in the config file. For weeklies, you can use"
-                        " the `lsst_distrib` package to set up all available packages.")
+                        help="A list of packages you want to setup. Coma separated from command"
+                        " line, or a list in the config file. You can use the `lsst_distrib` "
+                        "package to set up all available packages from a given distrib.")
     parser.add_argument("--jupyter", default="notebook",
                         help="Either launch a jupiter notebook or a jupyter lab.")
     parser.add_argument("--cca", default="cca7",
-                        help="Either connect to ccage or cca7. ccage might be used"
-                        " for old or local install of the stack, whereas all newer versions"
-                        " (> v13.0, installed for the LSST group) must be set up on centos7 (cca7).")
+                        help="Either connect to ccage or cca7. ccage might be used for old or local"
+                        " install of the stack, whereas all newer versions (>= v13.0, installed "
+                        "for the LSST group) must be set up on centos7 (cca7).")
     parser.add_argument("--libs", default=None,
                         help="Path(s) to local Python librairies. Will be added to your PYTHONPATH."
                         " Coma separated to add more than one paths, or a list in the config file."
