@@ -36,7 +36,8 @@ if __name__ == '__main__':
                         " (E.g. v13.0, w_2017_42 or w_2017_42_py2)")
     parser.add_argument("--packages", default=None,
                         help="A list of packages you want to setup. Coma separated"
-                        " from command line, or a list in the config file.")
+                        " from command line, or a list in the config file. For weeklies, you can use"
+                        " the `lsst_distrib` package to set up all available packages.")
     parser.add_argument("--jupyter", default="notebook",
                         help="Either launch a jupiter notebook or a jupyter lab.")
     parser.add_argument("--cca", default="cca7",
@@ -91,9 +92,13 @@ if __name__ == '__main__':
     args.bins = string_to_list(args.bins)
 
     # First get the runing version of python
-    cmd += "export VPY=\`ls /sps/lsst/software/lsst_distrib/%s/python/"  % args.vstack + \
-           " | egrep -o 'miniconda[2,3]' | egrep -o '[2,3]'\`\n"
-    cmd += "if [ \$VPY -eq 2 ]; then export FVPY=2.7; else export FVPY=3.6; fi\n"
+    if args.vstack == 'v13.0':
+        cmd += "export VPY=2 \n"
+        cmd += "export FVPY=2.7 \n"
+    else:
+        cmd += "export VPY=\`ls /sps/lsst/software/lsst_distrib/%s/python/"  % args.vstack + \
+               " | egrep -o 'miniconda[2,3]' | egrep -o '[2,3]'\`\n"
+        cmd += "if [ \$VPY -eq 2 ]; then export FVPY=2.7; else export FVPY=3.6; fi\n"
 
     # Use default paths to make sure that jupyter is available
     if args.libs is None:
