@@ -31,10 +31,9 @@ if __name__ == '__main__':
                         'either from command line or in the configuration file.')
     parser.add_argument("--workdir", default='/pbs/throng/lsst/users/<username>/notebooks',
                         help="Your working directory at CC-IN2P3")
-    parser.add_argument("--vstack",
-                        help="Version of the stack you want to setup up."
-                        " If not given, the LSST stack will not be set up."
-                        " (E.g. v13.0, w_2017_42 or w_2017_42_py2)")
+    parser.add_argument("--vstack", default='v14.0',
+                        help="Version of the stack you want to set up."
+                        " (E.g. v14.0, w_2017_42 or w_2017_42_py2)")
     parser.add_argument("--packages", default=None,
                         help="A list of packages you want to setup. Coma separated from command"
                         " line, or a list in the config file. You can use the `lsst_distrib` "
@@ -90,6 +89,7 @@ if __name__ == '__main__':
     # Setup the lsst stack and packages if a version of the stack if given
     if args.vstack is not None:
         cmd += "source /sps/lsst/software/lsst_distrib/%s/loadLSST.bash\n" % args.vstack
+    if args.packages is not None:
         cmd += ''.join(["setup %s\n" % package for package in args.packages])
 
     # Add local libraries to the PATH and PYTHONPATH
