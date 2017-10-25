@@ -18,7 +18,7 @@ available at CC-IN2P3 using Python.
 Installation
 ------------
 
-Latest stable version can be installed with `pip`::
+Latest stable version can be installed with ``pip``::
 
   pip install stackyter
    
@@ -29,13 +29,13 @@ To upgrade to a newer version::
 To install in a local directory::
 
    pip install --user stackyter            #  in your home directory
-   pip install --prefix mypath stackyter   #  in `mypath`
+   pip install --prefix mypath stackyter   #  in 'mypath'
 
 
 Usage
 -----
 
-..code-block:: shell
+.. code-block:: shell
    
    stackyter.py [options]
 
@@ -46,7 +46,7 @@ Options
 The configuration file can contain any (or all) options available
 through command line. An example of such a file can be found `here
 <https://github.com/nicolaschotard/stackyter/blob/master/example_config.yaml>`_. The
-only option that you **must** use is the `--username` option.
+only option that you **must** use is the ``--username`` option.
 
 Optional arguments are::
 
@@ -108,24 +108,24 @@ with the following nomencalture:
 
 - for weeklies < `w_2017_27`:
   
-  - Python 2 -> `w_2017_??`
-  - Python 3 -> `w_2017_??_py3`
+  - python 2 -> `w_2017_??`
+  - python 3 -> ``w_2017_??_py3`
     
 - for weeklies >= `w_2017_27`:
   
-  - Python 2 -> `w_2017_??_py2`
-  - Python 3 -> `w_2017_??`
+  - python 2 -> `w_2017_??_py2`
+  - python 3 -> `w_2017_??`
 
 Keep in mind that using Python 2 in an LSST context is not encouraged
 by the community, and will not be supported anymore. The latest weekly
-for which Python 2 will be installed at CC-IN2P3 will be (is)
-`w_2017_44` (see online documentation `here
+for which Python 2 will be installed at CC-IN2P3 will be `w_2017_44`
+(see online documentation `here
 <http://doc.lsst.eu/ccin2p3/ccin2p3.html#software>`_).
 
-**Note**: Since version `w_2017_40`, the `ipython` module is included
-in the stack installation at CC-IN2P3 as an add-on. This module is not
-part of the officiel LSST distribution and will not be set up with the
-`lsst_distrib` package.
+**Note**: Since version `w_2017_40`, the ``ipython`` module is
+included in the stack installation at CC-IN2P3 as an add-on. This
+module is not part of the officiel LSST distribution and will not be
+set up with the ``lsst_distrib`` package.
 
 Use the LSST stack
 ------------------
@@ -138,6 +138,6 @@ A few data sets have already been created using the LSST stack, and
 their outputs are already available for analysis at different places
 on CC-IN2P3:
 
-- SXDS data from HSC: `/sps/lsst/dev/lsstprod/hsc/SXDS/output`
-- CFHT data (containing clusters): `/sps/lsst/data/clusters`
+- SXDS data from HSC: ``/sps/lsst/dev/lsstprod/hsc/SXDS/output``
+- CFHT data (containing clusters): ``/sps/lsst/data/clusters``
 - list to be completed.
