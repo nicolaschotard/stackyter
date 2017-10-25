@@ -34,7 +34,7 @@ if __name__ == '__main__':
     parser.add_argument("--vstack", default='v14.0',
                         help="Version of the stack you want to set up."
                         " (E.g. v14.0, w_2017_42 or w_2017_42_py2)")
-    parser.add_argument("--packages", default=None,
+    parser.add_argument("--packages", default='lsst_distrib',
                         help="A list of packages you want to setup. Coma separated from command"
                         " line, or a list in the config file. You can use the `lsst_distrib` "
                         "package to set up all available packages from a given distrib.")
