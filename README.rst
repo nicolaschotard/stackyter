@@ -113,7 +113,7 @@ with the following nomencalture:
 - for weeklies < `w_2017_27`:
   
   - python 2 -> `w_2017_??`
-  - python 3 -> ``w_2017_??_py3`
+  - python 3 -> `w_2017_??_py3`
     
 - for weeklies >= `w_2017_27`:
   
@@ -123,7 +123,7 @@ with the following nomencalture:
 Keep in mind that using Python 2 in an LSST context is not encouraged
 by the community, and will not be supported anymore. The latest weekly
 for which Python 2 will be installed at CC-IN2P3 will be `w_2017_44`
-(see online documentation `here
+(see online `documentation
 <http://doc.lsst.eu/ccin2p3/ccin2p3.html#software>`_).
 
 **Note**: Since version `w_2017_40`, the ``ipython`` module is
@@ -135,7 +135,7 @@ Use the LSST stack
 ------------------
 
 Many examples on how to use the LSST stack and how to work with its
-outputs are presented `here
+outputs are presented `there
 <https://github.com/nicolaschotard/lsst_drp_analysis/tree/master/stack>`_.
 
 A few data sets have already been created using the LSST stack, and
