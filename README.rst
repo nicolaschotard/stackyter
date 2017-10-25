@@ -18,17 +18,18 @@ available at CC-IN2P3 using Python.
 Installation
 ------------
 
-Latest stable version (0.6) can be installed with `pip`::
+Latest stable version can be installed with `pip`::
 
-   pip install stackyter
+  pip install stackyter
    
 To upgrade to a newer version::
 
   pip install --upgrade stackyter
 
-To install in a local directory, either add `--user` to install it in
-your home directory, or `--prefix apath` to install it in a given
-path.
+To install in a local directory::
+
+   pip install --user stackyter            #  in your home directory
+   pip install --prefix mypath stackyter   #  in `mypath`
 
 
 Usage
