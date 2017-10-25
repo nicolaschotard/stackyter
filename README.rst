@@ -50,7 +50,7 @@ only option that you **must** use is the `--username` option.
                        from command line, or a list in the config file. You
                        can use the `lsst_distrib` package to set up all
                        available packages from a given distrib. (default:
-                       None)
+                       lsst_distrib)
   --jupyter JUPYTER    Either launch a jupiter notebook or a jupyter lab.
                        (default: notebook)
   --cca CCA            Either connect to ccage or cca7. ccage might be used
@@ -93,9 +93,12 @@ Version 2 (2.7) and 3 (>3.4) are available for almost all weeklies,
 with the following nomencalture:
 
 - for weeklies < `w_2017_27`:
+  
   - Python 2 -> `w_2017_??`
   - Python 3 -> `w_2017_??_py3`
+    
 - for weeklies >= `w_2017_27`:
+  
   - Python 2 -> `w_2017_??_py2`
   - Python 3 -> `w_2017_??`
 
