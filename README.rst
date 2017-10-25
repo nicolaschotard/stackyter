@@ -1,7 +1,13 @@
 stackyter
 =========
 
-LSST stack + Jupyter = stackyter
+.. image:: https://badge.fury.io/py/stackyter.svg
+    :target: https://badge.fury.io/py/stackyter
+
+Introduction
+------------
+
+LSST stack + Jupyter -> stackyter
 
 This script will allow you to run a jupyter notebook (or lab) at
 CC-IN2P3 while displaying it localy in your local brower. It is mainly
@@ -9,8 +15,8 @@ intended to help LSST members to interact with the datasets already
 available at CC-IN2P3 using Python.
 
 
-Install
--------
+Installation
+------------
 
 Latest stable version (0.6) can be installed with `pip`::
 
@@ -28,7 +34,7 @@ path.
 Usage
 -----
 
-::
+..code-block:: shell
    
    stackyter.py [options]
 
@@ -41,9 +47,8 @@ through command line. An example of such a file can be found `here
 <https://github.com/nicolaschotard/stackyter/blob/master/example_config.yaml>`_. The
 only option that you **must** use is the `--username` option.
 
-::
+Optional arguments are::
 
-  optional arguments:
   -h, --help           show this help message and exit
   --config CONFIG      Configuration file containing a set of option values.
                        The content of this file will be overwritten by any
