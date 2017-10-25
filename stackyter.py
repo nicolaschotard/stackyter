@@ -7,6 +7,7 @@ import subprocess
 from argparse import ArgumentParser
 from argparse import ArgumentDefaultsHelpFormatter
 import yaml
+import numpy as np
 
 
 def string_to_list(a):
@@ -74,10 +75,14 @@ if __name__ == '__main__':
     # Make sure that we have a list (even empty) for packages
     args.packages = string_to_list(args.packages)
 
+    # A random port number is selected between 1025 and 65635 (included) for server side to
+    # prevent from conflict between users. 
+    port = np.random.randint(1025, high=65635)
+    
     # Start building the command line that will be launched at CC-IN2P3
     # Open the ssh tunnel to a CC-IN2P3 host
-    cmd = "ssh -tt -L 20001:localhost:20002 %s@%s.in2p3.fr << EOF\n" % \
-          (args.username, args.cca)
+    cmd = "ssh -tt -L 20001:localhost:%i %s@%s.in2p3.fr << EOF\n" % \
+          (port, args.username, args.cca)
 
     # Print the hostname; for the record
     cmd += "hostname\n"
@@ -126,14 +131,14 @@ if __name__ == '__main__':
     cmd += "cd %s\n" % args.workdir
 
     # Launch jupyter
-    cmd += 'jupyter %s --no-browser --port=20002 --ip=127.0.0.1 &\n' % args.jupyter
+    cmd += 'jupyter %s --no-browser --port=%i --ip=127.0.0.1 &\n' % (args.jupyter, port)
 
     # Get the token number and print out the right web page to open
     cmd += "export servers=\`jupyter notebook list\`\n"
     # If might have to wait a little bit until the server is actually running...
-    cmd += "while [[ \$servers != *'127.0.0.1:20002'* ]]; " + \
+    cmd += "while [[ \$servers != *'127.0.0.1:%i'* ]]; " % port + \
            "do sleep 1; servers=\`jupyter notebook list\`; echo \$servers; done\n"
-    cmd += "export servers=\`jupyter notebook list | grep '127.0.0.1:20002'\`\n"
+    cmd += "export servers=\`jupyter notebook list | grep '127.0.0.1:%i'\`\n" % port
     cmd += "export TOKEN=\`echo \$servers | sed 's/\//\\n/g' | " + \
            "grep token | sed 's/ /\\n/g' | grep token \`\n"
     cmd += "printf '\\n    Copy/paste this URL into your browser to run the notebook" + \
