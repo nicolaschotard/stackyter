@@ -42,10 +42,10 @@ only option that you **must** use is the `--username` option.
                        given command line options. (default: None)
   --username USERNAME  Your CC-IN2P3 user name. Mandatory either from command
                        line or in the configuration file. (default: None)
-  --workdir WORKDIR    Your working directory at CC-IN2P3 (default: \$HOME)
-  --vstack VSTACK      Version of the stack you want to setup up. If not
-                       given, the LSST stack will not be set up. (E.g. v13.0,
-                       w_2017_42 or w_2017_42_py2) (default: None)
+  --workdir WORKDIR    Your working directory at CC-IN2P3 (default:
+                       /pbs/throng/lsst/users/<username>/notebooks)
+  --vstack VSTACK      Version of the stack you want to set up. (E.g. v14.0,
+                       w_2017_42 or w_2017_42_py2) (default: v14.0)
   --packages PACKAGES  A list of packages you want to setup. Coma separated
                        from command line, or a list in the config file. You
                        can use the `lsst_distrib` package to set up all
