@@ -10,6 +10,15 @@ available at CC-IN2P3 using Python. But setting up the LSST stack is
 not mandatory, making this script useful in other (LSST) contexts
 where a Jupyter notebook is needed.
 
+
+Install
+-------
+
+::
+
+   pip install stackyter
+   
+
 Usage
 -----
 
