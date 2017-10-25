@@ -82,7 +82,7 @@ All available versions of the LSST stack at CC-IN2P3 can be found under::
 
 A few of them that you might want to use are::
 
-  v13.0  -> stable version of the stack 13
+  v13.0  -> current stable version of the stack
   w_2017_42  -> latest (as of 10-23-2017) weekly release, python 3
   w_2017_42_py2  -> latest weekly release, python 2
 
@@ -91,7 +91,8 @@ must be used under a compatible system (CentOS7 or Ubuntu). To connect
 to a CentOS7 machine on CC-IN2P3, use cca7 instead of ccage (default
 value of this script).
 
-Version 2 (2.7) and 3 (>3.4) are available for almost all weeklies, with following nomencalture:
+Version 2 (2.7) and 3 (>3.4) are available for almost all weeklies,
+with the following nomencalture:
 
 - for weeklies < `w_2017_27`:
   - Python 2 -> `w_2017_??`
@@ -108,7 +109,7 @@ outputs are presented `here
 <https://github.com/nicolaschotard/lsst_drp_analysis/tree/master/stack>`_.
 
 A few data sets have already been created using the LSST stack, and
-their outputs are already available for analaysis at different places
+their outputs are already available for analysis at different places
 on CC-IN2P3:
 
 - SXDS data from HSC: `/sps/lsst/dev/lsstprod/hsc/SXDS/output`
