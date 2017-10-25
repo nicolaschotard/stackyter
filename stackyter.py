@@ -29,7 +29,7 @@ if __name__ == '__main__':
                         ' command line options.')
     parser.add_argument('--username', help='Your CC-IN2P3 user name. Mandatory '
                         'either from command line or in the configuration file.')
-    parser.add_argument("--workdir", default='\$HOME',
+    parser.add_argument("--workdir", default='/pbs/throng/lsst/users/<username>/notebooks',
                         help="Your working directory at CC-IN2P3")
     parser.add_argument("--vstack",
                         help="Version of the stack you want to setup up."
@@ -128,6 +128,8 @@ if __name__ == '__main__':
             raise IOError("Give me a path to the directory in which jupyterlab has been installed.")
 
     # Move to the working directory
+    if args.workdir == '/pbs/throng/lsst/users/<username>/notebooks':
+        args.workdir = args.workdir.replace('<username>', args.username)
     cmd += "cd %s\n" % args.workdir
 
     # Launch jupyter
