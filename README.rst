@@ -6,9 +6,7 @@ LSST stack + Jupyter = stackyter
 This script will allow you to run a jupyter notebook (or lab) at
 CC-IN2P3 while displaying it localy in your local brower. It is mainly
 intended to help LSST members to interact with the datasets already
-available at CC-IN2P3 using Python. But setting up the LSST stack is
-not mandatory, making this script useful in other (LSST) contexts
-where a Jupyter notebook is needed.
+available at CC-IN2P3 using Python.
 
 
 Install
@@ -82,9 +80,9 @@ All available versions of the LSST stack at CC-IN2P3 can be found under::
 
 A few of them that you might want to use are::
 
-  v13.0  -> current stable version of the stack
-  w_2017_42  -> latest (as of 10-23-2017) weekly release, python 3
-  w_2017_42_py2  -> latest weekly release, python 2
+  v14.0  -> current stable version of the stack (Python 3 only)
+  w_2017_42  -> latest (as of 10-25-2017) weekly release, Python 3
+  w_2017_42_py2  -> latest weekly release, Python 2
 
 These versions (and all the others) have been built under CentOS7, and
 must be used under a compatible system (CentOS7 or Ubuntu). To connect
@@ -100,6 +98,17 @@ with the following nomencalture:
 - for weeklies >= `w_2017_27`:
   - Python 2 -> `w_2017_??_py2`
   - Python 3 -> `w_2017_??`
+
+Keep in mind that using Python 2 in an LSST context is not encouraged
+by the community, and will not be supported anymore. The latest weekly
+for which Python 2 will be installed at CC-IN2P3 will be (is)
+`w_2017_44` (see online documentation `here
+<http://doc.lsst.eu/ccin2p3/ccin2p3.html#software>`_).
+
+**Note**: Since version `w_2017_40`, the `ipython` module is included
+in the stack installation at CC-IN2P3 as an add-on. This module is not
+part of the officiel LSST distribution and will not be set up with the
+`lsst_distrib` package.
 
 Use the LSST stack
 ------------------
