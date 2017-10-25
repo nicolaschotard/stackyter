@@ -1,6 +1,10 @@
 stackyter
 =========
 
+.. image:: https://landscape.io/github/nicolaschotard/stackyter/master/landscape.svg?style=flat
+   :target: https://landscape.io/github/nicolaschotard/stackyter/master
+   :alt: Code Health
+	 
 .. image:: https://badge.fury.io/py/stackyter.svg
     :target: https://badge.fury.io/py/stackyter
 
