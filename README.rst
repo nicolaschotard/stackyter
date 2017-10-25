@@ -20,10 +20,9 @@ To upgrade to a newer version::
 
   pip install --upgrade stackyter
 
-To install in a local directiry, either add:
-
-- `--user`, to install it in your home directory, or
-- `-- prefix apath`, to install it in a given path.
+To install in a local directory, either add `--user` to install it in
+your home directory, or `-- prefix apath` to install it in a given
+path.
 
 
 Usage
