@@ -63,7 +63,7 @@ Optional arguments are::
   --workdir WORKDIR    Your working directory at CC-IN2P3 (default:
                        /pbs/throng/lsst/users/<username>/notebooks)
   --vstack VSTACK      Version of the stack you want to set up. (E.g. v14.0,
-                       w_2017_42 or w_2017_42_py2) (default: v14.0)
+                       w_2017_43 or w_2017_43_py2) (default: v14.0)
   --packages PACKAGES  A list of packages you want to setup. Coma separated
                        from command line, or a list in the config file. You
                        can use the `lsst_distrib` package to set up all
@@ -99,8 +99,8 @@ All available versions of the LSST stack at CC-IN2P3 can be found under::
 A few of them that you might want to use are::
 
   v14.0  -> current stable version of the stack (Python 3 only)
-  w_2017_42  -> latest (as of 10-25-2017) weekly release, Python 3
-  w_2017_42_py2  -> latest weekly release, Python 2
+  w_2017_43  -> latest (as of 10-25-2017) weekly release, Python 3
+  w_2017_43_py2  -> latest weekly release, Python 2
 
 These versions (and all the others) have been built under CentOS7, and
 must be used under a compatible system (CentOS7 or Ubuntu). To connect
@@ -110,15 +110,13 @@ value of this script).
 Version 2 (2.7) and 3 (>3.4) are available for almost all weeklies,
 with the following nomencalture:
 
-- for weeklies < `w_2017_27`:
-  
-  - python 2 -> `w_2017_??`
-  - python 3 -> `w_2017_??_py3`
-    
-- for weeklies >= `w_2017_27`:
-  
-  - python 2 -> `w_2017_??_py2`
-  - python 3 -> `w_2017_??`
++----------+-----------------+-----------------+
+| Versino  | < `w_2017_27`   | `w_2017_27`     |
++==========+=================+=================+
+| Python 2 | `w_2017_??`     | `w_2017_??_py2` |
++----------+-----------------+-----------------+
+| Python 3 | `w_2017_??_py3` | `w_2017_??`     |
++----------+-----------------+-----------------+
 
 Keep in mind that using Python 2 in an LSST context is not encouraged
 by the community, and will not be supported anymore. The latest weekly

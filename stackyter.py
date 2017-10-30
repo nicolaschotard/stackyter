@@ -33,7 +33,7 @@ if __name__ == '__main__':
                         help="Your working directory at CC-IN2P3")
     parser.add_argument("--vstack", default='v14.0',
                         help="Version of the stack you want to set up."
-                        " (E.g. v14.0, w_2017_42 or w_2017_42_py2)")
+                        " (E.g. v14.0, w_2017_43 or w_2017_43_py2)")
     parser.add_argument("--packages", default='lsst_distrib',
                         help="A list of packages you want to setup. Coma separated from command"
                         " line, or a list in the config file. You can use the `lsst_distrib` "
@@ -75,9 +75,9 @@ if __name__ == '__main__':
     args.packages = string_to_list(args.packages)
 
     # A random port number is selected between 1025 and 65635 (included) for server side to
-    # prevent from conflict between users. 
+    # prevent from conflict between users.
     port = np.random.randint(1025, high=65635)
-    
+
     # Start building the command line that will be launched at CC-IN2P3
     # Open the ssh tunnel to a CC-IN2P3 host
     cmd = "ssh -tt -L 20001:localhost:%i %s@%s.in2p3.fr << EOF\n" % \
