@@ -111,11 +111,11 @@ Version 2 (2.7) and 3 (>3.4) are available for almost all weeklies,
 with the following nomencalture:
 
 +----------+-----------------+-----------------+
-| Versino  | < `w_2017_27`   | `w_2017_27`     |
+| Version  | < `w_2017_27`   | `w_2017_27`     |
 +==========+=================+=================+
-| Python 2 | `w_2017_??`     | `w_2017_??_py2` |
+| Python 2 | `w_2017_XX`     | `w_2017_XX_py2` |
 +----------+-----------------+-----------------+
-| Python 3 | `w_2017_??_py3` | `w_2017_??`     |
+| Python 3 | `w_2017_XX_py3` | `w_2017_XX`     |
 +----------+-----------------+-----------------+
 
 Keep in mind that using Python 2 in an LSST context is not encouraged
