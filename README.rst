@@ -96,18 +96,12 @@ All available versions of the LSST stack at CC-IN2P3 can be found under::
 
   /sps/lsst/software/lsst_distrib/
 
-A few of them that you might want to use are::
-
-  v14.0  -> current stable version of the stack (Python 3 only)
-  w_2017_43  -> latest (as of 10-25-2017) weekly release, Python 3
-  w_2017_43_py2  -> latest weekly release, Python 2
-
 These versions (and all the others) have been built under CentOS7, and
 must be used under a compatible system (CentOS7 or Ubuntu). To connect
 to a CentOS7 machine on CC-IN2P3, use cca7 instead of ccage (default
 value of this script).
 
-Version 2 (2.7) and 3 (>3.4) are available for almost all weeklies,
+Python 2 (2.7) and 3 (>3.4) are available for almost all weeklies,
 with the following nomencalture:
 
 +----------+-----------------+-----------------+
@@ -118,10 +112,22 @@ with the following nomencalture:
 | Python 3 | `w_2017_XX_py3` | `w_2017_XX`     |
 +----------+-----------------+-----------------+
 
+Latest releases of the LSST stack, as of 11-07-2017, are:
+
++-------------------+-----------------------------------------------------+
+| Version           | Comment                                             |
++===================+=====================================================+
+| ``v14.0``         | Current stable version of the stack (Python 3 only) |
++-------------------+-----------------------------------------------------+
+| ``w_2017_43_py2`` | Latest weekly release for Python 2                  |
++-------------------+-----------------------------------------------------+
+| ``w_2017_44``     | Latest weekly release for Python 3                  |
++-------------------+-----------------------------------------------------+
+
 Keep in mind that using Python 2 in an LSST context is not encouraged
 by the community, and will not be supported anymore. The latest weekly
-for which Python 2 will be installed at CC-IN2P3 will be `w_2017_44`
-(see online `documentation
+for which Python 2 has been installed at CC-IN2P3 is `w_2017_4` (see
+online `documentation
 <http://doc.lsst.eu/ccin2p3/ccin2p3.html#software>`_).
 
 **Note**: Since version `w_2017_40`, the ``ipython`` module is
