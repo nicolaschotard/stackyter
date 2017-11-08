@@ -80,7 +80,7 @@ if __name__ == '__main__':
 
     # Start building the command line that will be launched at CC-IN2P3
     # Open the ssh tunnel to a CC-IN2P3 host
-    cmd = "ssh -tt -L 20001:localhost:%i %s@%s.in2p3.fr << EOF\n" % \
+    cmd = "ssh -X -YC4c arcfour,blowfish-cbc -tt -L 20001:localhost:%i %s@%s.in2p3.fr << EOF\n" % \
           (port, args.username, args.cca)
 
     # Print the hostname; for the record
@@ -114,6 +114,9 @@ if __name__ == '__main__':
         cmd += 'export PYTHONPATH="%s:\$PYTHONPATH"\n' % lib
     for lbin in args.bins:
         cmd += 'export PATH="%s:\$PATH:"\n' % lbin
+
+    # Add ds9 to the PATH
+    cmd += 'export PATH=\$PATH:/sps/lsst/dev/nchotard/local/bin\n'
 
     # We also need to add the following path to set up a jupyter lab
     if args.jupyter == 'lab':

@@ -16,7 +16,8 @@ LSST stack + Jupyter -> stackyter
 This script will allow you to run a jupyter notebook (or lab) at
 CC-IN2P3 while displaying it localy in your local brower. It is mainly
 intended to help LSST members to interact with the datasets already
-available at CC-IN2P3 using Python.
+available at CC-IN2P3 using Python, but can be use for other purposes
+that need an anaconda environment.
 
 
 Installation
@@ -88,7 +89,8 @@ Optional arguments are::
                        gave to the --libs option. A default path for
                        jupyterlab will be choose if not given. (default: None)
 
-
+**Note**: ds9 is available since version 0.9.
+		  
 Version of the LSST stack
 -------------------------
 
