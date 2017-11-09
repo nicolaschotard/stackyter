@@ -88,8 +88,19 @@ Optional arguments are::
                        installed in case it differs from the (first) path you
                        gave to the --libs option. A default path for
                        jupyterlab will be choose if not given. (default: None)
+  --mysetup MYSETUP    Path to a setup file (at CC-IN2P3) that will be used to
+                       set up the working environment. Be sure that a Python
+                       installation with Jupyter (and jupyterlab) is available
+                       to make this work. The LSST stack won't be set up in
+                       this mode. 'vstack', 'libs', 'bins' and 'labpath'
+                       options will be ignored. (default: None)
 
-**Note**: ds9 is available since version 0.9.
+**Notes**:
+
+- ``ds9`` is automatically available since version 0.9.
+- The ``mysetup`` option allows you to set up your own working
+  environment using a setup file located at CC-IN2P3. In this mode,
+  the LSST stack will **not** be setup.
 		  
 Version of the LSST stack
 -------------------------
