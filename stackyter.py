@@ -56,6 +56,12 @@ if __name__ == '__main__':
                         help="You must provide the path in which jupyterlab has been installed"
                         " in case it differs from the (first) path you gave to the --libs option."
                         " A default path for jupyterlab will be choose if not given.")
+    parser.add_argument("--mysetup", default=None,
+                        help="Path to a setup file (at CC-IN2P3) that will be used to set up the "
+                        "working environment. Be sure that a Python installation with Jupyter (and"
+                        " jupyterlab) is available to make this work. The LSST stack won't be set "
+                        "up in this mode. 'vstack', 'libs', 'bins' and 'labpath' options will be "
+                        "ignored.")
     args = parser.parse_args()
 
     # Check if a configuration file is given
@@ -86,49 +92,54 @@ if __name__ == '__main__':
     # Print the hostname; for the record
     cmd += "hostname\n"
 
-    # Setup the lsst stack and packages if a version of the stack if given
-    if args.vstack is not None:
-        cmd += "source /sps/lsst/software/lsst_distrib/%s/loadLSST.bash\n" % args.vstack
-    if args.packages is not None:
-        cmd += ''.join(["setup %s\n" % package for package in args.packages])
+    if args.mysetup is None:
+        # Setup the lsst stack and packages if a version of the stack if given
+        if args.vstack is not None:
+            cmd += "source /sps/lsst/software/lsst_distrib/%s/loadLSST.bash\n" % args.vstack
+        if args.packages is not None:
+            cmd += ''.join(["setup %s\n" % package for package in args.packages])
 
-    # Add local libraries to the PATH and PYTHONPATH
-    args.libs = string_to_list(args.libs)
-    args.bins = string_to_list(args.bins)
+        # Add local libraries to the PATH and PYTHONPATH
+        args.libs = string_to_list(args.libs)
+        args.bins = string_to_list(args.bins)
 
-    # First get the runing version of python
-    if args.vstack == 'v13.0':
-        cmd += "export VPY=2 \n"
-        cmd += "export FVPY=2.7 \n"
+        # First get the runing version of python
+        if args.vstack == 'v13.0':
+            cmd += "export VPY=2 \n"
+            cmd += "export FVPY=2.7 \n"
+        else:
+            cmd += "export VPY=\`ls /sps/lsst/software/lsst_distrib/%s/python/"  % args.vstack + \
+                   " | egrep -o 'miniconda[2,3]' | egrep -o '[2,3]'\`\n"
+            cmd += "if [ \$VPY -eq 2 ]; then export FVPY=2.7; else export FVPY=3.6; fi\n"
+
+        # Use default paths to make sure that jupyter is available
+        if args.libs is None:
+            args.libs = ['/sps/lsst/dev/nchotard/demo/python\$VPY/lib/python\$FVPY/site-packages']
+        if args.bins is None:
+            args.bins = ["/sps/lsst/dev/nchotard/demo/python\$VPY/bin"]
+        for lib in args.libs:
+            cmd += 'export PYTHONPATH="%s:\$PYTHONPATH"\n' % lib
+        for lbin in args.bins:
+            cmd += 'export PATH="%s:\$PATH:"\n' % lbin
+
+        # Add ds9 to the PATH
+        cmd += 'export PATH=\$PATH:/sps/lsst/dev/nchotard/local/bin\n'
+
+        # We also need to add the following path to set up a jupyter lab
+        if args.jupyter == 'lab':
+            if args.labpath is not None:
+                # Use the path given by the user
+                cmd += 'export JUPYTERLAB_DIR="%s/share/jupyter/lab"\n' % args.labpath
+            elif args.labpath is None and args.libs is not None:
+                # Take the first path of the --libs list
+                cmd += 'export JUPYTERLAB_DIR="%s/share/jupyter/lab"\n' % \
+                       args.libs[0].split('/lib')[0]
+            elif args.labpath is None and args.libs is not None:
+                # That should not happen
+                raise IOError("Give me a path to the install directory of jupyterlab.")
     else:
-        cmd += "export VPY=\`ls /sps/lsst/software/lsst_distrib/%s/python/"  % args.vstack + \
-               " | egrep -o 'miniconda[2,3]' | egrep -o '[2,3]'\`\n"
-        cmd += "if [ \$VPY -eq 2 ]; then export FVPY=2.7; else export FVPY=3.6; fi\n"
-
-    # Use default paths to make sure that jupyter is available
-    if args.libs is None:
-        args.libs = ['/sps/lsst/dev/nchotard/demo/python\$VPY/lib/python\$FVPY/site-packages']
-    if args.bins is None:
-        args.bins = ["/sps/lsst/dev/nchotard/demo/python\$VPY/bin"]
-    for lib in args.libs:
-        cmd += 'export PYTHONPATH="%s:\$PYTHONPATH"\n' % lib
-    for lbin in args.bins:
-        cmd += 'export PATH="%s:\$PATH:"\n' % lbin
-
-    # Add ds9 to the PATH
-    cmd += 'export PATH=\$PATH:/sps/lsst/dev/nchotard/local/bin\n'
-
-    # We also need to add the following path to set up a jupyter lab
-    if args.jupyter == 'lab':
-        if args.labpath is not None:
-            # Use the path given by the user
-            cmd += 'export JUPYTERLAB_DIR="%s/share/jupyter/lab"\n' % args.labpath
-        elif args.labpath is None and args.libs is not None:
-            # Take the first path of the --libs list
-            cmd += 'export JUPYTERLAB_DIR="%s/share/jupyter/lab"\n' % args.libs[0].split('/lib')[0]
-        elif args.labpath is None and args.libs is not None:
-            # That should not happen
-            raise IOError("Give me a path to the directory in which jupyterlab has been installed.")
+        # Use the setup file given by the user to set up the working environment (no LSST stack)
+        cmd += "source %s\n" % args.mysetup
 
     # Move to the working directory
     if args.workdir == '/pbs/throng/lsst/users/<username>/notebooks':
