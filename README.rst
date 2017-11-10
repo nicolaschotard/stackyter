@@ -14,10 +14,17 @@ Introduction
 LSST stack + Jupyter -> stackyter
 
 This script will allow you to run a jupyter notebook (or lab) at
-CC-IN2P3 while displaying it localy in your local brower. It is mainly
-intended to help LSST members to interact with the datasets already
-available at CC-IN2P3 using Python, but can be use for other purposes
-that need an anaconda environment.
+CC-IN2P3 while displaying it localy in your local brower.
+
+It is mainly intended to help LSST members to interact with the
+datasets already available at CC-IN2P3 using Python, but can be use
+for other purposes that need an anaconda environment.
+
+It can also be used by any CC-IN2P3 users thanks to the ``--mysetup``
+option, allowing a personal environment to be setup when the session
+is starting (and thus ignoring the LSST environment). **Caveat:**
+Jupyter must be available in your personal environment for this script
+to be useful.
 
 
 Installation
@@ -95,15 +102,12 @@ Optional arguments are::
                        this mode. 'vstack', 'libs', 'bins' and 'labpath'
                        options will be ignored. (default: None)
 
-**Notes**:
 
-- ``ds9`` is automatically available since version 0.9.
-- The ``mysetup`` option allows you to set up your own working
-  environment using a setup file located at CC-IN2P3. In this mode,
-  the LSST stack will **not** be setup.
+LSST environment
+----------------
 		  
 Version of the LSST stack
--------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 All available versions of the LSST stack at CC-IN2P3 can be found under::
 
@@ -149,16 +153,39 @@ module is not part of the officiel LSST distribution and will not be
 set up with the ``lsst_distrib`` package.
 
 Use the LSST stack
-------------------
+~~~~~~~~~~~~~~~~~~
 
 Many examples on how to use the LSST stack and how to work with its
 outputs are presented `there
 <https://github.com/nicolaschotard/lsst_drp_analysis/tree/master/stack>`_.
 
-A few data sets have already been created using the LSST stack, and
-their outputs are already available for analysis at different places
-on CC-IN2P3:
+A few data sets have already been re-processed using the LSST stack,
+and their outputs are available for analysis at different places on
+CC-IN2P3:
 
 - SXDS data from HSC: ``/sps/lsst/dev/lsstprod/hsc/SXDS/output``
 - CFHT data (containing clusters): ``/sps/lsst/data/clusters``
-- list to be completed.
+- CFHT D3 fieald: ``/sps/lsst/data/CFHT/D3``
+
+Additional features
+~~~~~~~~~~~~~~~~~~~
+
+- ``ds9`` is automatically available since version 0.9, and can be
+  called in a Jupyter terminal.
+  
+Personal environment
+--------------------
+
+As stated in the introduction, and instead of seting up the LSST
+working environment, you can set up your personal working environment
+by using the ``--mysetup`` option. Given a setup file located at
+CC-IN2P3, you can simply do::
+
+    stackyter.py --username myusername --mysetup /sps/.../mysetup.sh
+
+Your local setup file will be sourced at connection as followed::
+
+  source /sps/.../mysetup.sh
+
+Your setup file must **at least** contains what is needed to make
+Jupyter available. In this mode, the LSST stack will **not** be setup.
