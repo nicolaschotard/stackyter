@@ -1,5 +1,6 @@
 {
- 'cca': 'cca7',
+ # 'cca': 'cca7',  # still works but will be deprecated at some point 
+ 'host': 'cca7.in2p3.fr',
  'jupyter': 'lab',
  'packages': ["pipe_tasks", "display_ds9",  "obs_subaru",
               "jointcal", "display_matplotlib -t nchotard"],
