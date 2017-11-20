@@ -27,8 +27,8 @@ if __name__ == '__main__':
                         help='Configuration file containing a set of option values. '
                         'The content of this file will be overwritten by any given'
                         ' command line options.')
-    parser.add_argument('--username', help='Your CC-IN2P3 user name. Mandatory '
-                        'either from command line or in the configuration file.')
+    parser.add_argument('--username', help="Your CC-IN2P3 user name. If not given, ssh will try to "
+                        "figure it out from you ~/.ssh/config or will use your local user name.")
     parser.add_argument("--workdir", default='/pbs/throng/lsst/users/<username>/notebooks',
                         help="Your working directory at CC-IN2P3")
     parser.add_argument("--vstack", default='v14.0',
@@ -72,6 +72,10 @@ if __name__ == '__main__':
                         " jupyterlab) is available to make this work. The LSST stack won't be set "
                         "up in this mode. 'vstack', 'libs', 'bins' and 'labpath' options will be "
                         "ignored.")
+    parser.add_argument("--sshopt", default=None,
+                        help="You can add other shh options if needed (E.g., "
+                        "`-C4c arcfour,blowfish-cbc` for fastest connection).")
+    
     args = parser.parse_args()
 
     # Check if a configuration file is given
@@ -85,7 +89,11 @@ if __name__ == '__main__':
 
     # A valid username (and the corresponding password) is actually the only mandatory thing we need
     if args.username is None:
-        raise IOError("You must give you CC-IN2P3 username through the '--username' option.")
+        msg = "WARNING: The user name will be taken in your ~/.ssh/config or from the local host."
+        print("\x1B[01;93m%s \x1B[0m" % msg)
+        args.username = ""
+    else:
+        args.username += "@"
 
     # Make sure that we have a list (even empty) for packages
     args.packages = string_to_list(args.packages)
@@ -94,11 +102,15 @@ if __name__ == '__main__':
     # prevent from conflict between users.
     port = np.random.randint(1025, high=65635)
 
+    # ssh option?
+    args.sshopt = args.sshopt if args.sshopt is not None else ""
+
     # Start building the command line that will be launched at CC-IN2P3
     # Open the ssh tunnel to a CC-IN2P3 host
     host = args.host if args.host is not None else args.cca + ".in2p3.fr"
-    cmd = "ssh -X -YC4c arcfour,blowfish-cbc -tt -L 20001:localhost:%i %s@%s << EOF\n" % \
-          (port, args.username, host)
+    #cmd = "ssh -X -YC4c arcfour,blowfish-cbc -tt -L 20001:localhost:%i %s@%s << EOF\n" % \
+    cmd = "ssh -X -Y -tt -L %s 20001:localhost:%i %s%s << EOF\n" % \
+          (args.sshopt, port, args.username, host)
 
     # Print the hostname; for the record
     cmd += "hostname\n"
@@ -136,7 +148,7 @@ if __name__ == '__main__':
         if args.libs is None:
             args.libs = [jupylib]
         else:
-            args.lib.append(jupylib)
+            args.libs.append(jupylib)
         if args.bins is None:
             args.bins = [jupybin]
         else:

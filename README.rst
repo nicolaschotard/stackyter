@@ -78,8 +78,9 @@ Optional arguments are::
   --config CONFIG      Configuration file containing a set of option values.
                        The content of this file will be overwritten by any
                        given command line options. (default: None)
-  --username USERNAME  Your CC-IN2P3 user name. Mandatory either from command
-                       line or in the configuration file. (default: None)
+  --username USERNAME  Your CC-IN2P3 user name. If not given, ssh will try to
+                       figure it out from you ~/.ssh/config or will use your
+                       local user name. (default: None)
   --workdir WORKDIR    Your working directory at CC-IN2P3 (default:
                        /pbs/throng/lsst/users/<username>/notebooks)
   --vstack VSTACK      Version of the stack you want to set up. (E.g. v14.0,
@@ -124,6 +125,9 @@ Optional arguments are::
                        to make this work. The LSST stack won't be set up in
                        this mode. 'vstack', 'libs', 'bins' and 'labpath'
                        options will be ignored. (default: None)
+  --sshopt SSHOPT      You can add other shh options if needed (E.g., `-C4c
+                       arcfour,blowfish-cbc` for fastest connection).
+                       (default: None)
 
 LSST environment
 ----------------
