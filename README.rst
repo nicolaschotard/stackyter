@@ -11,21 +11,32 @@ stackyter
 Introduction
 ------------
 
-LSST stack + Jupyter -> stackyter
+This script will allow you to run a jupyter notebook (or lab) on a
+distant server (initialy at CC-IN2P3) while displaying it localy in
+your local brower.
 
-This script will allow you to run a jupyter notebook (or lab) at
-CC-IN2P3 while displaying it localy in your local brower.
+It was initialy intended to help LSST members to interact with the
+datasets already available at CC-IN2P3 using Python (in a ``stack`` or a
+DESC environment), but can be use for other purposes that need a
+Jupyter environment.
 
-It is mainly intended to help LSST members to interact with the
-datasets already available at CC-IN2P3 using Python, but can be use
-for other purposes that need an anaconda environment.
+It can now be used in the following mode:
 
-It can also be used by any CC-IN2P3 users thanks to the ``--mysetup``
-option, allowing a personal environment to be setup when the session
-is starting (and thus ignoring the LSST environment). **Caveat:**
-Jupyter must be available in your personal environment for this script
-to be useful.
+- For LSST/DESC members:
 
+  - LSST stack environment: using the ``--vstack`` option.
+  - DESC catalogs environment using the ``--desc`` option
+  - Your personal setup using the ``--mysetup`` option
+
+- For all users:
+
+  - With your personal setup using the ``--mysetup`` option
+  - On any host (not only CC-IN2P3) using the ``--host`` option.
+
+   
+**Caveat:** Jupyter must be available for this script to work.
+
+For *historical reasons*: LSST stack + Jupyter -> stackyter
 
 Installation
 ------------

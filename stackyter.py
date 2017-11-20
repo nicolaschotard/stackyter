@@ -161,10 +161,10 @@ if __name__ == '__main__':
     # Add local libraries to the PATH and PYTHONPATH
     if args.libs is not None:            
         for lib in args.libs:
-            cmd += 'export PYTHONPATH="%s:\$PYTHONPATH"\n' % lib
+            cmd += 'export PYTHONPATH="\$PYTHONPATH:%s"\n' % lib
     if args.bins is not None:
         for lbin in args.bins:
-            cmd += 'export PATH="%s:\$PATH:"\n' % lbin
+            cmd += 'export PATH="\$PATH::%s"\n' % lbin
 
     # Move to the working directory
     if args.workdir == '/pbs/throng/lsst/users/<username>/notebooks':
