@@ -14,30 +14,27 @@ Introduction
 
 This script will allow you to run a jupyter notebook (or lab) on a
 distant server (initialy at CC-IN2P3) while displaying it localy in
-your local brower.
-
-It was initialy intended to help LSST members to interact with the
-datasets already available at CC-IN2P3 using Python (in a ``stack`` or a
-DESC environment), but can be use for other purposes that need a
-Jupyter environment.
-
-It can now be used in the following mode:
+your local brower. It was initialy intended to help LSST members to
+interact with the datasets already available at CC-IN2P3 using Python
+(in a ``stack`` or a DESC environment), but can be use for other
+purposes that need a Jupyter environment. It can be used in the
+following mode:
 
 - For LSST/DESC members:
 
-  - LSST stack environment: using the ``--vstack`` option.
+  - LSST stack environment using the ``--vstack`` option.
   - DESC catalogs environment using the ``--desc`` option
   - Your personal setup using the ``--mysetup`` option
 
 - For all users:
 
   - With your personal setup using the ``--mysetup`` option
-  - On any host (not only CC-IN2P3) using the ``--host`` option.
+  - On any host (not only CC-IN2P3) using the ``--host`` **AND** the
+    ``--mysetup`` options together.
 
    
-**Caveat:** Jupyter must be available for this script to work.
-
-For historical reasons: LSST stack + Jupyter -> stackyter
+**Caveat:** Jupyter must be available on the distant host for this
+ script to work.
 
 Installation
 ------------
@@ -69,8 +66,7 @@ Options
 
 The configuration file can contain any (or all) options available
 through command line. An example of such a file can be found `here
-<https://github.com/nicolaschotard/stackyter/blob/master/example_config.yaml>`_. The
-only option that you **must** use is the ``--username`` option.
+<https://github.com/nicolaschotard/stackyter/blob/master/example_config.yaml>`_.
 
 Optional arguments are::
 
@@ -163,13 +159,13 @@ script).
 Python 2 (2.7) and 3 (>3.4) are available for almost all weeklies,
 with the following nomencalture:
 
-+----------+-----------------+-----------------+
-| Version  | < `w_2017_27`   | `w_2017_27`     |
-+==========+=================+=================+
-| Python 2 | `w_2017_XX`     | `w_2017_XX_py2` |
-+----------+-----------------+-----------------+
-| Python 3 | `w_2017_XX_py3` | `w_2017_XX`     |
-+----------+-----------------+-----------------+
++----------+-------------------+-------------------+
+| Version  | < ``w_2017_27``   | ``w_2017_27``     |
++==========+===================+===================+
+| Python 2 | ``w_2017_XX``     | ``w_2017_XX_py2`` |
++----------+-------------------+-------------------+
+| Python 3 | ``w_2017_XX_py3`` | ``w_2017_XX``     |
++----------+-------------------+-------------------+
 
 Latest releases of the LSST stack, as of 11-07-2017, are:
 
@@ -185,11 +181,11 @@ Latest releases of the LSST stack, as of 11-07-2017, are:
 
 Keep in mind that using Python 2 in an LSST context is not encouraged
 by the community, and will not be supported anymore. The latest weekly
-for which Python 2 has been installed at CC-IN2P3 is `w_2017_4` (see
+for which Python 2 has been installed at CC-IN2P3 is ``w_2017_4`` (see
 online `documentation
 <http://doc.lsst.eu/ccin2p3/ccin2p3.html#software>`_).
 
-**Note**: Since version `w_2017_40`, the ``ipython`` module is
+**Note**: Since version ``w_2017_40``, the ``ipython`` module is
 included in the stack installation at CC-IN2P3 as an add-on. This
 module is not part of the officiel LSST distribution and will not be
 set up with the ``lsst_distrib`` package.
@@ -219,13 +215,13 @@ DESC environment
 ----------------
 
 You can automatically set up a DESC environment that will give you
-access to DESC catalogs such as the lattest `proto-dc2_v2.0`. A test
+access to DESC catalogs such as the lattest ``proto-dc2_v2.0``. A test
 notebook is available on `this github page
 <https://github.com/LSSTDESC/gcr-catalogs/blob/master/examples/GCRCatalogs%20Demo.ipynb>`_. Download
 and test it to make sure that everything is working properly. In this
 environment, the following ressources are available:
 
-- A `miniconda3` install with `Jupyter` (notebook and lab) and `Ipython`;
+- A ``miniconda3`` install with ``Jupyter`` (notebook and lab) and ``Ipython``;
 - The `GRC <https://github.com/yymao/generic-catalog-reader>`_
   (Generic Catalog Reader) and `grc-catalogs
   <https://github.com/LSSTDESC/gcr-catalogs>`_ packages, allowing you
@@ -233,9 +229,9 @@ environment, the following ressources are available:
 - The following DESC catalogs (more info can be found on the `grc-catalogs
   <https://github.com/LSSTDESC/gcr-catalogs>`_ web page):
 
-  - proto-dc2_v2.0
+  - ``proto-dc2_v2.0``
 
-- You can also use the `--libs` or `--bins` options to complete this
+- You can also use the ``--libs`` or ``--bins`` options to complete this
   set up with your personnal libraries (Python 3 only for now).
   
 Personal environment
@@ -246,7 +242,7 @@ working environment, you can set up your personal working environment
 by using the ``--mysetup`` option. Given a setup file located at
 CC-IN2P3, you can simply do::
 
-    stackyter.py --username myusername --mysetup /sps/.../mysetup.sh
+  stackyter.py --username myusername --mysetup /sps/.../mysetup.sh
 
 Your local setup file will be sourced at connection as followed::
 
@@ -254,3 +250,14 @@ Your local setup file will be sourced at connection as followed::
 
 Your setup file must **at least** contains what is needed to make
 Jupyter available. In this mode, the LSST stack will **not** be setup.
+
+Questions?
+----------
+
+- If you have any comments or suggestions, or if you find a bug,
+  please use the dedicated github `issue tracker
+  <https://github.com/nicolaschotard/stackyter/issues>`_ for this
+  page.
+- Why ``stakyter``? For historical reason: ``stackyter`` = LSST ``stack`` +
+  ``Jupyter``. It was initially intended for LSST members to easily use the
+  LSST software stack and interact with the data sets.
