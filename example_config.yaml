@@ -1,6 +1,5 @@
 {
- # 'cca': 'cca7',  # still works but will be deprecated at some point 
- 'host': 'cca7.in2p3.fr',
+ 'host': 'cca7.in2p3.fr',  # or ccjupyter if you have configured your ~/.ssh/config file
  'jupyter': 'lab',
  'packages': ["pipe_tasks", "display_ds9",  "obs_subaru",
               "jointcal", "display_matplotlib -t nchotard"],
@@ -9,5 +8,4 @@
  'workdir': '/sps/lsst/dev/nchotard/demo/lsst_drp_analysis',
  'libs': '/sps/lsst/dev/nchotard/demo/python3/lib/python3.6/site-packages',
  'bins': '/sps/lsst/dev/nchotard/demo/python3/bin',
- 'sshopts': `-C4c arcfour,blowfish-cbc`
 }

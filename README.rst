@@ -96,17 +96,12 @@ Optional arguments are::
                        lsst_distrib)
   --jupyter JUPYTER    Either launch a jupiter notebook or a jupyter lab.
                        (default: notebook)
-  --cca CCA            Either connect to ccage or cca7. ccage might be used
-                       for old or local install of the stack, whereas all
-                       newer versions (>= v13.0, installed for the LSST group)
-                       must be set up on centos7 (cca7). (default: cca7)
-  --host HOST          Name of the target host. This will overwrite the 'cca'
-                       option. This option may allow you to avoid potential
-                       conflit with the definition of the same host in your
-                       $HOME/.ssh/config, or to connect to an other host than
-                       the CC-IN2P3 ones (Jupyter must also be available on
-                       these hosts). Default if to connect to CC-IN2P3.
-                       (default: None)
+  --host HOST          Name of the target host. This option may allow you to
+                       avoid potential conflit with the definition of the same
+                       host in your $HOME/.ssh/config, or to connect to an
+                       other host than the CC-IN2P3 ones (Jupyter must also be
+                       available on these hosts). Default if to connect to CC-
+                       IN2P3. (default: cca7.in2p3.fr)
   --libs LIBS          Path(s) to local Python librairies. Will be added to
                        your PYTHONPATH. Coma separated to add more than one
                        paths, or a list in the config file. A default path for
@@ -125,9 +120,29 @@ Optional arguments are::
                        to make this work. The LSST stack won't be set up in
                        this mode. 'vstack', 'libs', 'bins' and 'labpath'
                        options will be ignored. (default: None)
-  --sshopt SSHOPT      You can add other shh options if needed (E.g., `-C4c
-                       arcfour,blowfish-cbc` for fastest connection).
-                       (default: None)
+
+Distant host configuration
+--------------------------
+
+The ``--host`` option allows you to connect to any distant host. The
+default option used to create the ``ssh`` tunnel are ``-X -Y -tt
+-L``. If you want to configure your ``ssh`` connection, edit your
+``~/.ssh/config`` file using, for instance, the following template::
+
+  Host ccjupyter
+  Hostname cca7.in2p3.fr
+  User lsstuser
+  GSSAPIClientIdentity lsstuser@IN2P3.FR
+  GSSAPIAuthentication yes
+  GSSAPIDelegateCredentials yes
+  GSSAPITrustDns yes
+
+You can then use the ``stackyter`` script as follows::
+
+  stackyter.py --host ccjupyter
+
+Or put the value for that option (along with others) in your
+``config.yaml`` file.
 
 LSST environment
 ----------------
@@ -141,8 +156,9 @@ All available versions of the LSST stack at CC-IN2P3 can be found under::
 
 These versions (and all the others) have been built under CentOS7, and
 must be used under a compatible system (CentOS7 or Ubuntu). To connect
-to a CentOS7 machine on CC-IN2P3, use cca7 instead of ccage (default
-value of this script).
+to a CentOS7 machine on CC-IN2P3, use ``--host cca7.in2p3.fr`` instead
+of ``--host ccage.in2p3.fr`` (``cca7`` is the default value of this
+script).
 
 Python 2 (2.7) and 3 (>3.4) are available for almost all weeklies,
 with the following nomencalture:
