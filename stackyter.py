@@ -81,8 +81,8 @@ if __name__ == '__main__':
 
     # A valid username (and the corresponding password) is actually the only mandatory thing we need
     if args.username is None:
-        msg = "WARNING: The user name will be taken in your ~/.ssh/config or from the local host."
-        print("\x1B[01;93m%s \x1B[0m" % msg)
+        msg = "INFO: The user name will be taken in your ~/.ssh/config or from the local host."
+        print("\x1B[01;92m%s \x1B[0m" % msg)
         args.username = ""
     else:
         args.username += "@"
