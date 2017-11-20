@@ -44,6 +44,12 @@ if __name__ == '__main__':
                         help="Either connect to ccage or cca7. ccage might be used for old or local"
                         " install of the stack, whereas all newer versions (>= v13.0, installed "
                         "for the LSST group) must be set up on centos7 (cca7).")
+    parser.add_argument("--host", default=None,
+                        help="Name of the target host. This will overwrite the 'cca' option. "
+                        "This option may allow you to avoid potential conflit with the definition "
+                        "of the same host in your $HOME/.ssh/config, or to connect to an other "
+                        "host than the CC-IN2P3 ones (Jupyter must also be available on these "
+                        "hosts). Default if to connect to CC-IN2P3.")
     parser.add_argument("--libs", default=None,
                         help="Path(s) to local Python librairies. Will be added to your PYTHONPATH."
                         " Coma separated to add more than one paths, or a list in the config file."
@@ -86,8 +92,9 @@ if __name__ == '__main__':
 
     # Start building the command line that will be launched at CC-IN2P3
     # Open the ssh tunnel to a CC-IN2P3 host
-    cmd = "ssh -X -YC4c arcfour,blowfish-cbc -tt -L 20001:localhost:%i %s@%s.in2p3.fr << EOF\n" % \
-          (port, args.username, args.cca)
+    host = args.host if args.host is not None else args.cca + ".in2p3.fr"
+    cmd = "ssh -X -YC4c arcfour,blowfish-cbc -tt -L 20001:localhost:%i %s@%s << EOF\n" % \
+          (port, args.username, host)
 
     # Print the hostname; for the record
     cmd += "hostname\n"
