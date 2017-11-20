@@ -34,6 +34,10 @@ if __name__ == '__main__':
     parser.add_argument("--vstack", default='v14.0',
                         help="Version of the stack you want to set up."
                         " (E.g. v14.0, w_2017_43 or w_2017_43_py2)")
+    parser.add_argument("--desc", action='store_true', default=False,
+                        help="Setup a DESC environment giving you access to DESC catalogs."
+                        "('proto-dc2_v2.0' is for now the only available catalog). This option "
+                        "overwrites the '--vstack' and '--mysetup' options.")
     parser.add_argument("--packages", default='lsst_distrib',
                         help="A list of packages you want to setup. Coma separated from command"
                         " line, or a list in the config file. You can use the `lsst_distrib` "
@@ -99,7 +103,14 @@ if __name__ == '__main__':
     # Print the hostname; for the record
     cmd += "hostname\n"
 
-    if args.mysetup is None:
+    if args.mysetup is not None:
+        # Use the setup file given by the user to set up the working environment (no LSST stack)
+        cmd += "source %s\n" % args.mysetup
+    elif args.desc:
+        # Setup a DESC environment with an easy access to DESC catalogs
+        desc_env = "/sps/lsst/dev/DESC/setup.sh"
+        cmd += "source %s\n" % desc_env
+    else:
         # Setup the lsst stack and packages if a version of the stack if given
         if args.vstack is not None:
             cmd += "source /sps/lsst/software/lsst_distrib/%s/loadLSST.bash\n" % args.vstack
@@ -144,9 +155,6 @@ if __name__ == '__main__':
             elif args.labpath is None and args.libs is not None:
                 # That should not happen
                 raise IOError("Give me a path to the install directory of jupyterlab.")
-    else:
-        # Use the setup file given by the user to set up the working environment (no LSST stack)
-        cmd += "source %s\n" % args.mysetup
 
     # Move to the working directory
     if args.workdir == '/pbs/throng/lsst/users/<username>/notebooks':
