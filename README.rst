@@ -8,6 +8,7 @@ stackyter
 .. image:: https://badge.fury.io/py/stackyter.svg
     :target: https://badge.fury.io/py/stackyter
 
+	   
 Introduction
 ------------
 
@@ -211,7 +212,9 @@ environment, the following ressources are available:
   to easily load and read the DESC catalogs;
 - The following DESC catalogs (more info can be found on the `grc-catalogs
   <https://github.com/LSSTDESC/gcr-catalogs>`_ web page):
+
   - proto-dc2_v2.0
+
 - You can also use the `--libs` or `--bins` options to complete this
   set up with your personnal libraries (Python 3 only for now).
   
