@@ -72,6 +72,10 @@ Optional arguments are::
                        /pbs/throng/lsst/users/<username>/notebooks)
   --vstack VSTACK      Version of the stack you want to set up. (E.g. v14.0,
                        w_2017_43 or w_2017_43_py2) (default: v14.0)
+  --desc               Setup a DESC environment giving you access to DESC
+                       catalogs ('proto-dc2_v2.0' is for now the only
+                       available catalog). This option overwrites the '--
+                       vstack' and '--mysetup' options. (default: False)
   --packages PACKAGES  A list of packages you want to setup. Coma separated
                        from command line, or a list in the config file. You
                        can use the `lsst_distrib` package to set up all
@@ -83,6 +87,13 @@ Optional arguments are::
                        for old or local install of the stack, whereas all
                        newer versions (>= v13.0, installed for the LSST group)
                        must be set up on centos7 (cca7). (default: cca7)
+  --host HOST          Name of the target host. This will overwrite the 'cca'
+                       option. This option may allow you to avoid potential
+                       conflit with the definition of the same host in your
+                       $HOME/.ssh/config, or to connect to an other host than
+                       the CC-IN2P3 ones (Jupyter must also be available on
+                       these hosts). Default if to connect to CC-IN2P3.
+                       (default: None)
   --libs LIBS          Path(s) to local Python librairies. Will be added to
                        your PYTHONPATH. Coma separated to add more than one
                        paths, or a list in the config file. A default path for
@@ -101,7 +112,6 @@ Optional arguments are::
                        to make this work. The LSST stack won't be set up in
                        this mode. 'vstack', 'libs', 'bins' and 'labpath'
                        options will be ignored. (default: None)
-
 
 LSST environment
 ----------------
@@ -172,6 +182,27 @@ Additional features
 
 - ``ds9`` is automatically available since version 0.9, and can be
   called in a Jupyter terminal.
+
+DESC environment
+----------------
+
+You can automatically set up a DESC environment that will give you
+access to DESC catalogs such as the lattest `proto-dc2_v2.0`. A test
+notebook is available on `this github page
+<https://github.com/LSSTDESC/gcr-catalogs/blob/master/examples/GCRCatalogs%20Demo.ipynb>`_. Download
+and test it to make sure that everything is working properly. In this
+environment, the following ressources are available:
+
+- A `miniconda3` install with `Jupyter` (notebook and lab) and `Ipython`;
+- The `GRC <https://github.com/yymao/generic-catalog-reader>`_
+  (Generic Catalog Reader) and `grc-catalogs
+  <https://github.com/LSSTDESC/gcr-catalogs>`_ packages, allowing you
+  to easily load and read the DESC catalogs;
+- The following DESC catalogs (more info can be found on the `grc-catalogs
+  <https://github.com/LSSTDESC/gcr-catalogs>`_ web page):
+  - proto-dc2_v2.0
+- You can also use the `--libs` or `--bins` options to complete this
+  set up with your personnal libraries (Python 3 only for now).
   
 Personal environment
 --------------------

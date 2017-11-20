@@ -35,7 +35,7 @@ if __name__ == '__main__':
                         help="Version of the stack you want to set up."
                         " (E.g. v14.0, w_2017_43 or w_2017_43_py2)")
     parser.add_argument("--desc", action='store_true', default=False,
-                        help="Setup a DESC environment giving you access to DESC catalogs."
+                        help="Setup a DESC environment giving you access to DESC catalogs "
                         "('proto-dc2_v2.0' is for now the only available catalog). This option "
                         "overwrites the '--vstack' and '--mysetup' options.")
     parser.add_argument("--packages", default='lsst_distrib',
@@ -103,6 +103,10 @@ if __name__ == '__main__':
     # Print the hostname; for the record
     cmd += "hostname\n"
 
+    # Add local libraries to the PATH and PYTHONPATH
+    args.libs = string_to_list(args.libs)
+    args.bins = string_to_list(args.bins)
+
     if args.mysetup is not None:
         # Use the setup file given by the user to set up the working environment (no LSST stack)
         cmd += "source %s\n" % args.mysetup
@@ -117,10 +121,6 @@ if __name__ == '__main__':
         if args.packages is not None:
             cmd += ''.join(["setup %s\n" % package for package in args.packages])
 
-        # Add local libraries to the PATH and PYTHONPATH
-        args.libs = string_to_list(args.libs)
-        args.bins = string_to_list(args.bins)
-
         # First get the runing version of python
         if args.vstack == 'v13.0':
             cmd += "export VPY=2 \n"
@@ -131,14 +131,16 @@ if __name__ == '__main__':
             cmd += "if [ \$VPY -eq 2 ]; then export FVPY=2.7; else export FVPY=3.6; fi\n"
 
         # Use default paths to make sure that jupyter is available
+        jupybin = "/sps/lsst/dev/nchotard/demo/python\$VPY/bin"
+        jupylib = "/sps/lsst/dev/nchotard/demo/python\$VPY/lib/python\$FVPY/site-packages"
         if args.libs is None:
-            args.libs = ['/sps/lsst/dev/nchotard/demo/python\$VPY/lib/python\$FVPY/site-packages']
+            args.libs = [jupylib]
+        else:
+            args.lib.append(jupylib)
         if args.bins is None:
-            args.bins = ["/sps/lsst/dev/nchotard/demo/python\$VPY/bin"]
-        for lib in args.libs:
-            cmd += 'export PYTHONPATH="%s:\$PYTHONPATH"\n' % lib
-        for lbin in args.bins:
-            cmd += 'export PATH="%s:\$PATH:"\n' % lbin
+            args.bins = [jupybin]
+        else:
+            args.bins.append(jupybin)
 
         # Add ds9 to the PATH
         cmd += 'export PATH=\$PATH:/sps/lsst/dev/nchotard/local/bin\n'
@@ -155,6 +157,14 @@ if __name__ == '__main__':
             elif args.labpath is None and args.libs is not None:
                 # That should not happen
                 raise IOError("Give me a path to the install directory of jupyterlab.")
+
+    # Add local libraries to the PATH and PYTHONPATH
+    if args.libs is not None:            
+        for lib in args.libs:
+            cmd += 'export PYTHONPATH="%s:\$PYTHONPATH"\n' % lib
+    if args.bins is not None:
+        for lbin in args.bins:
+            cmd += 'export PATH="%s:\$PATH:"\n' % lbin
 
     # Move to the working directory
     if args.workdir == '/pbs/throng/lsst/users/<username>/notebooks':
