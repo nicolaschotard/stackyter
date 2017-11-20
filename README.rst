@@ -37,7 +37,7 @@ It can now be used in the following mode:
    
 **Caveat:** Jupyter must be available for this script to work.
 
-For *historical reasons*: LSST stack + Jupyter -> stackyter
+For historical reasons: LSST stack + Jupyter -> stackyter
 
 Installation
 ------------
