@@ -60,13 +60,20 @@ Usage
    
    stackyter.py [options]
 
+By default, ``stackyter`` will try to connect to CC-IN2P3 using what
+``ssh`` can find in your ``~/.ssh/config`` or taking your local user
+name. It will also set up the latest stable version of the LSST
+stack. If this is not what you want to do, use the following set of
+options to adapt ``stackyter`` to your personal case.
 
 Options
 -------
 
-The configuration file can contain any (or all) options available
-through command line. An example of such a file can be found `here
-<https://github.com/nicolaschotard/stackyter/blob/master/example_config.yaml>`_.
+The configuration file can contain any options available through
+command line. An example of such a file can be found `here
+<https://github.com/nicolaschotard/stackyter/blob/master/example_config.yaml>`_. An
+option used on the command line will overwrite the content of the
+configuration file for the same option, if it exists.
 
 Optional arguments are::
 
@@ -237,16 +244,16 @@ environment, the following ressources are available:
 Personal environment
 --------------------
 
-As stated in the introduction, and instead of seting up the LSST
-working environment, you can set up your personal working environment
-by using the ``--mysetup`` option. Given a setup file located at
-CC-IN2P3, you can simply do::
+As stated in the introduction, and instead of seting up the LSST/DESC
+working environments, you can set up your personal working environment
+by using the ``--mysetup`` option. Given a setup file located an your
+distant host, you can simply do::
 
-  stackyter.py --username myusername --mysetup /sps/.../mysetup.sh
+  stackyter.py --mysetup /path/to/my/setup.sh (--username myusername)
 
 Your local setup file will be sourced at connection as followed::
 
-  source /sps/.../mysetup.sh
+  source /path/to/my/setup.sh
 
 Your setup file must **at least** contains what is needed to make
 Jupyter available. In this mode, the LSST stack will **not** be setup.
