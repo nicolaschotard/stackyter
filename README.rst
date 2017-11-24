@@ -158,15 +158,16 @@ options can be used (or not) in several different ways:
   is directly given by the user, and ``stakyter`` will look for a
   default configuration file. The default file must be either
   ``~/stackyter-config.yaml`` or defined by the ``STACKYTERCONFIG``
-  environment variable, that you must have previoulsy define in case
-  the default value does not fit your need. The ``myconfig`` key will
-  then be looked for in this default configuration file to get the
-  configuration dictionnart that you asked for.
+  environment variable (if the default path does not fit your
+  need). The ``myconfig`` key will be looked for in this default
+  configuration file to get the configuration dictionnary you asked
+  for.
 
 - ``stackyter.py``. In that case, ``stackyter`` will also look for a
   default configuration file (see above), and for a default
-  configuration called ``default_config`` in this file. Thi sdefault
-  must point to the configuration you would like to use by
+  configuration called ``default_config`` in this file. This default
+  value must be there if you have mor ethan one confiuration
+  defined. It must point to the configuration you would like to use by
   default.
 
 In principal, your default configuration file must look like that::
