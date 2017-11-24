@@ -13,7 +13,7 @@ Introduction
 ------------
 
 This script will allow you to run a jupyter notebook (or lab) on a
-distant server (initialy at CC-IN2P3) while displaying it localy in
+distant server (default is CC-IN2P3) while displaying it localy in
 your local brower. It was initialy intended to help LSST members to
 interact with the datasets already available at CC-IN2P3 using Python
 (in a ``stack`` or a DESC environment), but can be use for other
@@ -33,8 +33,8 @@ following mode:
     ``--mysetup`` options together.
 
    
-**Caveat:** Jupyter must be available on the distant host for this
- script to work.
+.. IMPORTANT::
+  Jupyter must be available on the distant host for this script to work.
 
 Installation
 ------------
@@ -66,16 +66,15 @@ name. It will also set up the latest stable version of the LSST
 stack. If this is not what you want to do, use the following set of
 options to adapt ``stackyter`` to your personal case.
 
-Options
--------
+Options and configurations
+--------------------------
 
-The configuration file can contain any options available through
-command line. An example of such a file can be found `here
-<https://github.com/nicolaschotard/stackyter/blob/master/example_config.yaml>`_. An
-option used on the command line will overwrite the content of the
-configuration file for the same option, if it exists.
+Optional arguments
+~~~~~~~~~~~~~~~~~~
 
-Optional arguments are::
+An option used on the command line will always overwrite the content
+of the configuration file for the same option, if it exists. See the
+next section for a description on how to use the configuration file::
 
   -h, --help           show this help message and exit
   --config CONFIG      Configuration file containing a set of option values.
@@ -124,6 +123,60 @@ Optional arguments are::
                        this mode. 'vstack', 'libs', 'bins' and 'labpath'
                        options will be ignored. (default: None)
 
+
+Configuration file
+~~~~~~~~~~~~~~~~~~
+
+A configuration dictionnary can contain any options available through
+the command line. The options found in the configuration file will
+always be overwritten by the command line.
+
+The configuration file can be given in different ways, and can
+contains from a single configuration dictionnary to several
+configuration dictionnaries. The ``--config`` option can be used (or not) in several different ways:
+
+- ``stackyter.py --config myfile.yaml``. ``myfile.yaml`` must contain
+a single dictionnary with your set of options. An example of such a
+file can be found `here
+<https://github.com/nicolaschotard/stackyter/blob/master/example_config.yaml>`_.
+
+- ``stackyter.py --config myconfig``. In that case, no configuration
+  is directly given by the user, and ``stakyter`` will look for a
+  default configuration file. The default file must be either
+  ``~/stackyter-config.yaml`` or defined by the ``STACKYTERCONFIG``
+  environment variable, that you must have previoulsy define in case
+  the default value does not fit your need. The ``myconfig`` key will
+  then be looked for in this default configuration file to get the
+  configuration dictionnart that you asked for.
+
+- ``stackyter.py``. In that case, ``stackyter`` will also look for a
+  default configuration file (see above), and for a default
+  configuration called ``default`` in this file. Thi sdefault must
+  point to the configuration you would like to use by default. The
+  previous way of using the ``--config`` option allows you to select
+  an other configuration that you have stored in your default
+  configuration file.
+
+In principal, your default configuration file must look like that::
+
+  {
+   'default': 'ccin2p3',
+   'ccin2p3': {
+               'host': 'cca7.in2p3.fr',  # or ccjupyter if your ~/.ssh/config if configured
+               'jupyter': 'lab',
+               'packages': ["lsst_distrib"],
+               'username': 'nchotard',
+               'vstack': 'v14.0',
+               'workdir': '/sps/lsst/dev/nchotard/',
+              },
+   'otherhost': {
+                 'host': 'otherhost.fr',
+                 'username': 'chotard',
+                 'mysetup': 'pathtomysetup'
+                },
+  }
+
+
 Distant host configuration
 --------------------------
 
@@ -145,7 +198,8 @@ You can then use the ``stackyter`` script as follows::
   stackyter.py --host ccjupyter
 
 Or put the value for that option (along with others) in your
-``config.yaml`` file.
+``config.yaml`` file. Do not forget to change ``lsstuser`` by your
+personal user name.
 
 LSST environment
 ----------------
@@ -221,12 +275,16 @@ Additional features
 DESC environment
 ----------------
 
-You can automatically set up a DESC environment that will give you
-access to DESC catalogs such as the lattest ``proto-dc2_v2.0``. A test
-notebook is available on `this github page
+You can automatically set up an ``anaconda`` working environment that
+will give you access to DESC catalogs such as the lattest
+``proto-dc2_v2.0``::
+
+  stackyter.py --desc
+
+A test notebook is available on `this github page
 <https://github.com/LSSTDESC/gcr-catalogs/blob/master/examples/GCRCatalogs%20Demo.ipynb>`_. Download
-and test it to make sure that everything is working properly. In this
-environment, the following ressources are available:
+it and run it to make sure that everything is working properly. In
+this environment, the following ressources are available:
 
 - A ``miniconda3`` install with ``Jupyter`` (notebook and lab) and ``Ipython``;
 - The `GRC <https://github.com/yymao/generic-catalog-reader>`_
@@ -257,6 +315,9 @@ Your local setup file will be sourced at connection as followed::
 
 Your setup file must **at least** contains what is needed to make
 Jupyter available. In this mode, the LSST stack will **not** be setup.
+
+You can also use the ``--host`` option to run on an different distant
+host than CC-IN2P3.
 
 Questions?
 ----------

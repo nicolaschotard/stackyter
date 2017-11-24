@@ -2,6 +2,7 @@
 """Run jupyter at CC-IN2P3, setup the LSST stack, and display it localy."""
 
 
+import os
 import sys
 import subprocess
 from argparse import ArgumentParser
@@ -10,9 +11,53 @@ import yaml
 import numpy as np
 
 
+DEFAULT_CONFIG = os.getenv("HOME") + "/.stackyter-config.yaml"
+
+
 def string_to_list(a):
     """Transform a string with coma separated values to a list of values."""
     return a if isinstance(a, list) or a is None else a.split(",")
+
+
+def get_default_config():
+    """Get the stackyter default configuration file if it exists."""
+    if os.getenv("STACKYTERCONFIG") is not None:  # set up by the user
+        return yaml.load(open(os.getenv("STACKYTERCONFIG"), 'r'))
+    elif os.path.exists(DEFAULT_CONFIG):  # default location
+        print("INFO: Loading default configuration file from", DEFAULT_CONFIG)
+        return yaml.load(open(DEFAULT_CONFIG, 'r'))
+    else:
+        return None
+
+
+def get_config(config):
+    """Get the configuration for stackyter is any."""
+    if config is not None:
+        if os.path.exists(config):
+            # The user has given configuration file
+            print("INFO: Using configuration from", config)
+            config = yaml.load(open(config, 'r'))
+        else:
+            default_config = get_default_config()
+            if default_config is None:
+                raise IOError("No default configuration file found. Check the doc.")
+            # Get the selected configuration from the config file
+            if config in default_config:
+                print("INFO: Using configuration '%s'" % config)
+                config = default_config[config]
+            else:
+                raise IOError("Configuration `%s` does not exist. Check your default file." % \
+                              config)
+    else:
+        # Look for a default configuration file
+        default_config = get_default_config()
+        if default_config is not None:
+            if 'default' in default_config:
+                print("INFO: Using default configuration '%s'" % default_config['default'])
+                config = default_config[default_config['default']]
+            else:
+                raise IOError("You must define a `default` configuration in your default file.")
+    return config
 
 
 if __name__ == '__main__':
@@ -23,32 +68,38 @@ if __name__ == '__main__':
 
     parser = ArgumentParser(prog=prog, usage=usage, description=description,
                             formatter_class=ArgumentDefaultsHelpFormatter)
-    parser.add_argument('--config',
+    parser.add_argument('--config', default=None,
                         help='Configuration file containing a set of option values. '
                         'The content of this file will be overwritten by any given'
                         ' command line options.')
     parser.add_argument('--username', help="Your CC-IN2P3 user name. If not given, ssh will try to "
                         "figure it out from you ~/.ssh/config or will use your local user name.")
+    parser.add_argument("--host", default="cca7.in2p3.fr",
+                        help="Name of the target host. This option may allow you to avoid potential"
+                        " conflit with the definition of the same host in your $HOME/.ssh/config, "
+                        "or to connect to an other host than the CC-IN2P3 ones (Jupyter must also "
+                        "be available on these hosts). Default if to connect to CC-IN2P3.")
     parser.add_argument("--workdir", default='/pbs/throng/lsst/users/<username>/notebooks',
                         help="Your working directory at CC-IN2P3")
+    parser.add_argument("--jupyter", default="notebook",
+                        help="Either launch a jupiter notebook or a jupyter lab.")
     parser.add_argument("--vstack", default='v14.0',
                         help="Version of the stack you want to set up."
                         " (E.g. v14.0, w_2017_43 or w_2017_43_py2)")
-    parser.add_argument("--desc", action='store_true', default=False,
-                        help="Setup a DESC environment giving you access to DESC catalogs "
-                        "('proto-dc2_v2.0' is for now the only available catalog). This option "
-                        "overwrites the '--vstack' and '--mysetup' options.")
     parser.add_argument("--packages", default='lsst_distrib',
                         help="A list of packages you want to setup. Coma separated from command"
                         " line, or a list in the config file. You can use the `lsst_distrib` "
                         "package to set up all available packages from a given distrib.")
-    parser.add_argument("--jupyter", default="notebook",
-                        help="Either launch a jupiter notebook or a jupyter lab.")
-    parser.add_argument("--host", default="cca7.in2p3.fr",
-                        help="Name of the target host. This option may allow you to avoid potential "
-                        "conflit with the definition of the same host in your $HOME/.ssh/config, "
-                        "or to connect to an other host than the CC-IN2P3 ones (Jupyter must also "
-                        "be available on these hosts). Default if to connect to CC-IN2P3.")
+    parser.add_argument("--desc", action='store_true', default=False,
+                        help="Setup a DESC environment giving you access to DESC catalogs "
+                        "('proto-dc2_v2.0' is for now the only available catalog). This option "
+                        "overwrites the '--vstack' and '--mysetup' options.")
+    parser.add_argument("--mysetup", default=None,
+                        help="Path to a setup file (at CC-IN2P3) that will be used to set up the "
+                        "working environment. Be sure that a Python installation with Jupyter (and"
+                        " jupyterlab) is available to make this work. The LSST stack won't be set "
+                        "up in this mode. 'vstack', 'libs', 'bins' and 'labpath' options will be "
+                        "ignored.")
     parser.add_argument("--libs", default=None,
                         help="Path(s) to local Python librairies. Will be added to your PYTHONPATH."
                         " Coma separated to add more than one paths, or a list in the config file."
@@ -61,18 +112,12 @@ if __name__ == '__main__':
                         help="You must provide the path in which jupyterlab has been installed"
                         " in case it differs from the (first) path you gave to the --libs option."
                         " A default path for jupyterlab will be choose if not given.")
-    parser.add_argument("--mysetup", default=None,
-                        help="Path to a setup file (at CC-IN2P3) that will be used to set up the "
-                        "working environment. Be sure that a Python installation with Jupyter (and"
-                        " jupyterlab) is available to make this work. The LSST stack won't be set "
-                        "up in this mode. 'vstack', 'libs', 'bins' and 'labpath' options will be "
-                        "ignored.")
     
     args = parser.parse_args()
-
-    # Check if a configuration file is given
-    if args.config is not None:
-        config = yaml.load(open(args.config, 'r'))
+        
+    # Do we have a configuration file
+    config = get_config(args.config)
+    if config is not None:
         for opt, val in args._get_kwargs():
             # only keep option value from the config file
             # if the user has not set it up from command line
@@ -80,12 +125,7 @@ if __name__ == '__main__':
                 setattr(args, opt, config[opt])
 
     # A valid username (and the corresponding password) is actually the only mandatory thing we need
-    if args.username is None:
-        msg = "INFO: The user name will be taken in your ~/.ssh/config or from the local host."
-        print("\x1B[01;92m%s \x1B[0m" % msg)
-        args.username = ""
-    else:
-        args.username += "@"
+    args.username = "" if args.username is None else args.username + "@"
 
     # Make sure that we have a list (even empty) for packages
     args.packages = string_to_list(args.packages)
@@ -166,8 +206,8 @@ if __name__ == '__main__':
             cmd += 'export PATH="\$PATH::%s"\n' % lbin
 
     # Move to the working directory
-    if args.workdir == '/pbs/throng/lsst/users/<username>/notebooks':
-        args.workdir = args.workdir.replace('<username>', args.username)
+    if args.workdir == '/pbs/throng/lsst/users/<username>/notebooks' and args.username != "":
+        args.workdir = args.workdir.replace('<username>', args.username.replace('@', ''))
     cmd += "cd %s\n" % args.workdir
 
     # Launch jupyter
