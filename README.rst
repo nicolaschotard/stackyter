@@ -33,8 +33,8 @@ following mode:
     ``--mysetup`` options together.
 
    
-**Caveat** Jupyter must be available on the distant host for this
- script to work.
+**Jupyter must be available on the distant host for this script to
+ work.**
 
 Installation
 ------------
@@ -156,7 +156,7 @@ options can be used (or not) in several different ways:
   default configuration file (see above), and for a default
   configuration called ``default_config`` in this file. Thi sdefault
   must point to the configuration you would like to use by
-  default. 
+  default.
 
 In principal, your default configuration file must look like that::
 
