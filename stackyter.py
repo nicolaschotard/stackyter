@@ -45,7 +45,7 @@ def read_config(config, key=None):
         else:
             raise IOError("You must define a 'default_config' in you configuration file.")
     else:
-        config = config[config.keys()[0]]
+        config = config[list(config)[0]]
     return config
 
 
