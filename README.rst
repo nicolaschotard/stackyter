@@ -33,8 +33,8 @@ following mode:
     ``--mysetup`` options together.
 
    
-.. important::
-  Jupyter must be available on the distant host for this script to work.
+**Caveat** Jupyter must be available on the distant host for this
+ script to work.
 
 Installation
 ------------
@@ -137,9 +137,10 @@ always be overwritten by the command line.
 
 The configuration file can be given in different ways, and can
 contains from a single configuration dictionnary to several
-configuration dictionnaries. The ``--config`` option can be used (or not) in several different ways:
+configuration dictionnaries. The ``--config`` and ``--congfile``
+options can be used (or not) in several different ways:
 
-- ``stackyter.py --config myfile.yaml``. ``myfile.yaml`` must contain
+- ``stackyter.py --configfile myfile.yaml``. ``myfile.yaml`` must contain
   your configuration, with your set of options.
 
 - ``stackyter.py --config myconfig``. In that case, no configuration
@@ -153,16 +154,14 @@ configuration dictionnaries. The ``--config`` option can be used (or not) in sev
 
 - ``stackyter.py``. In that case, ``stackyter`` will also look for a
   default configuration file (see above), and for a default
-  configuration called ``default`` in this file. Thi sdefault must
-  point to the configuration you would like to use by default. The
-  previous way of using the ``--config`` option allows you to select
-  an other configuration that you have stored in your default
-  configuration file.
+  configuration called ``default_config`` in this file. Thi sdefault
+  must point to the configuration you would like to use by
+  default. 
 
 In principal, your default configuration file must look like that::
 
   {
-   'default': 'ccin2p3',
+   'default_config': 'ccin2p3',
    'ccin2p3': {
                'host': 'cca7.in2p3.fr',  # or ccjupyter if your ~/.ssh/config if configured
                'jupyter': 'lab',
@@ -177,6 +176,20 @@ In principal, your default configuration file must look like that::
                  'mysetup': 'pathtomysetup'
                 },
   }
+
+or simply as followed if only one configuration is defined::
+
+  {
+   'ccin2p3': {
+               'host': 'cca7.in2p3.fr',  # or ccjupyter if your ~/.ssh/config if configured
+               'jupyter': 'lab',
+               'packages': ["lsst_distrib"],
+               'username': 'nchotard',
+               'vstack': 'v14.0',
+               'workdir': '/sps/lsst/dev/nchotard/',
+              },
+  }
+
 
 
 Distant host configuration

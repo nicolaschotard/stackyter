@@ -30,34 +30,45 @@ def get_default_config():
         return None
 
 
-def get_config(config):
+def read_config(config, key=None):
+    """Read a config file and return the right configuration."""
+    if key is not None:
+        if key in config:
+            print("INFO: Using configuration '%s'" % key)
+            config = config[key]
+        else:
+            raise IOError("Configuration `%s` does not exist. Check your default file." % key)
+    elif len(config) > 1:
+        if 'default_config' in config:
+            print("INFO: Using default configuration '%s'" % config['default_config'])
+            config = config[config['default_config']]
+        else:
+            raise IOError("You must define a 'default_config' in you configuration file.")
+    else:
+        config = config[config.keys()[0]]
+    return config
+
+
+def get_config(config, configfile):
     """Get the configuration for stackyter is any."""
+    if configfile is not None:
+        config = configfile
     if config is not None:
         if os.path.exists(config):
             # The user has given configuration file
             print("INFO: Using default configuration from", config)
-            config = yaml.load(open(config, 'r'))
-            config = config[config['default']]
+            config = read_config(yaml.load(open(config, 'r')))
         else:
             default_config = get_default_config()
             if default_config is None:
                 raise IOError("No default configuration file found. Check the doc.")
             # Get the selected configuration from the config file
-            if config in default_config:
-                print("INFO: Using configuration '%s'" % config)
-                config = default_config[config]
-            else:
-                raise IOError("Configuration `%s` does not exist. Check your default file." % \
-                              config)
+            config = read_config(default_config, key=config)
     else:
         # Look for a default configuration file
         default_config = get_default_config()
         if default_config is not None:
-            if 'default' in default_config:
-                print("INFO: Using default configuration '%s'" % default_config['default'])
-                config = default_config[default_config['default']]
-            else:
-                raise IOError("You must define a `default` configuration in your default file.")
+            config = read_config(default_config)
     return config
 
 
@@ -65,26 +76,31 @@ if __name__ == '__main__':
 
     description = """Run Jupyter on CC-IN2P3, setup the LSST stack, and display it localy."""
     prog = "stackyter.py"
-    usage = """%s [options]""" % prog
+    usage = """%s [remote] [options]""" % prog
 
     parser = ArgumentParser(prog=prog, usage=usage, description=description,
                             formatter_class=ArgumentDefaultsHelpFormatter)
-    parser.add_argument('--config', default=None,
-                        help='Configuration file containing a set of option values. '
-                        'The content of this file will be overwritten by any given'
-                        ' command line options. You can also give the name of a configuration if '
-                        'you have defined it in your default configuration file. See the '
-                        'documentation for details on how to build this file.')
-    parser.add_argument('--username', help="Your CC-IN2P3 user name. If not given, ssh will try to "
+    parser.add_argument('-c', '--config', default=None,
+                        help='Name of the configuration to use, taken from your default '
+                        'configuration file (~/.stackyter-config.yaml or $STACKYTERCONFIG). '
+                        "Default if to use the 'default_config' defined in this file. "
+                        'The content of the configuration file will be overwritten by any '
+                        'given command line options.')
+    parser.add_argument('-f', '--configfile', default=None,
+                        help='Configuration file containing a set of option values. The content '
+                        'of this file will be overwritten by any given command line options. '
+                        'Mostly for testing your configuration file before making it the default.')
+    parser.add_argument('-u', '--username',
+                        help="Your CC-IN2P3 user name. If not given, ssh will try to "
                         "figure it out from you ~/.ssh/config or will use your local user name.")
-    parser.add_argument("--host", default="cca7.in2p3.fr",
+    parser.add_argument('-H', "--host", default="cca7.in2p3.fr",
                         help="Name of the target host. This option may allow you to avoid potential"
                         " conflit with the definition of the same host in your $HOME/.ssh/config, "
                         "or to connect to an other host than the CC-IN2P3 ones (Jupyter must also "
                         "be available on these hosts). Default if to connect to CC-IN2P3.")
-    parser.add_argument("--workdir", default='/pbs/throng/lsst/users/<username>/notebooks',
+    parser.add_argument('-w', "--workdir", default='/pbs/throng/lsst/users/<username>/notebooks',
                         help="Your working directory at CC-IN2P3")
-    parser.add_argument("--jupyter", default="notebook",
+    parser.add_argument('-j', "--jupyter", default="notebook",
                         help="Either launch a jupiter notebook or a jupyter lab.")
     parser.add_argument("--vstack", default='v14.0',
                         help="Version of the stack you want to set up."
@@ -119,7 +135,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
         
     # Do we have a configuration file
-    config = get_config(args.config)
+    config = get_config(args.config, args.configfile)
     if config is not None:
         for opt, val in args._get_kwargs():
             # only keep option value from the config file
