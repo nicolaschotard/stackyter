@@ -98,7 +98,7 @@ if __name__ == '__main__':
                         " conflit with the definition of the same host in your $HOME/.ssh/config, "
                         "or to connect to an other host than the CC-IN2P3 ones (Jupyter must also "
                         "be available on these hosts). Default if to connect to CC-IN2P3.")
-    parser.add_argument('-w', "--workdir", default='/pbs/throng/lsst/users/<username>/notebooks',
+    parser.add_argument('-w', "--workdir", default=None,
                         help="Your working directory at CC-IN2P3")
     parser.add_argument('-j', "--jupyter", default="notebook",
                         help="Either launch a jupiter notebook or a jupyter lab.")
@@ -165,6 +165,12 @@ if __name__ == '__main__':
     args.libs = string_to_list(args.libs)
     args.bins = string_to_list(args.bins)
 
+    # Move to the working directory
+    if args.workdir is not None:
+        cmd += "if [[ ! -d %s ]]; then echo 'Error: directory %s does not exist'; exit 1; fi\n" % \
+               (args.workdir, args.workdir)
+        cmd += "cd %s\n" % args.workdir
+
     if args.mysetup is not None:
         # Use the setup file given by the user to set up the working environment (no LSST stack)
         cmd += "source %s\n" % args.mysetup
@@ -223,11 +229,6 @@ if __name__ == '__main__':
     if args.bins is not None:
         for lbin in args.bins:
             cmd += 'export PATH="\$PATH::%s"\n' % lbin
-
-    # Move to the working directory
-    if args.workdir == '/pbs/throng/lsst/users/<username>/notebooks' and args.username != "":
-        args.workdir = args.workdir.replace('<username>', args.username.replace('@', ''))
-    cmd += "cd %s\n" % args.workdir
 
     # Launch jupyter
     cmd += 'jupyter %s --no-browser --port=%i --ip=127.0.0.1 &\n' % (args.jupyter, port)
