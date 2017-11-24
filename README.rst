@@ -33,7 +33,7 @@ following mode:
     ``--mysetup`` options together.
 
    
-.. IMPORTANT::
+.. important::
   Jupyter must be available on the distant host for this script to work.
 
 Installation
@@ -74,36 +74,46 @@ Optional arguments
 
 An option used on the command line will always overwrite the content
 of the configuration file for the same option, if it exists. See the
-next section for a description on how to use the configuration file::
+next section for a description on how to use the configuration
+file. Available options are::
 
   -h, --help           show this help message and exit
   --config CONFIG      Configuration file containing a set of option values.
                        The content of this file will be overwritten by any
-                       given command line options. (default: None)
+                       given command line options. You can also give the name
+                       of a configuration if you have defined it in your
+                       default configuration file. See the documentation for
+                       details on how to build this file. (default: None)
   --username USERNAME  Your CC-IN2P3 user name. If not given, ssh will try to
                        figure it out from you ~/.ssh/config or will use your
                        local user name. (default: None)
-  --workdir WORKDIR    Your working directory at CC-IN2P3 (default:
-                       /pbs/throng/lsst/users/<username>/notebooks)
-  --vstack VSTACK      Version of the stack you want to set up. (E.g. v14.0,
-                       w_2017_43 or w_2017_43_py2) (default: v14.0)
-  --desc               Setup a DESC environment giving you access to DESC
-                       catalogs ('proto-dc2_v2.0' is for now the only
-                       available catalog). This option overwrites the '--
-                       vstack' and '--mysetup' options. (default: False)
-  --packages PACKAGES  A list of packages you want to setup. Coma separated
-                       from command line, or a list in the config file. You
-                       can use the `lsst_distrib` package to set up all
-                       available packages from a given distrib. (default:
-                       lsst_distrib)
-  --jupyter JUPYTER    Either launch a jupiter notebook or a jupyter lab.
-                       (default: notebook)
   --host HOST          Name of the target host. This option may allow you to
                        avoid potential conflit with the definition of the same
                        host in your $HOME/.ssh/config, or to connect to an
                        other host than the CC-IN2P3 ones (Jupyter must also be
                        available on these hosts). Default if to connect to CC-
                        IN2P3. (default: cca7.in2p3.fr)
+  --workdir WORKDIR    Your working directory at CC-IN2P3 (default:
+                       /pbs/throng/lsst/users/<username>/notebooks)
+  --jupyter JUPYTER    Either launch a jupiter notebook or a jupyter lab.
+                       (default: notebook)
+  --vstack VSTACK      Version of the stack you want to set up. (E.g. v14.0,
+                       w_2017_43 or w_2017_43_py2) (default: v14.0)
+  --packages PACKAGES  A list of packages you want to setup. Coma separated
+                       from command line, or a list in the config file. You
+                       can use the `lsst_distrib` package to set up all
+                       available packages from a given distrib. (default:
+                       lsst_distrib)
+  --desc               Setup a DESC environment giving you access to DESC
+                       catalogs ('proto-dc2_v2.0' is for now the only
+                       available catalog). This option overwrites the '--
+                       vstack' and '--mysetup' options. (default: False)
+  --mysetup MYSETUP    Path to a setup file (at CC-IN2P3) that will be used to
+                       set up the working environment. Be sure that a Python
+                       installation with Jupyter (and jupyterlab) is available
+                       to make this work. The LSST stack won't be set up in
+                       this mode. 'vstack', 'libs', 'bins' and 'labpath'
+                       options will be ignored. (default: None)
   --libs LIBS          Path(s) to local Python librairies. Will be added to
                        your PYTHONPATH. Coma separated to add more than one
                        paths, or a list in the config file. A default path for
@@ -116,12 +126,6 @@ next section for a description on how to use the configuration file::
                        installed in case it differs from the (first) path you
                        gave to the --libs option. A default path for
                        jupyterlab will be choose if not given. (default: None)
-  --mysetup MYSETUP    Path to a setup file (at CC-IN2P3) that will be used to
-                       set up the working environment. Be sure that a Python
-                       installation with Jupyter (and jupyterlab) is available
-                       to make this work. The LSST stack won't be set up in
-                       this mode. 'vstack', 'libs', 'bins' and 'labpath'
-                       options will be ignored. (default: None)
 
 
 Configuration file
@@ -136,9 +140,7 @@ contains from a single configuration dictionnary to several
 configuration dictionnaries. The ``--config`` option can be used (or not) in several different ways:
 
 - ``stackyter.py --config myfile.yaml``. ``myfile.yaml`` must contain
-a single dictionnary with your set of options. An example of such a
-file can be found `here
-<https://github.com/nicolaschotard/stackyter/blob/master/example_config.yaml>`_.
+  your configuration, with your set of options.
 
 - ``stackyter.py --config myconfig``. In that case, no configuration
   is directly given by the user, and ``stakyter`` will look for a
@@ -169,7 +171,7 @@ In principal, your default configuration file must look like that::
                'vstack': 'v14.0',
                'workdir': '/sps/lsst/dev/nchotard/',
               },
-   'otherhost': {
+   'othersite': {
                  'host': 'otherhost.fr',
                  'username': 'chotard',
                  'mysetup': 'pathtomysetup'

@@ -35,8 +35,9 @@ def get_config(config):
     if config is not None:
         if os.path.exists(config):
             # The user has given configuration file
-            print("INFO: Using configuration from", config)
+            print("INFO: Using default configuration from", config)
             config = yaml.load(open(config, 'r'))
+            config = config[config['default']]
         else:
             default_config = get_default_config()
             if default_config is None:
@@ -71,7 +72,9 @@ if __name__ == '__main__':
     parser.add_argument('--config', default=None,
                         help='Configuration file containing a set of option values. '
                         'The content of this file will be overwritten by any given'
-                        ' command line options.')
+                        ' command line options. You can also give the name of a configuration if '
+                        'you have defined it in your default configuration file. See the '
+                        'documentation for details on how to build this file.')
     parser.add_argument('--username', help="Your CC-IN2P3 user name. If not given, ssh will try to "
                         "figure it out from you ~/.ssh/config or will use your local user name.")
     parser.add_argument("--host", default="cca7.in2p3.fr",
