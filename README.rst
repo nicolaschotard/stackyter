@@ -33,8 +33,7 @@ following mode:
     ``--mysetup`` options together.
 
    
-**Jupyter must be available on the distant host for this script to
- work.**
+**Jupyter must be available on the distant host for this script to work.**
 
 Installation
 ------------
