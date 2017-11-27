@@ -1,0 +1,602 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>stackyter &mdash; stackyter  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="stackyter  documentation" href="index.html"/>
+        <link rel="prev" title="Welcome to stackyter’s documentation!" href="index.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> stackyter
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                "0.12"
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">stackyter</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#usage">Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#options-and-configurations">Options and configurations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#optional-arguments">Optional arguments</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#configuration-file">Configuration file</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#distant-host-configuration">Distant host configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lsst-environment">LSST environment</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#version-of-the-lsst-stack">Version of the LSST stack</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#use-the-lsst-stack">Use the LSST stack</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#additional-features">Additional features</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#desc-environment">DESC environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#personal-environment">Personal environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#help">Help</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">stackyter</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>stackyter</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/readme.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="stackyter">
+<h1>stackyter<a class="headerlink" href="#stackyter" title="Permalink to this headline">¶</a></h1>
+<a class="reference external image-reference" href="https://landscape.io/github/nicolaschotard/stackyter/master"><img alt="Code Health" src="https://landscape.io/github/nicolaschotard/stackyter/master/landscape.svg?style=flat" /></a>
+<a class="reference external image-reference" href="https://badge.fury.io/py/stackyter"><img alt="https://badge.fury.io/py/stackyter.svg" src="https://badge.fury.io/py/stackyter.svg" /></a>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>This script will allow you to run a jupyter notebook (or lab) on a
+distant server (default is CC-IN2P3) while displaying it localy in
+your local brower. It was initialy intended to help LSST members to
+interact with the datasets already available at CC-IN2P3 using Python
+(in a <code class="docutils literal"><span class="pre">stack</span></code> or a DESC environment), but can be use for other
+purposes that need a Jupyter environment. It can be used in the
+following mode:</p>
+<ul class="simple">
+<li>For all users:<ul>
+<li>On any host using the <code class="docutils literal"><span class="pre">--host</span></code> option</li>
+<li>With your personal setup using the <code class="docutils literal"><span class="pre">--mysetup</span></code> option</li>
+</ul>
+</li>
+<li>For LSST/DESC members (at CC-IN2P3):<ul>
+<li>LSST stack environment using the <code class="docutils literal"><span class="pre">--vstack</span></code> option.</li>
+<li>DESC catalogs environment using the <code class="docutils literal"><span class="pre">--desc</span></code> option</li>
+<li>Your personal setup using the <code class="docutils literal"><span class="pre">--mysetup</span></code> option</li>
+</ul>
+</li>
+</ul>
+<p><strong>Jupyter must be available on the distant host for this script to work.</strong></p>
+</div>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<p>Latest stable version can be installed with <code class="docutils literal"><span class="pre">pip</span></code>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">stackyter</span>
+</pre></div>
+</div>
+<p>To upgrade to a newer version:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">--</span><span class="n">upgrade</span> <span class="n">stackyter</span>
+</pre></div>
+</div>
+<p>To install in a local directory:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">--</span><span class="n">user</span> <span class="n">stackyter</span>            <span class="c1">#  in your home directory</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="o">--</span><span class="n">prefix</span> <span class="n">mypath</span> <span class="n">stackyter</span>   <span class="c1">#  in &#39;mypath&#39;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-shell"><div class="highlight"><pre><span></span>stackyter.py <span class="o">[</span>options<span class="o">]</span>
+</pre></div>
+</div>
+<p><code class="docutils literal"><span class="pre">Ctrl-C</span></code> will stop the Jupyter server and close the connection.</p>
+<p>By default, <code class="docutils literal"><span class="pre">stackyter</span></code> will try to connect to CC-IN2P3 using what
+<code class="docutils literal"><span class="pre">ssh</span></code> can find in your <code class="docutils literal"><span class="pre">~/.ssh/config</span></code> or taking your local user
+name. It will also set up the latest stable version of the LSST
+stack. If this is not what you want to do, use the following set of
+options to adapt <code class="docutils literal"><span class="pre">stackyter</span></code> to your personal case.</p>
+</div>
+<div class="section" id="options-and-configurations">
+<h2>Options and configurations<a class="headerlink" href="#options-and-configurations" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="optional-arguments">
+<h3>Optional arguments<a class="headerlink" href="#optional-arguments" title="Permalink to this headline">¶</a></h3>
+<p>An option used on the command line will always overwrite the content
+of the configuration file for the same option, if it exists. See the
+next section for a description on how to use the configuration
+file. Available options are:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>General:
+  General options for any host on which Jupyter can be found
+
+  -c CONFIG, --config CONFIG
+                        Name of the configuration to use, taken from your
+                        default configuration file (~/.stackyter-config.yaml
+                        or $STACKYTERCONFIG). Default if to use the
+                        &#39;default_config&#39; defined in this file. The content of
+                        the configuration file will be overwritten by any
+                        given command line options. (default: None)
+  -f CONFIGFILE, --configfile CONFIGFILE
+                        Configuration file containing a set of option values.
+                        The content of this file will be overwritten by any
+                        given command line options. (default: None)
+  -H HOST, --host HOST  Name of the target host. Allows you to avoid conflit
+                        with the content of your $HOME/.ssh/config, or to
+                        connect to any host on which Jupyter is available.
+                        (default: cca7.in2p3.fr)
+  -u USERNAME, --username USERNAME
+                        Your user name on the host. If not given, ssh will try
+                        to figure it out from you ~/.ssh/config or will use
+                        your local user name. (default: None)
+  -w WORKDIR, --workdir WORKDIR
+                        Your working directory on the host (default: None)
+  --mysetup MYSETUP     Path to a setup file (on the host) that will be used
+                        to set up the working environment. A Python
+                        installation with Jupyter must be available to make
+                        this work. (default: None)
+  -j JUPYTER, --jupyter JUPYTER
+                        Either launch a jupiter notebook or a jupyter lab.
+                        (default: notebook)
+  --libs LIBS           Path(s) to local Python librairies. Will be added to
+                        your PYTHONPATH. Coma separated to add more than one
+                        paths, or a list in the config file. (default: None)
+  --bins BINS           Path(s) to local binaries. Will be added to your PATH.
+                        Coma separated to add more than one paths, or a list
+                        in the config file. (default: None)
+  --labpath LABPATH     Path in which jupyterlab has been installed in case it
+                        differs from the (first) path you gave to the --libs
+                        option. (default: None)
+  -C, --nocompression   Deactivate ssh compression options. (default: False)
+  -S, --showconfig      Show all available configurations from your default
+                        file and exit. (default: False)
+
+LSST/DESC at CC-IN2P3:
+  Shortcuts to access the LSST stack or the DESC catalogs at CC-IN2P3
+
+  --vstack VSTACK       Version of the stack you want to set up. (E.g. v14.0,
+                        w_2017_43 or w_2017_43_py2) (default: v14.0)
+  --packages PACKAGES   A list of packages you want to setup. Coma separated
+                        from command line, or a list in the config file.
+                        `lsst_distrib` will set up all available packages.
+                        (default: lsst_distrib)
+  --desc                Setup a DESC environment giving you access to DESC
+                        catalogs. Overwrites the &#39;--mysetup&#39; and &#39;--vstack&#39;
+                        options. (default: False)
+</pre></div>
+</div>
+</div>
+<div class="section" id="configuration-file">
+<h3>Configuration file<a class="headerlink" href="#configuration-file" title="Permalink to this headline">¶</a></h3>
+<p>A configuration dictionnary can contain any options available through
+the command line. The options found in the configuration file will
+always be overwritten by the command line.</p>
+<p>The configuration file can be given in different ways, and can
+contains from a single configuration dictionnary to several
+configuration dictionnaries. The <code class="docutils literal"><span class="pre">--config</span></code> and <code class="docutils literal"><span class="pre">--congfile</span></code>
+options can be used (or not) in several different ways:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">stackyter.py</span> <span class="pre">--configfile</span> <span class="pre">myfile.yaml</span></code>. <code class="docutils literal"><span class="pre">myfile.yaml</span></code> must contain
+your configuration, with your set of options.</li>
+<li><code class="docutils literal"><span class="pre">stackyter.py</span> <span class="pre">--config</span> <span class="pre">myconfig</span></code>. In that case, no configuration
+is directly given by the user, and <code class="docutils literal"><span class="pre">stakyter</span></code> will look for a
+default configuration file. The default file must be either
+<code class="docutils literal"><span class="pre">~/stackyter-config.yaml</span></code> or defined by the <code class="docutils literal"><span class="pre">STACKYTERCONFIG</span></code>
+environment variable (if the default path does not fit your
+need). The <code class="docutils literal"><span class="pre">myconfig</span></code> key will be looked for in this default
+configuration file to get the configuration dictionnary you asked
+for.</li>
+<li><code class="docutils literal"><span class="pre">stackyter.py</span></code>. In that case, <code class="docutils literal"><span class="pre">stackyter</span></code> will also look for a
+default configuration file (see above), and for a default
+configuration called <code class="docutils literal"><span class="pre">default_config</span></code> in this file. This default
+value must be there if you have mor ethan one confiuration
+defined. It must point to the configuration you would like to use by
+default.</li>
+</ul>
+<p>In principal, your default configuration file must look like that:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+ <span class="s1">&#39;default_config&#39;</span><span class="p">:</span> <span class="s1">&#39;ccin2p3&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;&#39;</span><span class="p">:</span> <span class="p">{</span>
+             <span class="s1">&#39;host&#39;</span><span class="p">:</span> <span class="s1">&#39;cca7.in2p3.fr&#39;</span><span class="p">,</span>  <span class="c1"># or ccjupyter if your ~/.ssh/config if configured</span>
+             <span class="s1">&#39;jupyter&#39;</span><span class="p">:</span> <span class="s1">&#39;lab&#39;</span><span class="p">,</span>
+             <span class="s1">&#39;packages&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;lsst_distrib&quot;</span><span class="p">],</span>
+             <span class="s1">&#39;username&#39;</span><span class="p">:</span> <span class="s1">&#39;myusername&#39;</span><span class="p">,</span>
+             <span class="s1">&#39;vstack&#39;</span><span class="p">:</span> <span class="s1">&#39;v14.0&#39;</span><span class="p">,</span>
+             <span class="s1">&#39;workdir&#39;</span><span class="p">:</span> <span class="s1">&#39;/path/to/my/directory/&#39;</span><span class="p">,</span>
+            <span class="p">},</span>
+ <span class="s1">&#39;othersite&#39;</span><span class="p">:</span> <span class="p">{</span>
+               <span class="s1">&#39;host&#39;</span><span class="p">:</span> <span class="s1">&#39;otherhost.fr&#39;</span><span class="p">,</span>
+               <span class="s1">&#39;username&#39;</span><span class="p">:</span> <span class="s1">&#39;myusername&#39;</span><span class="p">,</span>
+               <span class="s1">&#39;mysetup&#39;</span><span class="p">:</span> <span class="s1">&#39;pathtomysetup&#39;</span>
+              <span class="p">},</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>or simply as followed if only one configuration is defined:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+ <span class="s1">&#39;ccin2p3&#39;</span><span class="p">:</span> <span class="p">{</span>
+             <span class="s1">&#39;host&#39;</span><span class="p">:</span> <span class="s1">&#39;cca7.in2p3.fr&#39;</span><span class="p">,</span>  <span class="c1"># or ccjupyter if your ~/.ssh/config if configured</span>
+             <span class="s1">&#39;jupyter&#39;</span><span class="p">:</span> <span class="s1">&#39;lab&#39;</span><span class="p">,</span>
+             <span class="s1">&#39;packages&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;lsst_distrib&quot;</span><span class="p">],</span>
+             <span class="s1">&#39;username&#39;</span><span class="p">:</span> <span class="s1">&#39;myusername&#39;</span><span class="p">,</span>
+             <span class="s1">&#39;vstack&#39;</span><span class="p">:</span> <span class="s1">&#39;v14.0&#39;</span><span class="p">,</span>
+             <span class="s1">&#39;workdir&#39;</span><span class="p">:</span> <span class="s1">&#39;/path/to/my/directory/&#39;</span><span class="p">,</span>
+            <span class="p">},</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>You can use the <a class="reference external" href="https://raw.githubusercontent.com/nicolaschotard/stackyter/master/example-config.yaml">example</a>
+configuration file as a template to create your own.</p>
+</div>
+</div>
+<div class="section" id="distant-host-configuration">
+<h2>Distant host configuration<a class="headerlink" href="#distant-host-configuration" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal"><span class="pre">--host</span></code> option allows you to connect to any distant host. The
+default option used to create the <code class="docutils literal"><span class="pre">ssh</span></code> tunnel are <code class="docutils literal"><span class="pre">-X</span> <span class="pre">-Y</span> <span class="pre">-tt</span>
+<span class="pre">-L</span></code>. If you want to configure your <code class="docutils literal"><span class="pre">ssh</span></code> connection, edit your
+<code class="docutils literal"><span class="pre">~/.ssh/config</span></code> file using, for instance, the following template:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Host</span> <span class="n">ccjupyter</span>
+<span class="n">Hostname</span> <span class="n">cca7</span><span class="o">.</span><span class="n">in2p3</span><span class="o">.</span><span class="n">fr</span>
+<span class="n">User</span> <span class="n">lsstuser</span>
+<span class="n">GSSAPIClientIdentity</span> <span class="n">lsstuser</span><span class="nd">@IN2P3</span><span class="o">.</span><span class="n">FR</span>
+<span class="n">GSSAPIAuthentication</span> <span class="n">yes</span>
+<span class="n">GSSAPIDelegateCredentials</span> <span class="n">yes</span>
+<span class="n">GSSAPITrustDns</span> <span class="n">yes</span>
+</pre></div>
+</div>
+<p>You can then use the <code class="docutils literal"><span class="pre">stackyter</span></code> script as follows:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">stackyter</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">host</span> <span class="n">ccjupyter</span>
+</pre></div>
+</div>
+<p>Or put the value for that option (along with others) in your
+<code class="docutils literal"><span class="pre">config.yaml</span></code> file. Do not forget to change <code class="docutils literal"><span class="pre">lsstuser</span></code> by your
+personal user name.</p>
+</div>
+<div class="section" id="lsst-environment">
+<h2>LSST environment<a class="headerlink" href="#lsst-environment" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="version-of-the-lsst-stack">
+<h3>Version of the LSST stack<a class="headerlink" href="#version-of-the-lsst-stack" title="Permalink to this headline">¶</a></h3>
+<p>All available versions of the LSST stack at CC-IN2P3 can be found under:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">sps</span><span class="o">/</span><span class="n">lsst</span><span class="o">/</span><span class="n">software</span><span class="o">/</span><span class="n">lsst_distrib</span><span class="o">/</span>
+</pre></div>
+</div>
+<p>These versions (and all the others) have been built under CentOS7, and
+must be used under a compatible system (CentOS7 or Ubuntu). To connect
+to a CentOS7 machine on CC-IN2P3, use <code class="docutils literal"><span class="pre">--host</span> <span class="pre">cca7.in2p3.fr</span></code> instead
+of <code class="docutils literal"><span class="pre">--host</span> <span class="pre">ccage.in2p3.fr</span></code> (<code class="docutils literal"><span class="pre">cca7</span></code> is the default value of this
+script).</p>
+<p>Python 2 (2.7) and 3 (&gt;3.4) are available for almost all weeklies,
+with the following nomencalture:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="21%" />
+<col width="40%" />
+<col width="40%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Version</th>
+<th class="head">&lt; <code class="docutils literal"><span class="pre">w_2017_27</span></code></th>
+<th class="head"><code class="docutils literal"><span class="pre">w_2017_27</span></code></th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Python 2</td>
+<td><code class="docutils literal"><span class="pre">w_2017_XX</span></code></td>
+<td><code class="docutils literal"><span class="pre">w_2017_XX_py2</span></code></td>
+</tr>
+<tr class="row-odd"><td>Python 3</td>
+<td><code class="docutils literal"><span class="pre">w_2017_XX_py3</span></code></td>
+<td><code class="docutils literal"><span class="pre">w_2017_XX</span></code></td>
+</tr>
+</tbody>
+</table>
+<p>Latest releases of the LSST stack, as of 11-07-2017, are:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="26%" />
+<col width="74%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Version</th>
+<th class="head">Comment</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">v14.0</span></code></td>
+<td>Current stable version of the stack (Python 3 only)</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">w_2017_43_py2</span></code></td>
+<td>Latest weekly release for Python 2</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">w_2017_44</span></code></td>
+<td>Latest weekly release for Python 3</td>
+</tr>
+</tbody>
+</table>
+<p>Keep in mind that using Python 2 in an LSST context is not encouraged
+by the community, and will not be supported anymore. The latest weekly
+for which Python 2 has been installed at CC-IN2P3 is <code class="docutils literal"><span class="pre">w_2017_4</span></code> (see
+online <a class="reference external" href="http://doc.lsst.eu/ccin2p3/ccin2p3.html#software">documentation</a>).</p>
+<p><strong>Note</strong>: Since version <code class="docutils literal"><span class="pre">w_2017_40</span></code>, the <code class="docutils literal"><span class="pre">ipython</span></code> module is
+included in the stack installation at CC-IN2P3 as an add-on. This
+module is not part of the officiel LSST distribution and will not be
+set up with the <code class="docutils literal"><span class="pre">lsst_distrib</span></code> package.</p>
+</div>
+<div class="section" id="use-the-lsst-stack">
+<h3>Use the LSST stack<a class="headerlink" href="#use-the-lsst-stack" title="Permalink to this headline">¶</a></h3>
+<p>Many examples on how to use the LSST stack and how to work with its
+outputs are presented <a class="reference external" href="https://github.com/nicolaschotard/lsst_drp_analysis/tree/master/stack">there</a>.</p>
+<p>A few data sets have already been re-processed using the LSST stack,
+and their outputs are available for analysis at different places on
+CC-IN2P3:</p>
+<ul class="simple">
+<li>SXDS data from HSC: <code class="docutils literal"><span class="pre">/sps/lsst/dev/lsstprod/hsc/SXDS/output</span></code></li>
+<li>CFHT data (containing clusters): <code class="docutils literal"><span class="pre">/sps/lsst/data/clusters</span></code></li>
+<li>CFHT D3 fieald: <code class="docutils literal"><span class="pre">/sps/lsst/data/CFHT/D3</span></code></li>
+</ul>
+</div>
+<div class="section" id="additional-features">
+<h3>Additional features<a class="headerlink" href="#additional-features" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">ds9</span></code> is automatically available since version 0.9, and can be
+called in a Jupyter terminal.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="desc-environment">
+<h2>DESC environment<a class="headerlink" href="#desc-environment" title="Permalink to this headline">¶</a></h2>
+<p>You can automatically set up an <code class="docutils literal"><span class="pre">anaconda</span></code> working environment that
+will give you access to DESC catalogs such as the lattest
+<code class="docutils literal"><span class="pre">proto-dc2_v2.0</span></code>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">stackyter</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">desc</span>
+</pre></div>
+</div>
+<p>A test notebook is available on <a class="reference external" href="https://github.com/LSSTDESC/gcr-catalogs/blob/master/examples/GCRCatalogs%20Demo.ipynb">this github page</a>. Download
+it and run it to make sure that everything is working properly. In
+this environment, the following ressources are available:</p>
+<ul class="simple">
+<li>A <code class="docutils literal"><span class="pre">miniconda3</span></code> install with <code class="docutils literal"><span class="pre">Jupyter</span></code> (notebook and lab) and <code class="docutils literal"><span class="pre">Ipython</span></code>;</li>
+<li>The <a class="reference external" href="https://github.com/yymao/generic-catalog-reader">GRC</a>
+(Generic Catalog Reader) and <a class="reference external" href="https://github.com/LSSTDESC/gcr-catalogs">grc-catalogs</a> packages, allowing you
+to easily load and read the DESC catalogs;</li>
+<li>The following DESC catalogs (more info can be found on the <a class="reference external" href="https://github.com/LSSTDESC/gcr-catalogs">grc-catalogs</a> web page):<ul>
+<li><code class="docutils literal"><span class="pre">proto-dc2_v2.0</span></code></li>
+</ul>
+</li>
+<li>You can also use the <code class="docutils literal"><span class="pre">--libs</span></code> or <code class="docutils literal"><span class="pre">--bins</span></code> options to complete this
+set up with your personnal libraries (Python 3 only for now).</li>
+</ul>
+</div>
+<div class="section" id="personal-environment">
+<h2>Personal environment<a class="headerlink" href="#personal-environment" title="Permalink to this headline">¶</a></h2>
+<p>As stated in the introduction, and instead of seting up the LSST/DESC
+working environments, you can set up your personal working environment
+by using the <code class="docutils literal"><span class="pre">--mysetup</span></code> option. Given a setup file located an your
+distant host, you can simply do:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">stackyter</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">mysetup</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">my</span><span class="o">/</span><span class="n">setup</span><span class="o">.</span><span class="n">sh</span> <span class="p">(</span><span class="o">--</span><span class="n">username</span> <span class="n">myusername</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Your local setup file will be sourced at connection as followed:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">source</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">my</span><span class="o">/</span><span class="n">setup</span><span class="o">.</span><span class="n">sh</span>
+</pre></div>
+</div>
+<p>Your setup file must <strong>at least</strong> contains what is needed to make
+Jupyter available. In this mode, the LSST stack will <strong>not</strong> be setup.</p>
+<p>You can also use the <code class="docutils literal"><span class="pre">--host</span></code> option to run on an different distant
+host than CC-IN2P3.</p>
+</div>
+<div class="section" id="help">
+<h2>Help<a class="headerlink" href="#help" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>If you have any comments or suggestions, or if you find a bug,
+please use the dedicated github <a class="reference external" href="https://github.com/nicolaschotard/stackyter/issues">issue tracker</a> for this
+page.</li>
+<li>Why <code class="docutils literal"><span class="pre">stakyter</span></code>? For historical reason: <code class="docutils literal"><span class="pre">stackyter</span></code> = LSST <code class="docutils literal"><span class="pre">stack</span></code> +
+<code class="docutils literal"><span class="pre">Jupyter</span></code>. It was initially intended for LSST members to easily use the
+LSST software stack and interact with the data sets.</li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="index.html" class="btn btn-neutral" title="Welcome to stackyter’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, N. Chotard.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
