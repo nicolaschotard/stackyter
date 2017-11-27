@@ -117,7 +117,8 @@ file. Available options are::
     --labpath LABPATH     Path in which jupyterlab has been installed in case it
                           differs from the (first) path you gave to the --libs
                           option. (default: None)
-    --showconfig          Show all available configurations from your default
+    -C, --nocompression   Deactivate ssh compression options. (default: False)
+    -S, --showconfig      Show all available configurations from your default
                           file and exit. (default: False)
   
   LSST/DESC at CC-IN2P3:
@@ -169,7 +170,7 @@ In principal, your default configuration file must look like that::
 
   {
    'default_config': 'ccin2p3',
-   'ccin2p3': {
+   '': {
                'host': 'cca7.in2p3.fr',  # or ccjupyter if your ~/.ssh/config if configured
                'jupyter': 'lab',
                'packages': ["lsst_distrib"],
@@ -197,6 +198,9 @@ or simply as followed if only one configuration is defined::
               },
   }
 
+You can use the `example
+<https://raw.githubusercontent.com/nicolaschotard/stackyter/master/example-config.yaml>`_
+configuration file as a template to create your own.
 
 
 Distant host configuration

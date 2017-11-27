@@ -1,0 +1,32 @@
+{
+ 'default_config': 'host1',
+
+ 'host1': {
+           'host': 'myhost.domain.fr',  # or 'myhost' if you have configured your ~/.ssh/config file
+           'jupyter': 'lab',  # if installed
+           'username': 'myusername',
+           'mysetup': '/path/to/my/setup/file.sh',
+           'workdir': '/path/to/my/directory/'
+            },
+
+ 'host2': {
+           'host': 'otherhost.fr',
+           'username': 'otherusername',
+           'mysetup': '/path/to/my/setup'
+          },
+
+ 'stack': {
+           'host': 'cca7.in2p3.fr',  # or ccjupyter if you have configured your ~/.ssh/config file
+           'packages': ["lsst_distrib"],
+           'username': 'myusername',
+           'vstack': 'v14.0',
+           'workdir': '/pbs/throng/lsst/users/username/',
+            },
+
+ 'desc': {
+          'host': 'cca7.in2p3.fr',
+          'username': 'myusername',
+          'desc': True,
+          'workdir': '/pbs/throng/lsst/users/username/'
+         }
+}
