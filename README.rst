@@ -351,8 +351,7 @@ Help
 
 - If you have any comments or suggestions, or if you find a bug,
   please use the dedicated github `issue tracker
-  <https://github.com/nicolaschotard/stackyter/issues>`_ for this
-  page.
-- Why ``stakyter``? For historical reason: ``stackyter`` = LSST ``stack`` +
-  ``Jupyter``. It was initially intended for LSST members to easily use the
-  LSST software stack and interact with the data sets.
+  <https://github.com/nicolaschotard/stackyter/issues>`_.
+- Why ``stakyter``? For historical reason: ``stackyter`` = LSST
+  ``stack`` + ``Jupyter``. It was initially intended for LSST members
+  to easily use the LSST software stack and interact with data sets.
