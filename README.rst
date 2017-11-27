@@ -20,17 +20,16 @@ interact with the datasets already available at CC-IN2P3 using Python
 purposes that need a Jupyter environment. It can be used in the
 following mode:
 
-- For LSST/DESC members:
+- For all users:
+
+  - On any host using the ``--host`` option
+  - With your personal setup using the ``--mysetup`` option
+
+- For LSST/DESC members (at CC-IN2P3):
 
   - LSST stack environment using the ``--vstack`` option.
   - DESC catalogs environment using the ``--desc`` option
   - Your personal setup using the ``--mysetup`` option
-
-- For all users:
-
-  - With your personal setup using the ``--mysetup`` option
-  - On any host (not only CC-IN2P3) using the ``--host`` **AND** the
-    ``--mysetup`` options together.
 
    
 **Jupyter must be available on the distant host for this script to work.**
@@ -59,6 +58,8 @@ Usage
    
    stackyter.py [options]
 
+``Ctrl-C`` will stop the Jupyter server and close the connection.
+
 By default, ``stackyter`` will try to connect to CC-IN2P3 using what
 ``ssh`` can find in your ``~/.ssh/config`` or taking your local user
 name. It will also set up the latest stable version of the LSST
@@ -76,67 +77,61 @@ of the configuration file for the same option, if it exists. See the
 next section for a description on how to use the configuration
 file. Available options are::
 
-  -h, --help            show this help message and exit
-  -c CONFIG, --config CONFIG
-                        Name of the configuration to use, taken from your
-                        default configuration file (~/.stackyter-config.yaml
-                        or $STACKYTERCONFIG). Default if to use the
-                        'default_config' defined in this file. The content of
-                        the configuration file will be overwritten by any
-                        given command line options. (default: None)
-  -f CONFIGFILE, --configfile CONFIGFILE
-                        Configuration file containing a set of option values.
-                        The content of this file will be overwritten by any
-                        given command line options. Mostly for testing your
-                        configuration file before making it the default.
-                        (default: None)
-  -u USERNAME, --username USERNAME
-                        Your CC-IN2P3 user name. If not given, ssh will try to
-                        figure it out from you ~/.ssh/config or will use your
-                        local user name. (default: None)
-  -H HOST, --host HOST  Name of the target host. This option may allow you to
-                        avoid potential conflit with the definition of the
-                        same host in your $HOME/.ssh/config, or to connect to
-                        an other host than the CC-IN2P3 ones (Jupyter must
-                        also be available on these hosts). Default if to
-                        connect to CC-IN2P3. (default: cca7.in2p3.fr)
-  -w WORKDIR, --workdir WORKDIR
-                        Your working directory at CC-IN2P3 (default:
-                        /pbs/throng/lsst/users/<username>/notebooks)
-  -j JUPYTER, --jupyter JUPYTER
-                        Either launch a jupiter notebook or a jupyter lab.
-                        (default: notebook)
-  --vstack VSTACK       Version of the stack you want to set up. (E.g. v14.0,
-                        w_2017_43 or w_2017_43_py2) (default: v14.0)
-  --packages PACKAGES   A list of packages you want to setup. Coma separated
-                        from command line, or a list in the config file. You
-                        can use the `lsst_distrib` package to set up all
-                        available packages from a given distrib. (default:
-                        lsst_distrib)
-  --desc                Setup a DESC environment giving you access to DESC
-                        catalogs ('proto-dc2_v2.0' is for now the only
-                        available catalog). This option overwrites the '--
-                        vstack' and '--mysetup' options. (default: False)
-  --mysetup MYSETUP     Path to a setup file (at CC-IN2P3) that will be used
-                        to set up the working environment. Be sure that a
-                        Python installation with Jupyter (and jupyterlab) is
-                        available to make this work. The LSST stack won't be
-                        set up in this mode. 'vstack', 'libs', 'bins' and
-                        'labpath' options will be ignored. (default: None)
-  --libs LIBS           Path(s) to local Python librairies. Will be added to
-                        your PYTHONPATH. Coma separated to add more than one
-                        paths, or a list in the config file. A default path
-                        for jupyter will be choose if not given. (default:
-                        None)
-  --bins BINS           Path(s) to local binaries. Will be added to your PATH.
-                        Coma separated to add more than one paths, or a list
-                        in the config file. A default path for jupyter will be
-                        choose if not given. (default: None)
-  --labpath LABPATH     You must provide the path in which jupyterlab has been
-                        installed in case it differs from the (first) path you
-                        gave to the --libs option. A default path for
-                        jupyterlab will be choose if not given. (default:
-                        None)
+  General:
+    General options for any host on which Jupyter can be found
+  
+    -c CONFIG, --config CONFIG
+                          Name of the configuration to use, taken from your
+                          default configuration file (~/.stackyter-config.yaml
+                          or $STACKYTERCONFIG). Default if to use the
+                          'default_config' defined in this file. The content of
+                          the configuration file will be overwritten by any
+                          given command line options. (default: None)
+    -f CONFIGFILE, --configfile CONFIGFILE
+                          Configuration file containing a set of option values.
+                          The content of this file will be overwritten by any
+                          given command line options. (default: None)
+    -H HOST, --host HOST  Name of the target host. Allows you to avoid conflit
+                          with the content of your $HOME/.ssh/config, or to
+                          connect to any host on which Jupyter is available.
+                          (default: cca7.in2p3.fr)
+    -u USERNAME, --username USERNAME
+                          Your user name on the host. If not given, ssh will try
+                          to figure it out from you ~/.ssh/config or will use
+                          your local user name. (default: None)
+    -w WORKDIR, --workdir WORKDIR
+                          Your working directory on the host (default: None)
+    --mysetup MYSETUP     Path to a setup file (on the host) that will be used
+                          to set up the working environment. A Python
+                          installation with Jupyter must be available to make
+                          this work. (default: None)
+    -j JUPYTER, --jupyter JUPYTER
+                          Either launch a jupiter notebook or a jupyter lab.
+                          (default: notebook)
+    --libs LIBS           Path(s) to local Python librairies. Will be added to
+                          your PYTHONPATH. Coma separated to add more than one
+                          paths, or a list in the config file. (default: None)
+    --bins BINS           Path(s) to local binaries. Will be added to your PATH.
+                          Coma separated to add more than one paths, or a list
+                          in the config file. (default: None)
+    --labpath LABPATH     Path in which jupyterlab has been installed in case it
+                          differs from the (first) path you gave to the --libs
+                          option. (default: None)
+    --showconfig          Show all available configurations from your default
+                          file and exit. (default: False)
+  
+  LSST/DESC at CC-IN2P3:
+    Shortcuts to access the LSST stack or the DESC catalogs at CC-IN2P3
+  
+    --vstack VSTACK       Version of the stack you want to set up. (E.g. v14.0,
+                          w_2017_43 or w_2017_43_py2) (default: v14.0)
+    --packages PACKAGES   A list of packages you want to setup. Coma separated
+                          from command line, or a list in the config file.
+                          `lsst_distrib` will set up all available packages.
+                          (default: lsst_distrib)
+    --desc                Setup a DESC environment giving you access to DESC
+                          catalogs. Overwrites the '--mysetup' and '--vstack'
+                          options. (default: False)
 
 
 Configuration file
@@ -178,13 +173,13 @@ In principal, your default configuration file must look like that::
                'host': 'cca7.in2p3.fr',  # or ccjupyter if your ~/.ssh/config if configured
                'jupyter': 'lab',
                'packages': ["lsst_distrib"],
-               'username': 'nchotard',
+               'username': 'myusername',
                'vstack': 'v14.0',
-               'workdir': '/sps/lsst/dev/nchotard/',
+               'workdir': '/path/to/my/directory/',
               },
    'othersite': {
                  'host': 'otherhost.fr',
-                 'username': 'chotard',
+                 'username': 'myusername',
                  'mysetup': 'pathtomysetup'
                 },
   }
@@ -196,9 +191,9 @@ or simply as followed if only one configuration is defined::
                'host': 'cca7.in2p3.fr',  # or ccjupyter if your ~/.ssh/config if configured
                'jupyter': 'lab',
                'packages': ["lsst_distrib"],
-               'username': 'nchotard',
+               'username': 'myusername',
                'vstack': 'v14.0',
-               'workdir': '/sps/lsst/dev/nchotard/',
+               'workdir': '/path/to/my/directory/',
               },
   }
 
@@ -346,8 +341,8 @@ Jupyter available. In this mode, the LSST stack will **not** be setup.
 You can also use the ``--host`` option to run on an different distant
 host than CC-IN2P3.
 
-Questions?
-----------
+Help
+----
 
 - If you have any comments or suggestions, or if you find a bug,
   please use the dedicated github `issue tracker

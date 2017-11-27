@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Run jupyter at CC-IN2P3, setup the LSST stack, and display it localy."""
+"""Run jupyter on a given host and display it localy."""
 
 
 import os
@@ -19,15 +19,20 @@ def string_to_list(a):
     return a if isinstance(a, list) or a is None else a.split(",")
 
 
-def get_default_config():
+def get_default_config(only_path=False):
     """Get the stackyter default configuration file if it exists."""
     if os.getenv("STACKYTERCONFIG") is not None:  # set up by the user
-        return yaml.load(open(os.getenv("STACKYTERCONFIG"), 'r'))
+        config = os.getenv("STACKYTERCONFIG")
+        if os.path.exist(config):
+            print("INFO: Loading default configuration file from", config)
+        else:
+            raise IOError("$STACKYTERCONFIG is defined but the file does not exist.")
     elif os.path.exists(DEFAULT_CONFIG):  # default location
         print("INFO: Loading default configuration file from", DEFAULT_CONFIG)
-        return yaml.load(open(DEFAULT_CONFIG, 'r'))
+        config = DEFAULT_CONFIG
     else:
         return None
+    return yaml.load(open(config, 'r')) if not only_path else config
 
 
 def read_config(config, key=None):
@@ -74,66 +79,80 @@ def get_config(config, configfile):
 
 if __name__ == '__main__':
 
-    description = """Run Jupyter on CC-IN2P3, setup the LSST stack, and display it localy."""
+    description = """Run Jupyter on a given host and display it localy."""
     prog = "stackyter.py"
-    usage = """%s [remote] [options]""" % prog
+    usage = """%s [options]""" % prog
 
     parser = ArgumentParser(prog=prog, usage=usage, description=description,
                             formatter_class=ArgumentDefaultsHelpFormatter)
-    parser.add_argument('-c', '--config', default=None,
-                        help='Name of the configuration to use, taken from your default '
-                        'configuration file (~/.stackyter-config.yaml or $STACKYTERCONFIG). '
-                        "Default if to use the 'default_config' defined in this file. "
-                        'The content of the configuration file will be overwritten by any '
-                        'given command line options.')
-    parser.add_argument('-f', '--configfile', default=None,
-                        help='Configuration file containing a set of option values. The content '
-                        'of this file will be overwritten by any given command line options. '
-                        'Mostly for testing your configuration file before making it the default.')
-    parser.add_argument('-u', '--username',
-                        help="Your CC-IN2P3 user name. If not given, ssh will try to "
-                        "figure it out from you ~/.ssh/config or will use your local user name.")
-    parser.add_argument('-H', "--host", default="cca7.in2p3.fr",
-                        help="Name of the target host. This option may allow you to avoid potential"
-                        " conflit with the definition of the same host in your $HOME/.ssh/config, "
-                        "or to connect to an other host than the CC-IN2P3 ones (Jupyter must also "
-                        "be available on these hosts). Default if to connect to CC-IN2P3.")
-    parser.add_argument('-w', "--workdir", default=None,
-                        help="Your working directory at CC-IN2P3")
-    parser.add_argument('-j', "--jupyter", default="notebook",
-                        help="Either launch a jupiter notebook or a jupyter lab.")
-    parser.add_argument("--vstack", default='v14.0',
-                        help="Version of the stack you want to set up."
-                        " (E.g. v14.0, w_2017_43 or w_2017_43_py2)")
-    parser.add_argument("--packages", default='lsst_distrib',
-                        help="A list of packages you want to setup. Coma separated from command"
-                        " line, or a list in the config file. You can use the `lsst_distrib` "
-                        "package to set up all available packages from a given distrib.")
-    parser.add_argument("--desc", action='store_true', default=False,
-                        help="Setup a DESC environment giving you access to DESC catalogs "
-                        "('proto-dc2_v2.0' is for now the only available catalog). This option "
-                        "overwrites the '--vstack' and '--mysetup' options.")
-    parser.add_argument("--mysetup", default=None,
-                        help="Path to a setup file (at CC-IN2P3) that will be used to set up the "
-                        "working environment. Be sure that a Python installation with Jupyter (and"
-                        " jupyterlab) is available to make this work. The LSST stack won't be set "
-                        "up in this mode. 'vstack', 'libs', 'bins' and 'labpath' options will be "
-                        "ignored.")
-    parser.add_argument("--libs", default=None,
-                        help="Path(s) to local Python librairies. Will be added to your PYTHONPATH."
-                        " Coma separated to add more than one paths, or a list in the config file."
-                        " A default path for jupyter will be choose if not given.")
-    parser.add_argument("--bins", default=None,
-                        help="Path(s) to local binaries. Will be added to your PATH."
-                        " Coma separated to add more than one paths, or a list in the config file."
-                        " A default path for jupyter will be choose if not given.")
-    parser.add_argument("--labpath", default=None,
-                        help="You must provide the path in which jupyterlab has been installed"
-                        " in case it differs from the (first) path you gave to the --libs option."
-                        " A default path for jupyterlab will be choose if not given.")
+    general = parser.add_argument_group('General', 'General options for any host on which '
+                                        ' Jupyter can be found')
+
+    # General options
+    general.add_argument('-c', '--config', default=None,
+                         help='Name of the configuration to use, taken from your default '
+                         'configuration file (~/.stackyter-config.yaml or $STACKYTERCONFIG). '
+                         "Default if to use the 'default_config' defined in this file. "
+                         'The content of the configuration file will be overwritten by any '
+                         'given command line options.')
+    general.add_argument('-f', '--configfile', default=None,
+                         help='Configuration file containing a set of option values. The content '
+                         'of this file will be overwritten by any given command line options.')
+    general.add_argument('-H', "--host", default="cca7.in2p3.fr",
+                         help="Name of the target host. Allows you to avoid conflit with the "
+                         "content of your $HOME/.ssh/config, or to connect to any host on which "
+                         "Jupyter is available.")
+    general.add_argument('-u', '--username',
+                         help="Your user name on the host. If not given, ssh will try to "
+                         "figure it out from you ~/.ssh/config or will use your local user name.")
+    general.add_argument('-w', "--workdir", default=None,
+                         help="Your working directory on the host")
+    general.add_argument("--mysetup", default=None,
+                         help="Path to a setup file (on the host) that will be used to set up the "
+                         "working environment. A Python installation with Jupyter must be "
+                         "available to make this work.")
+    general.add_argument('-j', "--jupyter", default="notebook",
+                         help="Either launch a jupiter notebook or a jupyter lab.")
+    general.add_argument("--libs", default=None,
+                         help="Path(s) to local Python librairies. Will be added to your PYTHONPATH."
+                         " Coma separated to add more than one paths, or a list in the config file.")
+    general.add_argument("--bins", default=None,
+                         help="Path(s) to local binaries. Will be added to your PATH."
+                         " Coma separated to add more than one paths, or a list in the config file.")
+    general.add_argument("--labpath", default=None,
+                         help="Path in which jupyterlab has been installed in case it differs from "
+                         "the (first) path you gave to the --libs option.")
+    general.add_argument('--showconfig', action='store_true', default=False,
+                         help='Show all available configurations from your default file and exit.')
+
+    # LSST/DESC @ CC-IN2P3 options
+    lsstdesc = parser.add_argument_group('LSST/DESC at CC-IN2P3', 'Shortcuts to access the LSST '
+                                         'stack or the DESC catalogs at CC-IN2P3')
+    lsstdesc.add_argument("--vstack", default='v14.0',
+                          help="Version of the stack you want to set up."
+                          " (E.g. v14.0, w_2017_43 or w_2017_43_py2)")
+    lsstdesc.add_argument("--packages", default='lsst_distrib',
+                          help="A list of packages you want to setup. Coma separated from command"
+                          " line, or a list in the config file. `lsst_distrib` will set up all "
+                          "available packages.")
+    lsstdesc.add_argument("--desc", action='store_true', default=False,
+                          help="Setup a DESC environment giving you access to DESC catalogs. "
+                          "Overwrites the '--mysetup' and '--vstack' options.")
     
     args = parser.parse_args()
-        
+
+    # Show available configuration(s) is any and exit
+    if args.showconfig:
+        config = get_default_config(only_path=True)
+        if config is not None:
+            config = open(config, 'r')
+            print("Your default configuration file contains the following configuration(s).")
+            print(config.read())
+            config.close()
+        else:
+            print("Error: No default configuration file found.")
+        sys.exit(0)
+
     # Do we have a configuration file
     config = get_config(args.config, args.configfile)
     if config is not None:
@@ -153,8 +172,8 @@ if __name__ == '__main__':
     # prevent from conflict between users.
     port = np.random.randint(1025, high=65635)
 
-    # Start building the command line that will be launched at CC-IN2P3
-    # Open the ssh tunnel to a CC-IN2P3 host
+    # Start building the command line that will be launched on the host
+    # Open the ssh tunnel to the host
     cmd = "ssh -X -Y -tt -L 20001:localhost:%i %s%s << EOF\n" % \
           (port, args.username, args.host)
 
