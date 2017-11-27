@@ -1,6 +1,3 @@
-stackyter
-=========
-
 .. image:: https://landscape.io/github/nicolaschotard/stackyter/master/landscape.svg?style=flat
    :target: https://landscape.io/github/nicolaschotard/stackyter/master
    :alt: Code Health
@@ -8,9 +5,9 @@ stackyter
 .. image:: https://badge.fury.io/py/stackyter.svg
     :target: https://badge.fury.io/py/stackyter
 
-	   
-Introduction
-------------
+
+stackyter
+=========
 
 This script will allow you to run a jupyter notebook (or lab) on a
 distant server (default is CC-IN2P3) while displaying it localy in
@@ -35,7 +32,7 @@ following mode:
 **Jupyter must be available on the distant host for this script to work.**
 
 Installation
-------------
+============
 
 Latest stable version can be installed with ``pip``::
 
@@ -52,7 +49,7 @@ To install in a local directory::
 
 
 Usage
------
+=====
 
 .. code-block:: shell
    
@@ -67,10 +64,10 @@ stack. If this is not what you want to do, use the following set of
 options to adapt ``stackyter`` to your personal case.
 
 Options and configurations
---------------------------
+==========================
 
 Optional arguments
-~~~~~~~~~~~~~~~~~~
+------------------
 
 An option used on the command line will always overwrite the content
 of the configuration file for the same option, if it exists. See the
@@ -136,7 +133,7 @@ file. Available options are::
 
 
 Configuration file
-~~~~~~~~~~~~~~~~~~
+------------------
 
 A configuration dictionnary can contain any options available through
 the command line. The options found in the configuration file will
@@ -204,7 +201,7 @@ configuration file as a template to create your own.
 
 
 Distant host configuration
---------------------------
+==========================
 
 The ``--host`` option allows you to connect to any distant host. The
 default option used to create the ``ssh`` tunnel are ``-X -Y -tt
@@ -228,10 +225,10 @@ Or put the value for that option (along with others) in your
 personal user name.
 
 LSST environment
-----------------
+================
 		  
 Version of the LSST stack
-~~~~~~~~~~~~~~~~~~~~~~~~~
+-------------------------
 
 All available versions of the LSST stack at CC-IN2P3 can be found under::
 
@@ -278,7 +275,7 @@ module is not part of the officiel LSST distribution and will not be
 set up with the ``lsst_distrib`` package.
 
 Use the LSST stack
-~~~~~~~~~~~~~~~~~~
+------------------
 
 Many examples on how to use the LSST stack and how to work with its
 outputs are presented `there
@@ -293,13 +290,13 @@ CC-IN2P3:
 - CFHT D3 fieald: ``/sps/lsst/data/CFHT/D3``
 
 Additional features
-~~~~~~~~~~~~~~~~~~~
+-------------------
 
 - ``ds9`` is automatically available since version 0.9, and can be
   called in a Jupyter terminal.
 
 DESC environment
-----------------
+================
 
 You can automatically set up an ``anaconda`` working environment that
 will give you access to DESC catalogs such as the lattest
@@ -326,7 +323,7 @@ this environment, the following ressources are available:
   set up with your personnal libraries (Python 3 only for now).
   
 Personal environment
---------------------
+====================
 
 As stated in the introduction, and instead of seting up the LSST/DESC
 working environments, you can set up your personal working environment
@@ -346,7 +343,7 @@ You can also use the ``--host`` option to run on an different distant
 host than CC-IN2P3.
 
 Help
-----
+====
 
 - If you have any comments or suggestions, or if you find a bug,
   please use the dedicated github `issue tracker
