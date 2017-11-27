@@ -1,3 +1,7 @@
+.. image:: http://readthedocs.org/projects/stackyter/badge/?version=latest
+   :target: http://stackyter.readthedocs.io/en/latest/?badge=latest
+   :alt: Documentation Status
+
 .. image:: https://landscape.io/github/nicolaschotard/stackyter/master/landscape.svg?style=flat
    :target: https://landscape.io/github/nicolaschotard/stackyter/master
    :alt: Code Health
@@ -5,6 +9,7 @@
 .. image:: https://badge.fury.io/py/stackyter.svg
     :target: https://badge.fury.io/py/stackyter
 
+.. inclusion-marker-do-not-remove	
 
 stackyter
 =========
@@ -224,6 +229,25 @@ Or put the value for that option (along with others) in your
 ``config.yaml`` file. Do not forget to change ``lsstuser`` by your
 personal user name.
 
+Personal environment
+====================
+
+As stated in the introduction, you can set up your personal working
+environment by using the ``--mysetup`` option. Given a setup file
+located an your distant host, you can simply do::
+
+  stackyter.py --mysetup /path/to/my/setup.sh (--username myusername)
+
+Your local setup file will be sourced at connection as followed::
+
+  source /path/to/my/setup.sh
+
+Your setup file must **at least** contains what is needed to make
+Jupyter available. In this mode, the LSST stack will **not** be setup.
+
+You can also use the ``--host`` option to run on an different distant
+host than CC-IN2P3.
+
 LSST environment
 ================
 		  
@@ -321,26 +345,6 @@ this environment, the following ressources are available:
 
 - You can also use the ``--libs`` or ``--bins`` options to complete this
   set up with your personnal libraries (Python 3 only for now).
-  
-Personal environment
-====================
-
-As stated in the introduction, and instead of seting up the LSST/DESC
-working environments, you can set up your personal working environment
-by using the ``--mysetup`` option. Given a setup file located an your
-distant host, you can simply do::
-
-  stackyter.py --mysetup /path/to/my/setup.sh (--username myusername)
-
-Your local setup file will be sourced at connection as followed::
-
-  source /path/to/my/setup.sh
-
-Your setup file must **at least** contains what is needed to make
-Jupyter available. In this mode, the LSST stack will **not** be setup.
-
-You can also use the ``--host`` option to run on an different distant
-host than CC-IN2P3.
 
 Help
 ====
