@@ -5,7 +5,7 @@
 from os import path
 from setuptools import setup
 
-VERSION = "0.12"
+VERSION = "0.13"
 
 # Long description loaded from the README
 with open(path.join(path.abspath(path.dirname(__file__)), "README.rst")) as readme:
