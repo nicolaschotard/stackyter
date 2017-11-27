@@ -39,7 +39,7 @@ def read_config(config, key=None):
     """Read a config file and return the right configuration."""
     if key is not None:
         if key in config:
-            print("INFO: Using configuration '%s'" % key)
+            print("INFO: Using the '%s' configuration" % key)
             config = config[key]
         else:
             raise IOError("Configuration `%s` does not exist. Check your default file." % key)
@@ -122,7 +122,9 @@ if __name__ == '__main__':
     general.add_argument("--labpath", default=None,
                          help="Path in which jupyterlab has been installed in case it differs from "
                          "the (first) path you gave to the --libs option.")
-    general.add_argument('--showconfig', action='store_true', default=False,
+    general.add_argument('-C', '--nocompression', action='store_true', default=False,
+                         help='Deactivate the compression options of ssh.')
+    general.add_argument('-S', '--showconfig', action='store_true', default=False,
                          help='Show all available configurations from your default file and exit.')
 
     # LSST/DESC @ CC-IN2P3 options
@@ -174,8 +176,9 @@ if __name__ == '__main__':
 
     # Start building the command line that will be launched on the host
     # Open the ssh tunnel to the host
-    cmd = "ssh -X -Y -tt -L 20001:localhost:%i %s%s << EOF\n" % \
-          (port, args.username, args.host)
+    cmd = "ssh -X -Y -tt -L %s 20001:localhost:%i %s%s << EOF\n" % \
+          ("-C4c arcfour,blowfish-cbc" if not args.nocompression else "",
+           port, args.username, args.host)
 
     # Print the hostname; for the record
     cmd += "hostname\n"
