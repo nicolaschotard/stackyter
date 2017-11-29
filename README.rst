@@ -158,12 +158,12 @@ configuration dictionnaries:
 
 - The **configuration file** can be either be a default file located
   under ``~/stackyter-config.yaml`` or defined by the
-  ``STACKYTERCONFIG``, or given in command line usig the
-  `--configfile` option.
+  ``STACKYTERCONFIG``, or given in command line using the
+  ``--configfile`` option.
 
 - The **configuration name**, which should be defined in your
   configuration file, must be given using the command line option
-  `--config`. If not given, a `default_config`, which should be
+  ``--config``. If not given, a ``default_config``, which should be
   defined in your configration file, will be used by default.
 
 Here are a few example on how to use it::
