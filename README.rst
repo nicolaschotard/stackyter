@@ -60,6 +60,14 @@ Usage
    
    stackyter.py [options]
 
+
+Then click on the green link given by ``stackyter``, as followed::
+  
+    Copy/paste this URL into your browser to run the notebook localy 
+       http://localhost:20001/?token=38924c48136091ade71a597218f2722dc49c669d1430db41
+
+
+
 ``Ctrl-C`` will stop the Jupyter server and close the connection.
 
 By default, ``stackyter`` will try to connect to CC-IN2P3 using what
@@ -146,57 +154,69 @@ always be overwritten by the command line.
 
 The configuration file can be given in different ways, and can
 contains from a single configuration dictionnary to several
-configuration dictionnaries. The ``--config`` and ``--congfile``
-options can be used (or not) in several different ways:
+configuration dictionnaries:
 
-- ``stackyter.py --configfile myfile.yaml``. ``myfile.yaml`` must contain
-  your configuration, with your set of options.
+- The **configuration file** can be either be a default file located
+  under ``~/stackyter-config.yaml`` or defined by the
+  ``STACKYTERCONFIG``, or given in command line usig the
+  `--configfile` option.
 
-- ``stackyter.py --config myconfig``. In that case, no configuration
-  is directly given by the user, and ``stakyter`` will look for a
-  default configuration file. The default file must be either
-  ``~/stackyter-config.yaml`` or defined by the ``STACKYTERCONFIG``
-  environment variable (if the default path does not fit your
-  need). The ``myconfig`` key will be looked for in this default
-  configuration file to get the configuration dictionnary you asked
-  for.
+- The **configuration name**, which should be defined in your
+  configuration file, must be given using the command line option
+  `--config`. If not given, a `default_config`, which should be
+  defined in your configration file, will be used by default.
 
-- ``stackyter.py``. In that case, ``stackyter`` will also look for a
-  default configuration file (see above), and for a default
-  configuration called ``default_config`` in this file. This default
-  value must be there if you have mor ethan one confiuration
-  defined. It must point to the configuration you would like to use by
-  default.
+Here are a few example on how to use it::
 
-In principal, your default configuration file must look like that::
+  stackyter.py  # 'default_config' in default file if it exists, default option values used otherwise
+  stackyter.py --config config1  # 'config1' in default file which must exist
+  stackyter.py --config config2 --configfile myfile.yaml  # 'config2' in 'myfile.yaml'
+  stackyter.py --configfile myfile.yaml  # 'default_config' in 'myfile.yaml'
+
+In principal, your default configuration file should look like that::
 
   {
-   'default_config': 'ccin2p3',
-   '': {
-               'host': 'cca7.in2p3.fr',  # or ccjupyter if your ~/.ssh/config if configured
-               'jupyter': 'lab',
-               'packages': ["lsst_distrib"],
-               'username': 'myusername',
-               'vstack': 'v14.0',
-               'workdir': '/path/to/my/directory/',
+   'default_config': 'host1',
+  
+   'host1': {
+             'host': 'myhost.domain.fr',  # or 'myhost' if you have configured your ~/.ssh/config file
+             'jupyter': 'lab',  # if installed
+             'username': 'myusername',
+             'mysetup': '/path/to/my/setup/file.sh',
+             'workdir': '/path/to/my/directory/'
               },
-   'othersite': {
-                 'host': 'otherhost.fr',
-                 'username': 'myusername',
-                 'mysetup': 'pathtomysetup'
-                },
+  
+   'host2': {
+             'host': 'otherhost.fr',
+             'username': 'otherusername',
+             'mysetup': '/path/to/my/setup'
+            },
+  
+   'stack': {
+             'host': 'cca7.in2p3.fr',  # or ccjupyter if you have configured your ~/.ssh/config file
+             'packages': ["lsst_distrib"],
+             'username': 'myusername',
+             'vstack': 'v14.0',
+             'workdir': '/pbs/throng/lsst/users/username/',
+              },
+  
+   'desc': {
+            'host': 'cca7.in2p3.fr',
+            'username': 'myusername',
+            'desc': True,
+            'workdir': '/pbs/throng/lsst/users/username/'
+           }
   }
 
 or simply as followed if only one configuration is defined::
 
   {
-   'ccin2p3': {
-               'host': 'cca7.in2p3.fr',  # or ccjupyter if your ~/.ssh/config if configured
-               'jupyter': 'lab',
-               'packages': ["lsst_distrib"],
-               'username': 'myusername',
-               'vstack': 'v14.0',
-               'workdir': '/path/to/my/directory/',
+   'host1': {
+             'host': 'myhost.domain.fr',  # or 'myhost' if you have configured your ~/.ssh/config file
+             'jupyter': 'lab',  # if installed
+             'username': 'myusername',
+             'mysetup': '/path/to/my/setup/file.sh',
+             'workdir': '/path/to/my/directory/'
               },
   }
 

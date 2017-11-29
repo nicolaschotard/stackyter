@@ -23,12 +23,9 @@ def get_default_config(only_path=False):
     """Get the stackyter default configuration file if it exists."""
     if os.getenv("STACKYTERCONFIG") is not None:  # set up by the user
         config = os.getenv("STACKYTERCONFIG")
-        if os.path.exist(config):
-            print("INFO: Loading default configuration file from", config)
-        else:
+        if not os.path.exist(config):
             raise IOError("$STACKYTERCONFIG is defined but the file does not exist.")
     elif os.path.exists(DEFAULT_CONFIG):  # default location
-        print("INFO: Loading default configuration file from", DEFAULT_CONFIG)
         config = DEFAULT_CONFIG
     else:
         return None
@@ -37,6 +34,8 @@ def get_default_config(only_path=False):
 
 def read_config(config, key=None):
     """Read a config file and return the right configuration."""
+    print("INFO: Loading configuration from", config)
+    config = yaml.load(open(config, 'r'))
     if key is not None:
         if key in config:
             print("INFO: Using the '%s' configuration" % key)
@@ -56,24 +55,14 @@ def read_config(config, key=None):
 
 def get_config(config, configfile):
     """Get the configuration for stackyter is any."""
-    if configfile is not None:
-        config = configfile
+    configfile = get_default_config(only_path=True) if configfile is None else configfile
     if config is not None:
-        if os.path.exists(config):
-            # The user has given configuration file
-            print("INFO: Using default configuration from", config)
-            config = read_config(yaml.load(open(config, 'r')))
-        else:
-            default_config = get_default_config()
-            if default_config is None:
-                raise IOError("No default configuration file found. Check the doc.")
-            # Get the selected configuration from the config file
-            config = read_config(default_config, key=config)
-    else:
-        # Look for a default configuration file
-        default_config = get_default_config()
-        if default_config is not None:
-            config = read_config(default_config)
+        # Is there a configuration file?
+        if configfile is None:
+            raise IOError("No (default) configuration file found or given. Check the doc.")
+        config = read_config(configfile, key=config)
+    elif configfile is not None:
+        config = read_config(configfile)
     return config
 
 
@@ -140,7 +129,7 @@ if __name__ == '__main__':
     lsstdesc.add_argument("--desc", action='store_true', default=False,
                           help="Setup a DESC environment giving you access to DESC catalogs. "
                           "Overwrites the '--mysetup' and '--vstack' options.")
-    
+
     args = parser.parse_args()
 
     # Show available configuration(s) is any and exit
