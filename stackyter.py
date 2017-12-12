@@ -169,9 +169,6 @@ if __name__ == '__main__':
           ("-C4c arcfour,blowfish-cbc" if not args.nocompression else "",
            port, args.username, args.host)
 
-    # Print the hostname; for the record
-    cmd += "hostname\n"
-
     # Add local libraries to the PATH and PYTHONPATH
     args.libs = string_to_list(args.libs)
     args.bins = string_to_list(args.bins)
@@ -196,42 +193,46 @@ if __name__ == '__main__':
         if args.packages is not None:
             cmd += ''.join(["setup %s\n" % package for package in args.packages])
 
-        # First get the runing version of python
-        if args.vstack == 'v13.0':
-            cmd += "export VPY=2 \n"
-            cmd += "export FVPY=2.7 \n"
-        else:
-            cmd += "export VPY=\`ls /sps/lsst/software/lsst_distrib/%s/python/"  % args.vstack + \
-                   " | egrep -o 'miniconda[2,3]' | egrep -o '[2,3]'\`\n"
-            cmd += "if [ \$VPY -eq 2 ]; then export FVPY=2.7; else export FVPY=3.6; fi\n"
+        has_jupyter = not ((args.vstack == "v13.0") or (int(args.vstack[4:6]) == 17 and \
+                                                        int(args.vstack[-2:]) < 49))
+        if not has_jupyter:
+            # Jupyter notebook and lab are installed in w_2017_49 and in later version
+            # First get the runing version of python
+            if args.vstack == 'v13.0':
+                cmd += "export VPY=2 \n"
+                cmd += "export FVPY=2.7 \n"
+            else:
+                cmd += "export VPY=\`ls /sps/lsst/software/lsst_distrib/%s/python/"  % args.vstack + \
+                       " | egrep -o 'miniconda[2,3]' | egrep -o '[2,3]'\`\n"
+                cmd += "if [ \$VPY -eq 2 ]; then export FVPY=2.7; else export FVPY=3.6; fi\n"
 
-        # Use default paths to make sure that jupyter is available
-        jupybin = "/sps/lsst/dev/nchotard/demo/python\$VPY/bin"
-        jupylib = "/sps/lsst/dev/nchotard/demo/python\$VPY/lib/python\$FVPY/site-packages"
-        if args.libs is None:
-            args.libs = [jupylib]
-        else:
-            args.libs.append(jupylib)
-        if args.bins is None:
-            args.bins = [jupybin]
-        else:
-            args.bins.append(jupybin)
+            # Use default paths to make sure that jupyter is available
+            jupybin = "/sps/lsst/dev/nchotard/demo/python\$VPY/bin"
+            jupylib = "/sps/lsst/dev/nchotard/demo/python\$VPY/lib/python\$FVPY/site-packages"
+            if args.libs is None:
+                args.libs = [jupylib]
+            else:
+                args.libs.append(jupylib)
+            if args.bins is None:
+                args.bins = [jupybin]
+            else:
+                args.bins.append(jupybin)
+
+            # We also need to add the following path to set up a jupyter lab
+            if args.jupyter == 'lab':
+                if args.labpath is not None:
+                    # Use the path given by the user
+                    cmd += 'export JUPYTERLAB_DIR="%s/share/jupyter/lab"\n' % args.labpath
+                elif args.labpath is None and args.libs is not None:
+                    # Take the first path of the --libs list
+                    cmd += 'export JUPYTERLAB_DIR="%s/share/jupyter/lab"\n' % \
+                           args.libs[0].split('/lib')[0]
+                elif args.labpath is None and args.libs is not None:
+                    # That should not happen
+                    raise IOError("Give me a path to the install directory of jupyterlab.")
 
         # Add ds9 to the PATH
         cmd += 'export PATH=\$PATH:/sps/lsst/dev/nchotard/local/bin\n'
-
-        # We also need to add the following path to set up a jupyter lab
-        if args.jupyter == 'lab':
-            if args.labpath is not None:
-                # Use the path given by the user
-                cmd += 'export JUPYTERLAB_DIR="%s/share/jupyter/lab"\n' % args.labpath
-            elif args.labpath is None and args.libs is not None:
-                # Take the first path of the --libs list
-                cmd += 'export JUPYTERLAB_DIR="%s/share/jupyter/lab"\n' % \
-                       args.libs[0].split('/lib')[0]
-            elif args.labpath is None and args.libs is not None:
-                # That should not happen
-                raise IOError("Give me a path to the install directory of jupyterlab.")
 
     # Add local libraries to the PATH and PYTHONPATH
     if args.libs is not None:            

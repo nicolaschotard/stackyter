@@ -295,7 +295,7 @@ with the following nomencalture:
 | Python 3 | ``w_2017_XX_py3`` | ``w_2017_XX``     |
 +----------+-------------------+-------------------+
 
-Latest releases of the LSST stack, as of 11-07-2017, are:
+Latest releases of the LSST stack, as of 12-12-2017, are:
 
 +-------------------+-----------------------------------------------------+
 | Version           | Comment                                             |
@@ -304,7 +304,7 @@ Latest releases of the LSST stack, as of 11-07-2017, are:
 +-------------------+-----------------------------------------------------+
 | ``w_2017_43_py2`` | Latest weekly release for Python 2                  |
 +-------------------+-----------------------------------------------------+
-| ``w_2017_44``     | Latest weekly release for Python 3                  |
+| ``w_2017_49``     | Latest weekly release for Python 3                  |
 +-------------------+-----------------------------------------------------+
 
 Keep in mind that using Python 2 in an LSST context is not encouraged
