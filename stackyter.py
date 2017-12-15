@@ -207,8 +207,8 @@ if __name__ == '__main__':
                 cmd += "if [ \$VPY -eq 2 ]; then export FVPY=2.7; else export FVPY=3.6; fi\n"
 
             # Use default paths to make sure that jupyter is available
-            jupybin = "/sps/lsst/dev/nchotard/demo/python\$VPY/bin"
-            jupylib = "/sps/lsst/dev/nchotard/demo/python\$VPY/lib/python\$FVPY/site-packages"
+            jupybin = "/pbs/throng/lsst/users/nchotard/demo/python\$VPY/bin"
+            jupylib = "/pbs/throng/lsst/users/nchotard/demo/python\$VPY/lib/python\$FVPY/site-packages"
             if args.libs is None:
                 args.libs = [jupylib]
             else:
@@ -232,7 +232,7 @@ if __name__ == '__main__':
                     raise IOError("Give me a path to the install directory of jupyterlab.")
 
         # Add ds9 to the PATH
-        cmd += 'export PATH=\$PATH:/sps/lsst/dev/nchotard/local/bin\n'
+        cmd += 'export PATH=\$PATH:/pbs/throng/lsst/users/nchotard/local/bin\n'
 
     # Add local libraries to the PATH and PYTHONPATH
     if args.libs is not None:            
