@@ -184,7 +184,7 @@ if __name__ == '__main__':
         cmd += "source %s\n" % args.mysetup
     elif args.desc:
         # Setup a DESC environment with an easy access to DESC catalogs
-        desc_env = "/sps/lsst/dev/DESC/setup.sh"
+        desc_env = "/pbs/throng/lsst/software/desc/setup.sh"
         cmd += "source %s\n" % desc_env
     else:
         # Setup the lsst stack and packages if a version of the stack if given
