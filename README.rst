@@ -14,7 +14,7 @@
 stackyter
 =========
 
-This script will allow you to run a jupyter notebook (or lab) on a
+This script allow you to run a jupyter notebook (or lab) on a
 distant server (default is CC-IN2P3) while displaying it localy in
 your local brower. It was initialy intended to help LSST members to
 interact with the datasets already available at CC-IN2P3 using Python
@@ -24,14 +24,14 @@ following mode:
 
 - For all users:
 
-  - On any host using the ``--host`` option
-  - With your personal setup using the ``--mysetup`` option
+  - On any host using the ``--host`` option.
+  - With your personal setup using the ``--mysetup`` option.
 
 - For LSST/DESC members (at CC-IN2P3):
 
+  - Your personal setup using the ``--mysetup`` option (as above).
   - LSST stack environment using the ``--vstack`` option.
-  - DESC catalogs environment using the ``--desc`` option
-  - Your personal setup using the ``--mysetup`` option
+  - DESC catalogs environment using the ``--desc`` option.
 
    
 **Jupyter must be available on the distant host for this script to work.**
@@ -156,7 +156,7 @@ The configuration file can be given in different ways, and can
 contains from a single configuration dictionnary to several
 configuration dictionnaries:
 
-- The **configuration file** can be either be a default file located
+- The **configuration file** can either be a default file located
   under ``~/stackyter-config.yaml`` or defined by the
   ``STACKYTERCONFIG``, or given in command line using the
   ``--configfile`` option.
@@ -304,12 +304,12 @@ Latest releases of the LSST stack, as of 12-12-2017, are:
 +-------------------+-----------------------------------------------------+
 | ``w_2017_43_py2`` | Latest weekly release for Python 2                  |
 +-------------------+-----------------------------------------------------+
-| ``w_2017_49``     | Latest weekly release for Python 3                  |
+| ``w_2017_52``     | Latest weekly release for Python 3                  |
 +-------------------+-----------------------------------------------------+
 
 Keep in mind that using Python 2 in an LSST context is not encouraged
 by the community, and will not be supported anymore. The latest weekly
-for which Python 2 has been installed at CC-IN2P3 is ``w_2017_4`` (see
+for which Python 2 has been installed at CC-IN2P3 is ``w_2017_43`` (see
 online `documentation
 <http://doc.lsst.eu/ccin2p3/ccin2p3.html#software>`_).
 
@@ -329,7 +329,7 @@ A few data sets have already been re-processed using the LSST stack,
 and their outputs are available for analysis at different places on
 CC-IN2P3:
 
-- SXDS data from HSC: ``/sps/lsst/dev/lsstprod/hsc/SXDS/output``
+- SXDS data from HSC: ``/sps/lsst/users/lsstprod/hsc/SXDS/output``
 - CFHT data (containing clusters): ``/sps/lsst/data/clusters``
 - CFHT D3 fieald: ``/sps/lsst/data/CFHT/D3``
 
