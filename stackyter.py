@@ -131,6 +131,7 @@ if __name__ == '__main__':
                           "Overwrites the '--mysetup' and '--vstack' options.")
 
     args = parser.parse_args()
+    default_args = parser.parse_args(args=[])
 
     # Show available configuration(s) is any and exit
     if args.showconfig:
@@ -150,7 +151,7 @@ if __name__ == '__main__':
         for opt, val in args._get_kwargs():
             # only keep option value from the config file
             # if the user has not set it up from command line
-            if opt in config and '--' + opt not in sys.argv:
+            if opt in config and args.__dict__[opt] == default_args.__dict__[opt]:
                 setattr(args, opt, config[opt])
 
     # A valid username (and the corresponding password) is actually the only mandatory thing we need
