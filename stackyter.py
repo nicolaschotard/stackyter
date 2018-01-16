@@ -111,8 +111,8 @@ if __name__ == '__main__':
     general.add_argument("--labpath", default=None,
                          help="Path in which jupyterlab has been installed in case it differs from "
                          "the (first) path you gave to the --libs option.")
-    general.add_argument('-C', '--nocompression', action='store_true', default=False,
-                         help='Deactivate ssh compression options.')
+    general.add_argument('-C', '--compression', action='store_true', default=False,
+                         help='Activate ssh compression option (-C).')
     general.add_argument('-S', '--showconfig', action='store_true', default=False,
                          help='Show all available configurations from your default file and exit.')
 
@@ -166,8 +166,7 @@ if __name__ == '__main__':
     # Start building the command line that will be launched on the host
     # Open the ssh tunnel to the host
     cmd = "ssh -X -Y %s -tt -L 20001:localhost:%i %s%s << EOF\n" % \
-          ("-C4c arcfour,blowfish-cbc" if not args.nocompression else "",
-           port, args.username, args.host)
+          ("-C" if args.compression else "", port, args.username, args.host)
 
     # Add local libraries to the PATH and PYTHONPATH
     args.libs = string_to_list(args.libs)

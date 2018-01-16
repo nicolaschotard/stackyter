@@ -127,7 +127,7 @@ file. Available options are::
     --labpath LABPATH     Path in which jupyterlab has been installed in case it
                           differs from the (first) path you gave to the --libs
                           option. (default: None)
-    -C, --nocompression   Deactivate ssh compression options. (default: False)
+    -C, --compression     Activate ssh compression option (-C). (default: False)
     -S, --showconfig      Show all available configurations from your default
                           file and exit. (default: False)
   
