@@ -9,9 +9,11 @@
 .. image:: https://badge.fury.io/py/stackyter.svg
     :target: https://badge.fury.io/py/stackyter
 
+------------
+
 .. inclusion-marker-do-not-remove	
 
-**stackyter** Local display of a Jupyter notebook running on a distant server
+Local display of a Jupyter notebook running on a distant server
 
 #. Install `Jupyter <http://jupyter.org/>`_ on your distant server
 #. Create a file containing instructions to make Jupyter (and anything you need) available (e.g, ``mysetup.sh``)
@@ -19,6 +21,10 @@
 	
 	stackyter.py --host thehost --user myusername --mysetup /path/on/server/mysetup.sh
 	
+#. Copy/paste the given URL into your local browser to display Jupyter
+	
+------------
+
 .. Contents::
 
 Overview
