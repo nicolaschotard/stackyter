@@ -15,7 +15,7 @@
 
 #. Install `Jupyter <http://jupyter.org/>`_ on your distant server
 #. Create a file containing instructions to make Jupyter (and anything you need) available (e.g, ``mysetup.sh``)
-#. Run ``stackyter.py`` on your local machine
+#. Run ``stackyter.py`` on your local machine::
 	
 	stackyter.py --host thehost --user myusername --mysetup /path/on/server/mysetup.sh
 	
