@@ -11,8 +11,18 @@
 
 .. inclusion-marker-do-not-remove	
 
-stackyter
-=========
+**stackyter** Local display of a Jupyter notebook running on a distant server
+
+#. Install `Jupyter <http://jupyter.org/>`_ on your distant server
+#. Create a file containing instructions to make Jupyter (and anything you need) available (e.g, ``mysetup.sh``)
+#. Run ``stackyter.py`` on your local machine
+	
+	stackyter.py --host thehost --user myusername --mysetup /path/on/server/mysetup.sh
+	
+.. Contents::
+
+Overview
+========
 
 This script allow you to run a jupyter notebook (or lab) on a
 distant server (default is CC-IN2P3) while displaying it localy in
