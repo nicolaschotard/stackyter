@@ -14,19 +14,4 @@
            'username': 'otherusername',
            'mysetup': '/path/to/my/setup'
           },
-
- 'stack': {
-           'host': 'cca7.in2p3.fr',  # or ccjupyter if you have configured your ~/.ssh/config file
-           'packages': ["lsst_distrib"],
-           'username': 'myusername',
-           'vstack': 'v14.0',
-           'workdir': '/pbs/throng/lsst/users/username/',
-            },
-
- 'desc': {
-          'host': 'cca7.in2p3.fr',
-          'username': 'myusername',
-          'desc': True,
-          'workdir': '/pbs/throng/lsst/users/username/'
-         }
 }

@@ -68,67 +68,48 @@ def get_config(config, configfile):
 
 if __name__ == '__main__':
 
-    description = """Run Jupyter on a given host and display it localy."""
+    description = """Run Jupyter on a distant host and display it localy."""
     prog = "stackyter.py"
     usage = """%s [options]""" % prog
 
     parser = ArgumentParser(prog=prog, usage=usage, description=description,
                             formatter_class=ArgumentDefaultsHelpFormatter)
-    general = parser.add_argument_group('General', 'General options for any host on which '
-                                        ' Jupyter can be found')
 
     # General options
-    general.add_argument('-c', '--config', default=None,
-                         help='Name of the configuration to use, taken from your default '
-                         'configuration file (~/.stackyter-config.yaml or $STACKYTERCONFIG). '
-                         "Default if to use the 'default_config' defined in this file. "
-                         'The content of the configuration file will be overwritten by any '
-                         'given command line options.')
-    general.add_argument('-f', '--configfile', default=None,
-                         help='Configuration file containing a set of option values. The content '
-                         'of this file will be overwritten by any given command line options.')
-    general.add_argument('-H', "--host", default="cca7.in2p3.fr",
-                         help="Name of the target host. Allows you to avoid conflit with the "
-                         "content of your $HOME/.ssh/config, or to connect to any host on which "
-                         "Jupyter is available.")
-    general.add_argument('-u', '--username',
-                         help="Your user name on the host. If not given, ssh will try to "
-                         "figure it out from you ~/.ssh/config or will use your local user name.")
-    general.add_argument('-w', "--workdir", default=None,
-                         help="Your working directory on the host")
-    general.add_argument("--mysetup", default=None,
-                         help="Path to a setup file (on the host) that will be used to set up the "
-                         "working environment. A Python installation with Jupyter must be "
-                         "available to make this work.")
-    general.add_argument('-j', "--jupyter", default="notebook",
-                         help="Either launch a jupiter notebook or a jupyter lab.")
-    general.add_argument("--libs", default=None,
-                         help="Path(s) to local Python librairies. Will be added to your PYTHONPATH."
-                         " Coma separated to add more than one paths, or a list in the config file.")
-    general.add_argument("--bins", default=None,
-                         help="Path(s) to local binaries. Will be added to your PATH."
-                         " Coma separated to add more than one paths, or a list in the config file.")
-    general.add_argument("--labpath", default=None,
-                         help="Path in which jupyterlab has been installed in case it differs from "
-                         "the (first) path you gave to the --libs option.")
-    general.add_argument('-C', '--compression', action='store_true', default=False,
-                         help='Activate ssh compression option (-C).')
-    general.add_argument('-S', '--showconfig', action='store_true', default=False,
-                         help='Show all available configurations from your default file and exit.')
-
-    # LSST/DESC @ CC-IN2P3 options
-    lsstdesc = parser.add_argument_group('LSST/DESC at CC-IN2P3', 'Shortcuts to access the LSST '
-                                         'stack or the DESC catalogs at CC-IN2P3')
-    lsstdesc.add_argument("--vstack", default='v14.0',
-                          help="Version of the stack you want to set up."
-                          " (E.g. v14.0, w_2017_43 or w_2017_43_py2)")
-    lsstdesc.add_argument("--packages", default='lsst_distrib',
-                          help="A list of packages you want to setup. Coma separated from command"
-                          " line, or a list in the config file. `lsst_distrib` will set up all "
-                          "available packages.")
-    lsstdesc.add_argument("--desc", action='store_true', default=False,
-                          help="Setup a DESC environment giving you access to DESC catalogs. "
-                          "Overwrites the '--mysetup' and '--vstack' options.")
+    parser.add_argument('-c', '--config', default=None,
+                        help='Name of the configuration to use, taken from your default '
+                        'configuration file (~/.stackyter-config.yaml or $STACKYTERCONFIG). '
+                        "Default if to use the 'default_config' defined in this file. "
+                        'The content of the configuration file will be overwritten by any '
+                        'given command line options.')
+    parser.add_argument('-f', '--configfile', default=None,
+                        help='Configuration file containing a set of option values. The content '
+                        'of this file will be overwritten by any given command line options.')
+    parser.add_argument('-H', "--host", default="cca7.in2p3.fr",
+                        help="Name of the target host. Allows you to avoid conflit with the "
+                        "content of your $HOME/.ssh/config, or to connect to any host on which "
+                        "Jupyter is available.")
+    parser.add_argument('-u', '--username',
+                        help="Your user name on the host. If not given, ssh will try to "
+                        "figure it out from you ~/.ssh/config or will use your local user name.")
+    parser.add_argument('-w', "--workdir", default=None,
+                        help="Your working directory on the host")
+    parser.add_argument("--mysetup", default=None,
+                        help="Path to a setup file (on the host) that will be used to set up the "
+                        "working environment. A Python installation with Jupyter must be "
+                        "available to make this work.")
+    parser.add_argument('-j', "--jupyter", default="notebook",
+                        help="Either launch a jupiter notebook or a jupyter lab.")
+    parser.add_argument("--runbefore", default=None,
+                        help="A list of extra commands to run BEFORE sourcing your setup file."
+                        " Coma separated for more than one command, or a list in the config file.")
+    parser.add_argument("--runafter", default=None,
+                        help="A list of extra commands to run AFTER sourcing your setup file."
+                        " Coma separated for more than one command, or a list in the config file.")
+    parser.add_argument('-C', '--compression', action='store_true', default=False,
+                        help='Activate ssh compression option (-C).')
+    parser.add_argument('-S', '--showconfig', action='store_true', default=False,
+                        help='Show all available configurations from your default file and exit.')
 
     args = parser.parse_args()
     default_args = parser.parse_args(args=[])
@@ -157,8 +138,9 @@ if __name__ == '__main__':
     # A valid username (and the corresponding password) is actually the only mandatory thing we need
     args.username = "" if args.username is None else args.username + "@"
 
-    # Make sure that we have a list (even empty) for packages
-    args.packages = string_to_list(args.packages)
+    # Make sure that we have a list (even empty) for extra commands to run
+    args.runbefore = string_to_list(args.runbefore)
+    args.runafter = string_to_list(args.runafter)
 
     # A random port number is selected between 1025 and 65635 (included) for server side to
     # prevent from conflict between users.
@@ -169,78 +151,20 @@ if __name__ == '__main__':
     cmd = "ssh -X -Y %s -tt -L 20001:localhost:%i %s%s << EOF\n" % \
           ("-C" if args.compression else "", port, args.username, args.host)
 
-    # Add local libraries to the PATH and PYTHONPATH
-    args.libs = string_to_list(args.libs)
-    args.bins = string_to_list(args.bins)
-
     # Move to the working directory
     if args.workdir is not None:
         cmd += "if [[ ! -d %s ]]; then echo 'Error: directory %s does not exist'; exit 1; fi\n" % \
                (args.workdir, args.workdir)
         cmd += "cd %s\n" % args.workdir
 
+    # Do we have to run something before sourcing the setup file
+    if args.runbefore:
+        cmd += ''.join([run.replace("$", "\$") + "\n" for run in args.runbefore])
     if args.mysetup is not None:
-        # Use the setup file given by the user to set up the working environment (no LSST stack)
+        # Use the setup file given by the user to set up the working environment
         cmd += "source %s\n" % args.mysetup
-    elif args.desc:
-        # Setup a DESC environment with an easy access to DESC catalogs
-        desc_env = "/pbs/throng/lsst/software/desc/setup.sh"
-        cmd += "source %s\n" % desc_env
-    else:
-        # Setup the lsst stack and packages if a version of the stack if given
-        if args.vstack is not None:
-            cmd += "source /sps/lsst/software/lsst_distrib/%s/loadLSST.bash\n" % args.vstack
-        if args.packages is not None:
-            cmd += ''.join(["setup %s\n" % package for package in args.packages])
-
-        has_jupyter = not ((args.vstack == "v13.0") or (int(args.vstack[4:6]) == 17 and \
-                                                        int(args.vstack[-2:]) < 49))
-        if not has_jupyter:
-            # Jupyter notebook and lab are installed in w_2017_49 and in later version
-            # First get the runing version of python
-            if args.vstack == 'v13.0':
-                cmd += "export VPY=2 \n"
-                cmd += "export FVPY=2.7 \n"
-            else:
-                cmd += "export VPY=\`ls /sps/lsst/software/lsst_distrib/%s/python/"  % args.vstack + \
-                       " | egrep -o 'miniconda[2,3]' | egrep -o '[2,3]'\`\n"
-                cmd += "if [ \$VPY -eq 2 ]; then export FVPY=2.7; else export FVPY=3.6; fi\n"
-
-            # Use default paths to make sure that jupyter is available
-            jupybin = "/pbs/throng/lsst/users/nchotard/demo/python\$VPY/bin"
-            jupylib = "/pbs/throng/lsst/users/nchotard/demo/python\$VPY/lib/python\$FVPY/site-packages"
-            if args.libs is None:
-                args.libs = [jupylib]
-            else:
-                args.libs.append(jupylib)
-            if args.bins is None:
-                args.bins = [jupybin]
-            else:
-                args.bins.append(jupybin)
-
-            # We also need to add the following path to set up a jupyter lab
-            if args.jupyter == 'lab':
-                if args.labpath is not None:
-                    # Use the path given by the user
-                    cmd += 'export JUPYTERLAB_DIR="%s/share/jupyter/lab"\n' % args.labpath
-                elif args.labpath is None and args.libs is not None:
-                    # Take the first path of the --libs list
-                    cmd += 'export JUPYTERLAB_DIR="%s/share/jupyter/lab"\n' % \
-                           args.libs[0].split('/lib')[0]
-                elif args.labpath is None and args.libs is not None:
-                    # That should not happen
-                    raise IOError("Give me a path to the install directory of jupyterlab.")
-
-        # Add ds9 to the PATH
-        cmd += 'export PATH=\$PATH:/pbs/throng/lsst/users/nchotard/local/bin\n'
-
-    # Add local libraries to the PATH and PYTHONPATH
-    if args.libs is not None:            
-        for lib in args.libs:
-            cmd += 'export PYTHONPATH="\$PYTHONPATH:%s"\n' % lib
-    if args.bins is not None:
-        for lbin in args.bins:
-            cmd += 'export PATH="\$PATH::%s"\n' % lbin
+    if args.runafter:
+        cmd += ''.join([run.replace("$", "\$") + "\n" for run in args.runafter])
 
     # Launch jupyter
     cmd += 'jupyter %s --no-browser --port=%i --ip=127.0.0.1 &\n' % (args.jupyter, port)
@@ -249,7 +173,7 @@ if __name__ == '__main__':
     cmd += "export servers=\`jupyter notebook list\`\n"
     # If might have to wait a little bit until the server is actually running...
     cmd += "while [[ \$servers != *'127.0.0.1:%i'* ]]; " % port + \
-           "do sleep 1; servers=\`jupyter notebook list\`; echo \$servers; done\n"
+           "do sleep 1; servers=\`jupyter notebook list\`; echo waiting...; done\n"
     cmd += "export servers=\`jupyter notebook list | grep '127.0.0.1:%i'\`\n" % port
     cmd += "export TOKEN=\`echo \$servers | sed 's/\//\\n/g' | " + \
            "grep token | sed 's/ /\\n/g' | grep token \`\n"

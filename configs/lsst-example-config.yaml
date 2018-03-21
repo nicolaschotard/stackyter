@@ -1,0 +1,18 @@
+{
+ 'default_config': 'stackatcc',
+ 
+ 'stackatcc': {
+               'host': 'cca7.in2p3.fr',
+               'username': 'myusername',
+               'runbefore': ["source /sps/lsst/software/lsst_distrib/w_2018_08/loadLSST.bash",
+                             "setup lsst_distrib",
+                             "export PATH=$PATH:/pbs/throng/lsst/users/nchotard/local/bin"
+                            ],
+              },
+
+  'lsstdesc': {
+               'host': 'cca7.in2p3.fr',
+               'username': 'myusername',
+               'runbefore': "source /pbs/throng/lsst/software/desc/setup.sh",
+              },
+}
