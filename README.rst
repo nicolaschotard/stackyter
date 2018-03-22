@@ -11,8 +11,8 @@
 
 .. inclusion-marker-do-not-remove
 
-Quick install and tutorial
-==========================
+Quick install and how-to
+========================
 
 Local display of a Jupyter notebook running on a distant server
 
@@ -20,29 +20,23 @@ Local display of a Jupyter notebook running on a distant server
 
      pip install stackyter
      
-#. Install `Jupyter <http://jupyter.org/>`_ on your distant server
-#. Create a file containing instructions to make Jupyter (and anything else you need) available (e.g, `in a `mysetup.sh`` file 
+#. Install `Jupyter <http://jupyter.org/>`_ on your distant host if not done yet
+#. Create a file with instructions to make Jupyter (and anything else
+   you need) available (e.g, ``mysetup.sh``)
 #. Run ``stackyter.py`` on your local machine::
 	
-     stackyter.py --host thehost --user myusername --mysetup /path/on/server/mysetup.sh
+     stackyter.py --host thehost --user myusername --mysetup /path/on/the/host/mysetup.sh
 	
-#. Copy/paste the given URL into your local browser to display Jupyter	
+#. Copy/paste the given URL into your local browser to display Jupyter
 
-Overview
-========
+Purpose
+=======
 
 This script allow you to run a jupyter notebook (or lab) on a distant
-server while displaying it localy in your local brower. It was
-initialy intended to help LSST members to interact with the datasets
-available at CC-IN2P3 using Python, but can be use in any other
-context that needs a Jupyter environment. It can thus be used by
-
-- anyone and on any host using the ``--host`` and ``--mysetup`` options
-- LSST/DESC members at CC-IN2P3 using the ``--vstack`` option (LSST
-  stack environment) or the ``--desc`` option (DESC environment).
-
-The only prerequisite is that **Jupyter must be available on the
-distant host for this script to work.**
+server while displaying it localy in your local brower. It can be used
+by anyone and on any host using the ``--host`` and ``--mysetup``
+options. The only prerequisite is that **Jupyter must be available on
+the distant host for this script to work.**
 
 Installation
 ============
@@ -68,27 +62,19 @@ Usage
    
    stackyter.py [options]
 
-
 Then click on the green link given by ``stackyter``, as followed::
   
     Copy/paste this URL into your browser to run the notebook localy 
        http://localhost:20001/?token=38924c48136091ade71a597218f2722dc49c669d1430db41
 
-
-
 ``Ctrl-C`` will stop the Jupyter server and close the connection.
 
-By default, ``stackyter`` will try to connect to CC-IN2P3 using what
-``ssh`` can find in your ``~/.ssh/config`` or taking your local user
-name. It will also set up the latest stable version of the LSST
-stack. If this is not what you want to do, use the following set of
-options to adapt ``stackyter`` to your personal case.
+You can use the following set of options to adapt ``stackyter`` to
+your personal case.
 
-Options and configurations
-==========================
 
 Optional arguments
-------------------
+==================
 
 An option used on the command line will always overwrite the content
 of the configuration file for the same option, if it exists. See the
@@ -110,7 +96,7 @@ file. Available options are::
   -H HOST, --host HOST  Name of the target host. Allows you to avoid conflit
                         with the content of your $HOME/.ssh/config, or to
                         connect to any host on which Jupyter is available.
-                        (default: cca7.in2p3.fr)
+                        (default: None)
   -u USERNAME, --username USERNAME
                         Your user name on the host. If not given, ssh will try
                         to figure it out from you ~/.ssh/config or will use
@@ -137,7 +123,7 @@ file. Available options are::
 
 
 Configuration file
-------------------
+==================
 
 A configuration dictionnary can contain any options available through
 the command line. The options found in the configuration file will
@@ -170,8 +156,8 @@ In principal, your default configuration file should look like that::
    'default_config': 'host1',
   
    'host1': {
-             'host': 'myhost.domain.fr',  # or 'myhost' if you have configured your ~/.ssh/config file
-             'jupyter': 'lab',  # if installed
+             'host': 'myhost.domain.fr',  # 'myhost' if you have configured your ~/.ssh/config
+             'jupyter': 'lab',            # if installed
              'username': 'myusername',
              'mysetup': '/path/to/my/setup/file.sh',
              'workdir': '/path/to/my/directory/'
@@ -182,21 +168,12 @@ In principal, your default configuration file should look like that::
              'username': 'otherusername',
              'mysetup': '/path/to/my/setup'
             },
-  
-   'stack': {
-             'host': 'cca7.in2p3.fr',  # or ccjupyter if you have configured your ~/.ssh/config file
-             'packages': ["lsst_distrib"],
-             'username': 'myusername',
-             'vstack': 'v14.0',
-             'workdir': '/pbs/throng/lsst/users/username/',
-              },
-  
-   'desc': {
-            'host': 'cca7.in2p3.fr',
-            'username': 'myusername',
-            'desc': True,
-            'workdir': '/pbs/throng/lsst/users/username/'
-           }
+
+   'host3': {
+             'host': 'somewhere.edu',
+             'username': 'ausername',
+	     # Jupyter is available by default on this host, 'mysetup' is not needed
+            },  
   }
 
 or simply as followed if only one configuration is defined::
@@ -213,7 +190,10 @@ or simply as followed if only one configuration is defined::
 
 You can use the `example
 <https://raw.githubusercontent.com/nicolaschotard/stackyter/master/configs/example-config.yaml>`_
-configuration file as a template to create your own.
+configuration file as a template to create your own. You can also find
+several example configuration files in the `configs
+<https://raw.githubusercontent.com/nicolaschotard/stackyter/master/configs>`_
+directory for different user cases.
 
 
 Distant host configuration
@@ -224,21 +204,22 @@ default option used to create the ``ssh`` tunnel are ``-X -Y -tt
 -L``. If you want to configure your ``ssh`` connection, edit your
 ``~/.ssh/config`` file using, for instance, the following template::
 
-  Host ccjupyter
-  Hostname cca7.in2p3.fr
+  Host myjupyter
+  Hostname thehostname
   User myusername
-  GSSAPIClientIdentity myusername@IN2P3.FR
+  GSSAPIClientIdentity myusername@HOST
   GSSAPIAuthentication yes
   GSSAPIDelegateCredentials yes
   GSSAPITrustDns yes
 
-You can then use the ``stackyter`` script as follows::
+Ypu only need to replace ``thehostname``, ``myusername``, and
+``myusername@HOST`` by the appropriate values. You can then use the
+``stackyter`` script as follows::
 
-  stackyter.py --host ccjupyter
+  stackyter.py --host myjupyter
 
 Or put the value for that option (along with others) in your
-``config.yaml`` file. Do not forget to change ``myusername`` by your
-personal user name.
+``config.yaml`` file. 
 
 Working environment
 ===================
@@ -263,6 +244,9 @@ Your setup must **at least** contains what is needed to make
 Jupyter available. If Jupyter is available by default on the distant
 host (it might be set up on connection), you only need to use the
 ``--host`` and ``--username`` option to run.
+
+You can of course add any kind of personal setups with these three
+options, related of not to Jupyter.
 
 Help
 ====

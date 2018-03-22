@@ -85,7 +85,7 @@ if __name__ == '__main__':
     parser.add_argument('-f', '--configfile', default=None,
                         help='Configuration file containing a set of option values. The content '
                         'of this file will be overwritten by any given command line options.')
-    parser.add_argument('-H', "--host", default="cca7.in2p3.fr",
+    parser.add_argument('-H', "--host", default=None,
                         help="Name of the target host. Allows you to avoid conflit with the "
                         "content of your $HOME/.ssh/config, or to connect to any host on which "
                         "Jupyter is available.")
@@ -135,7 +135,11 @@ if __name__ == '__main__':
             if opt in config and args.__dict__[opt] == default_args.__dict__[opt]:
                 setattr(args, opt, config[opt])
 
-    # A valid username (and the corresponding password) is actually the only mandatory thing we need
+    # Do we have a valide host name
+    if args.host is None:
+        raise ValueError("You must give a valide host name (--host)")
+
+    # Do we have a valid username
     args.username = "" if args.username is None else args.username + "@"
 
     # Make sure that we have a list (even empty) for extra commands to run
