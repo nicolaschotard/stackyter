@@ -195,3 +195,81 @@ def main():
 
     # Run jupyter
     subprocess.call(cmd, stderr=subprocess.STDOUT, shell=True)
+    # print(cmd)
+
+
+def main_pexpect():
+    import time
+    # import pexpect
+    from pexpect.pxssh import pxssh
+    from colored import stylize, fg, attr
+
+    parser = setup_parser()
+    args = parser.parse_args()
+    default_args = parser.parse_args(args=[])
+
+    # Show available configuration(s) is any and exit
+    if args.showconfig:
+        config = get_default_config(only_path=True)
+        if config is not None:
+            config = open(config, 'r')
+            print("Your default configuration file contains the following configuration(s).")
+            print(config.read())
+            config.close()
+        else:
+            print("Error: No default configuration file found.")
+        sys.exit(0)
+
+    # Do we have a configuration file
+    config = get_config(args.config, args.configfile)
+    if config is not None:
+        for opt, val in args._get_kwargs():
+            # only keep option value from the config file
+            # if the user has not set it up from command line
+            if opt in config and args.__dict__[opt] == default_args.__dict__[opt]:
+                setattr(args, opt, config[opt])
+
+    # A valid username (and the corresponding password) is actually the only mandatory thing we need
+    # args.username = "" if args.username is None else args.username + "@"
+
+    # Make sure that we have a list (even empty) for extra commands to run
+    args.runbefore = string_to_list(args.runbefore)
+    args.runafter = string_to_list(args.runafter)
+
+    # A random port number is selected between 1025 and 65635 (included) for server side to
+    # prevent from conflict between users.
+    port = np.random.randint(1025, high=65635)
+
+    ssh = pxssh()
+    ssh.login(args.host, args.username)
+    ssh.sendline("cd {}".format(args.workdir))
+    ssh.sendline("source {}".format(args.mysetup))
+    ssh.sendline("jupyter {} --no-browser --port={} --ip=127.0.0.1 &"
+                 .format(args.jupyter, port))
+
+    print('Waiting for Jupyter lab to start..')
+    time.sleep(10)
+
+    ssh.sendline("jupyter notebook list")
+
+    # Use regular expression to find the token value in stdout
+    ssh.expect(r'http\://127\.0\.0\.1\:\d{4,5}/\?token\=([0-9a-f]+)\s\:\:')
+    token = ssh.match.group(1)
+
+    # Create url with the token and display it
+    url = "\thttp://localhost:20001/?token={}".format(token.decode('utf-8'))
+    print("Copy/paste this URL into your browser to run the notebook localy")
+    print(stylize(url, fg('dark_sea_green_3b') + attr('bold')))
+
+    # The rest should stay in a while loop TODO
+    print("Leave this terminal open to get the connexion going")
+    time.sleep(10)
+
+    # When the loop breaks or the program stop (cf. `atexit`) clean up.TODO
+    ssh.sendline("kill -9 `ps | grep jupyter | awk '{print $1}'`")
+    # And close the connexion
+    ssh.close()
+
+
+if __name__ == '__main__':
+    main_pexpect()
