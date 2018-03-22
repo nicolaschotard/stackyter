@@ -66,9 +66,8 @@ def get_config(config, configfile):
     return config
 
 
-if __name__ == '__main__':
-
-    description = """Run Jupyter on a distant host and display it localy."""
+def setup_parser():
+    description = "Run Jupyter on a distant host and display it localy."
     prog = "stackyter.py"
     usage = """%s [options]""" % prog
 
@@ -111,6 +110,11 @@ if __name__ == '__main__':
     parser.add_argument('-S', '--showconfig', action='store_true', default=False,
                         help='Show all available configurations from your default file and exit.')
 
+    return parser
+
+
+def main():
+    parser = setup_parser()
     args = parser.parse_args()
     default_args = parser.parse_args(args=[])
 
