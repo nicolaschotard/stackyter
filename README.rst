@@ -93,9 +93,9 @@ file. Available options are::
                         Configuration file containing a set of option values.
                         The content of this file will be overwritten by any
                         given command line options. (default: None)
-  -H HOST, --host HOST  Name of the target host. Allows you to avoid conflit
-                        with the content of your $HOME/.ssh/config, or to
-                        connect to any host on which Jupyter is available.
+  -H HOST, --host HOST  Name of the target host. Allows you to connect to any
+                        host on which Jupyter is available, or to avoid
+                        conflit with the content of your $HOME/.ssh/config.
                         (default: None)
   -u USERNAME, --username USERNAME
                         Your user name on the host. If not given, ssh will try
@@ -103,19 +103,19 @@ file. Available options are::
                         your local user name. (default: None)
   -w WORKDIR, --workdir WORKDIR
                         Your working directory on the host (default: None)
+  -j JUPYTER, --jupyter JUPYTER
+                        Either launch a jupiter notebook or a jupyter lab.
+                        (default: notebook)
   --mysetup MYSETUP     Path to a setup file (on the host) that will be used
                         to set up the working environment. A Python
                         installation with Jupyter must be available to make
                         this work. (default: None)
-  -j JUPYTER, --jupyter JUPYTER
-                        Either launch a jupiter notebook or a jupyter lab.
-                        (default: notebook)
   --runbefore RUNBEFORE
                         A list of extra commands to run BEFORE sourcing your
-                        setup file. Coma separated for more than one command,
+                        setup file. Coma separated for more than one commands,
                         or a list in the config file. (default: None)
   --runafter RUNAFTER   A list of extra commands to run AFTER sourcing your
-                        setup file. Coma separated for more than one command,
+                        setup file. Coma separated for more than one commands,
                         or a list in the config file. (default: None)
   -C, --compression     Activate ssh compression option (-C). (default: False)
   -S, --showconfig      Show all available configurations from your default

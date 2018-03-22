@@ -86,26 +86,26 @@ if __name__ == '__main__':
                         help='Configuration file containing a set of option values. The content '
                         'of this file will be overwritten by any given command line options.')
     parser.add_argument('-H', "--host", default=None,
-                        help="Name of the target host. Allows you to avoid conflit with the "
-                        "content of your $HOME/.ssh/config, or to connect to any host on which "
-                        "Jupyter is available.")
+                        help="Name of the target host. Allows you to connect to any host "
+                        "on which Jupyter is available, or to avoid conflit with the "
+                        "content of your $HOME/.ssh/config.")
     parser.add_argument('-u', '--username',
                         help="Your user name on the host. If not given, ssh will try to "
                         "figure it out from you ~/.ssh/config or will use your local user name.")
     parser.add_argument('-w', "--workdir", default=None,
                         help="Your working directory on the host")
+    parser.add_argument('-j', "--jupyter", default="notebook",
+                        help="Either launch a jupiter notebook or a jupyter lab.")
     parser.add_argument("--mysetup", default=None,
                         help="Path to a setup file (on the host) that will be used to set up the "
                         "working environment. A Python installation with Jupyter must be "
                         "available to make this work.")
-    parser.add_argument('-j', "--jupyter", default="notebook",
-                        help="Either launch a jupiter notebook or a jupyter lab.")
     parser.add_argument("--runbefore", default=None,
                         help="A list of extra commands to run BEFORE sourcing your setup file."
-                        " Coma separated for more than one command, or a list in the config file.")
+                        " Coma separated for more than one commands, or a list in the config file.")
     parser.add_argument("--runafter", default=None,
                         help="A list of extra commands to run AFTER sourcing your setup file."
-                        " Coma separated for more than one command, or a list in the config file.")
+                        " Coma separated for more than one commands, or a list in the config file.")
     parser.add_argument('-C', '--compression', action='store_true', default=False,
                         help='Activate ssh compression option (-C).')
     parser.add_argument('-S', '--showconfig', action='store_true', default=False,
@@ -161,13 +161,14 @@ if __name__ == '__main__':
                (args.workdir, args.workdir)
         cmd += "cd %s\n" % args.workdir
 
-    # Do we have to run something before sourcing the setup file
     if args.runbefore:
+        # Do we have to run something before sourcing the setup file
         cmd += ''.join([run.replace("$", "\$") + "\n" for run in args.runbefore])
     if args.mysetup is not None:
         # Use the setup file given by the user to set up the working environment
         cmd += "source %s\n" % args.mysetup
     if args.runafter:
+        # Do we have to run something after sourcing the setup file
         cmd += ''.join([run.replace("$", "\$") + "\n" for run in args.runafter])
 
     # Launch jupyter
