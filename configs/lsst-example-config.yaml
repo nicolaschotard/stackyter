@@ -21,7 +21,7 @@
               'username': 'MYUSERNAME',
               'runbefore': ["source /sps/lsst/software/lsst_distrib/w_2018_15/loadLSST.bash",
                             "setup lsst_distrib",
-                            "export DC2SOFT=/pbs/throng/lsst/software/desc/DC2/Run1.1-test2/"
+                            "export DC2SOFT=/pbs/throng/lsst/software/desc/DC2/Run1.1-test2/",
                             "eups declare -r $DC2SOFT/obs_lsstSim obs_lsstSim w201815_descdc2",
                             "setup obs_lsstSim w201815_descdc2",
                             "export PATH=$PATH:/pbs/throng/lsst/users/nchotard/local/bin"
