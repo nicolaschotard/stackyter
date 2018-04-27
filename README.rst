@@ -192,7 +192,7 @@ You can use the `example
 <https://raw.githubusercontent.com/nicolaschotard/stackyter/master/configs/example-config.yaml>`_
 configuration file as a template to create your own. You can also find
 several example configuration files in the `configs
-<https://raw.githubusercontent.com/nicolaschotard/stackyter/master/configs>`_
+<https://github.com/nicolaschotard/stackyter/tree/master/configs>`_
 directory for different user cases.
 
 
