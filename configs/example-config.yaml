@@ -12,6 +12,7 @@
  'host2': {
            'host': 'otherhost.fr',
            'username': 'otherusername',
+           'jump': 'username1@hophost1,username2@hophost2',
            'mysetup': '/path/to/my/setup'
           },
 }
