@@ -92,6 +92,9 @@ if __name__ == '__main__':
     parser.add_argument('-u', '--username',
                         help="Your user name on the host. If not given, ssh will try to "
                         "figure it out from you ~/.ssh/config or will use your local user name.")
+    parser.add_argument('-J', '--jump', default=None,
+                        help="jump hosts or gateways in the form username@host. For serveral hops,"
+                             " give them ordered and separated by a coma.")
     parser.add_argument('-w', "--workdir", default=None,
                         help="Your working directory on the host")
     parser.add_argument('-j', "--jupyter", default="notebook",
@@ -152,8 +155,14 @@ if __name__ == '__main__':
 
     # Start building the command line that will be launched on the host
     # Open the ssh tunnel to the host
-    cmd = "ssh -X -Y %s -tt -L 20001:localhost:%i %s%s << EOF\n" % \
-          ("-C" if args.compression else "", port, args.username, args.host)
+
+    if args.jump is not None:
+        jumphost = "-J " + args.jump
+    else:
+        jumphost = ""
+
+    cmd = "ssh %s -X -Y %s -tt -L 20001:localhost:%i %s%s << EOF\n" % \
+          (jumphost, "-C" if args.compression else "", port, args.username, args.host)
 
     # Move to the working directory
     if args.workdir is not None:
