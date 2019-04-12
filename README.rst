@@ -77,7 +77,7 @@ Optional arguments
 ==================
 
 An option used on the command line will always overwrite the content
-of the configuration file for the same option, if it exists. See the
+of the configuration file for the same option, if defined. See the
 next section for a description on how to use the configuration
 file. Available options are::
 
@@ -212,7 +212,7 @@ default option used to create the ``ssh`` tunnel are ``-X -Y -tt
   GSSAPIDelegateCredentials yes
   GSSAPITrustDns yes
 
-Ypu only need to replace ``thehostname``, ``myusername``, and
+You only need to replace ``thehostname``, ``myusername``, and
 ``myusername@HOST`` by the appropriate values. You can then use the
 ``stackyter`` script as follows::
 
@@ -246,7 +246,7 @@ host (it might be set up on connection), you only need to use the
 ``--host`` and ``--username`` option to run.
 
 You can of course add any kind of personal setups with these three
-options, related of not to Jupyter.
+options, related or not to Jupyter.
 
 Help
 ====
