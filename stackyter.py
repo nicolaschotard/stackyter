@@ -113,6 +113,9 @@ if __name__ == '__main__':
                         help='Activate ssh compression option (-C).')
     parser.add_argument('-S', '--showconfig', action='store_true', default=False,
                         help='Show all available configurations from your default file and exit.')
+    parser.add_argument('--localport', default=20001, type=int,
+                        help="Local port to use to connect to the distant machine."
+                        "The default value is 20001.")
 
     args = parser.parse_args()
     default_args = parser.parse_args(args=[])
@@ -161,8 +164,9 @@ if __name__ == '__main__':
     else:
         jumphost = ""
 
-    cmd = "ssh %s -X -Y %s -tt -L 20001:localhost:%i %s%s << EOF\n" % \
-          (jumphost, "-C" if args.compression else "", port, args.username, args.host)
+    local_port = args.localport
+    cmd = "ssh %s -X -Y %s -tt -L %i:localhost:%i %s%s << EOF\n" % \
+          (jumphost, "-C" if args.compression else "", local_port, port, args.username, args.host)
 
     # Move to the working directory
     if args.workdir is not None:
@@ -192,7 +196,7 @@ if __name__ == '__main__':
     cmd += "export TOKEN=\`echo \$servers | sed 's/\//\\n/g' | " + \
            "grep token | sed 's/ /\\n/g' | grep token \`\n"
     cmd += "printf '\\n    Copy/paste this URL into your browser to run the notebook" + \
-           " localy \n\\x1B[01;92m       'http://localhost:20001/\$TOKEN' \\x1B[0m\\n\\n'\n"
+           " localy \n\\x1B[01;92m       'http://localhost:%i/\$TOKEN' \\x1B[0m\\n\\n'\n" % local_port
 
     # Go back to the jupyter server
     cmd += 'fg\n'
