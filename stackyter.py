@@ -29,13 +29,13 @@ def get_default_config(only_path=False):
         config = DEFAULT_CONFIG
     else:
         return None
-    return yaml.load(open(config, 'r')) if not only_path else config
+    return yaml.load(open(config, 'r'), Loader=yaml.SafeLoader) if not only_path else config
 
 
 def read_config(config, key=None):
     """Read a config file and return the right configuration."""
     print("INFO: Loading configuration from", config)
-    config = yaml.load(open(config, 'r'))
+    config = yaml.load(open(config, 'r'), Loader=yaml.SafeLoader)
     if key is not None:
         if key in config:
             print("INFO: Using the '%s' configuration" % key)
