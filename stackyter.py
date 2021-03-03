@@ -93,8 +93,8 @@ if __name__ == '__main__':
     parser.add_argument('-J', '--jump', default=None,
                         help="jump hosts or gateways in the form username@host. For serveral hops,"
                              " give them ordered and separated by a coma.")
-    parser.add_argument('-w', "--workdir", default=None,
-                        help="Your working directory on the host")
+    parser.add_argument('-w', "--workdir", default="$HOME",
+                        help="Your working directory on the remote host")
     parser.add_argument('-j', "--jupyter", default="notebook",
                         help="Either launch Jupyter notebook or Jupyter lab.")
     parser.add_argument("--mysetup", default=None,
