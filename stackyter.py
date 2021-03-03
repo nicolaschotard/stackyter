@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 """Run jupyter on a given host and display it localy."""
 
-
 import os
 import sys
 import subprocess
@@ -67,7 +66,6 @@ def get_config(config, configfile):
 
 
 if __name__ == '__main__':
-
     description = """Run Jupyter on a distant host and display it localy."""
     prog = "stackyter.py"
     usage = """%s [options]""" % prog
@@ -95,10 +93,10 @@ if __name__ == '__main__':
     parser.add_argument('-J', '--jump', default=None,
                         help="jump hosts or gateways in the form username@host. For serveral hops,"
                              " give them ordered and separated by a coma.")
-    parser.add_argument('-w', "--workdir", default=None,
-                        help="Your working directory on the host")
+    parser.add_argument('-w', "--workdir", default="$HOME",
+                        help="Your working directory on the remote host")
     parser.add_argument('-j', "--jupyter", default="notebook",
-                        help="Either launch a jupiter notebook or a jupyter lab.")
+                        help="Either launch Jupyter notebook or Jupyter lab.")
     parser.add_argument("--mysetup", default=None,
                         help="Path to a setup file (on the host) that will be used to set up the "
                         "working environment. A Python installation with Jupyter must be "
@@ -141,12 +139,16 @@ if __name__ == '__main__':
             if opt in config and args.__dict__[opt] == default_args.__dict__[opt]:
                 setattr(args, opt, config[opt])
 
-    # Do we have a valide host name
+    # Do we have a valid host name
     if args.host is None:
-        raise ValueError("You must give a valide host name (--host)")
+        raise ValueError("You must give a valid host name (--host)")
 
     # Do we have a valid username
     args.username = "" if args.username is None else args.username + "@"
+
+    # Do we have a valid Jupyter flavor
+    if args.jupyter not in ("notebook", "lab"):
+        raise ValueError(f"Invalid Jupyter flavor '{args.jupyter}': expecting either 'notebook' or 'lab'")
 
     # Make sure that we have a list (even empty) for extra commands to run
     args.runbefore = string_to_list(args.runbefore)
@@ -156,56 +158,77 @@ if __name__ == '__main__':
     # prevent from conflict between users.
     port = np.random.randint(1025, high=65635)
 
-    # Start building the command line that will be launched on the host
-    # Open the ssh tunnel to the host
+    # Should we use a jump host?
+    jumphost = f"-J {args.jump}" if args.jump else ""
 
-    if args.jump is not None:
-        jumphost = "-J " + args.jump
-    else:
-        jumphost = ""
+    # Do we have to run something before sourcing the setup file ?
+    run_before = ''.join([run.replace("$", "\$") + "; " for run in args.runbefore]) if args.runbefore else ""
 
-    local_port = args.localport
-    cmd = "ssh %s -X -Y %s -tt -L %i:localhost:%i %s%s << EOF\n" % \
-          (jumphost, "-C" if args.compression else "", local_port, port, args.username, args.host)
+    # Do we have to run something after sourcing the setup file ?
+    run_after = ''.join([run.replace("$", "\$") + "; " for run in args.runafter]) if args.runafter else ""
 
-    # Move to the working directory
-    if args.workdir is not None:
-        cmd += "if [[ ! -d %s ]]; then echo 'Error: directory %s does not exist'; exit 1; fi\n" % \
-               (args.workdir, args.workdir)
-        cmd += "cd %s\n" % args.workdir
+    # Use the setup file given by the user to set up the working environment
+    user_setup = f"source {args.mysetup}" if args.mysetup else ""
 
-    if args.runbefore:
-        # Do we have to run something before sourcing the setup file
-        cmd += ''.join([run.replace("$", "\$") + "\n" for run in args.runbefore])
-    if args.mysetup is not None:
-        # Use the setup file given by the user to set up the working environment
-        cmd += "source %s\n" % args.mysetup
-    if args.runafter:
-        # Do we have to run something after sourcing the setup file
-        cmd += ''.join([run.replace("$", "\$") + "\n" for run in args.runafter])
+    script = f"""
+        #!/bin/bash
+        if [[ ! -d {args.workdir} ]]; then
+            echo 'Error: directory {args.workdir} does not exist'
+            exit 1
+        fi
+        cd {args.workdir}
+        {run_before}
+        {user_setup}
+        {run_after}
+        case "{args.jupyter}" in
+           lab)
+              jupyter_version=$(jupyter --version | grep 'jupyter lab' | awk '{{print $4}}' | awk -F '.' '{{print $1}}');;
+           notebook)
+              jupyter_version=$(jupyter --version | grep 'jupyter-notebook' | awk '{{print $3}}' | awk -F '.' '{{print $1}}');;
+        esac
+        function get_servers() {{
+            local version=$1
+            local flavor="{args.jupyter}"
+            local servers=""
+            local cmd="echo"
+            case ${{flavor}} in
+            notebook)
+                cmd="jupyter notebook list"
+                ;;
+            lab)
+                if [[ $version -le 2 ]]; then
+                    cmd="jupyter notebook list"
+                else
+                    cmd="jupyter server list"
+                fi
+                ;;
+            esac
+            echo `$cmd 2> /dev/null | grep '127.0.0.1:{port}' `
+        }}
+        set -m    # For job control
+        jupyter {args.jupyter} --no-browser --port={port} --ip=127.0.0.1 &
+        jupyter_pid=$!
+        for i in $(seq 1 10); do
+            sleep 2s
+            servers=$(get_servers $jupyter_version)
+            if [[ $servers == *"127.0.0.1:{port}"* ]]; then
+                break
+            fi
+            echo 'waiting...'
+        done
+        if [[ -z ${{servers}} ]]; then
+           echo 'could not determine the URL of the Jupyter server'
+           kill -TERM ${{jupyter_pid}} &> /dev/null
+           exit 1
+        fi
+        token=$(echo $servers | grep token | sed 's|^http.*?token=||g' | awk '{{print $1}}')
+        printf "\nCopy/paste the URL below into your browser to open your notebook \n\n\\x1B[01;92m    http://localhost:{args.localport}/?token=%s \\x1B[0m\\n\\n" $token
+        fg
+        kill -TERM ${{jupyter_pid}} &> /dev/null
+        exit 0
+    """
 
-    # Launch jupyter
-    cmd += 'jupyter %s --no-browser --port=%i --ip=127.0.0.1 &\n' % (args.jupyter, port)
-
-    # Get the token number and print out the right web page to open
-    cmd += "export servers=\`jupyter notebook list\`\n"
-    # If might have to wait a little bit until the server is actually running...
-    cmd += "while [[ \$servers != *'127.0.0.1:%i'* ]]; " % port + \
-           "do sleep 1; servers=\`jupyter notebook list\`; echo waiting...; done\n"
-    cmd += "export servers=\`jupyter notebook list | grep '127.0.0.1:%i'\`\n" % port
-    cmd += "export TOKEN=\`echo \$servers | sed 's/\//\\n/g' | " + \
-           "grep token | sed 's/ /\\n/g' | grep token \`\n"
-    cmd += "printf '\\n    Copy/paste this URL into your browser to run the notebook" + \
-           " localy \n\\x1B[01;92m       'http://localhost:%i/\$TOKEN' \\x1B[0m\\n\\n'\n" % local_port
-
-    # Go back to the jupyter server
-    cmd += 'fg\n'
-
-    # And make sure we can kill it properly
-    cmd += "kill -9 `ps | grep jupyter | awk '{print $1}'`\n"
-
-    # Close
-    cmd += "EOF"
-
-    # Run jupyter
-    subprocess.call(cmd, stderr=subprocess.STDOUT, shell=True)
+    # Establish the SSH tunnel and run the shell script
+    cmd = f"ssh {jumphost} -X -Y {'-C' if args.compression else ''} -tt -L {args.localport}:localhost:{port} {args.username}{args.host}"
+    proc = subprocess.run(cmd, input=script.encode(), stderr=subprocess.STDOUT, shell=True)
+    sys.exit(proc.returncode)
