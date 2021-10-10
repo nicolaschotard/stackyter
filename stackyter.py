@@ -180,7 +180,7 @@ if __name__ == '__main__':
         {run_before}
         {user_setup}
         {run_after}
-        jupyter_version=$(jupyter --version | grep '{args.jupyter}' | awk '{{print $NF}}' | awk -F '.' '{{print $1}}');;
+        jupyter_version=$(jupyter --version | grep '{args.jupyter}' | awk '{{print $NF}}' | awk -F '.' '{{print $1}}')
         function get_servers() {{
             local version=$1
             local flavor="{args.jupyter}"
