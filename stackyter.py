@@ -180,12 +180,7 @@ if __name__ == '__main__':
         {run_before}
         {user_setup}
         {run_after}
-        case "{args.jupyter}" in
-           lab)
-              jupyter_version=$(jupyter --version | grep 'jupyter lab' | awk '{{print $4}}' | awk -F '.' '{{print $1}}');;
-           notebook)
-              jupyter_version=$(jupyter --version | grep 'jupyter-notebook' | awk '{{print $3}}' | awk -F '.' '{{print $1}}');;
-        esac
+        jupyter_version=$(jupyter --version | grep '{args.jupyter}' | awk '{{print $NF}}' | awk -F '.' '{{print $1}}')
         function get_servers() {{
             local version=$1
             local flavor="{args.jupyter}"
