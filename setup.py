@@ -33,5 +33,8 @@ setup(name=NAME,
       author="Nicolas Chotard",
       author_email="nchotard@in2p3.fr",
       scripts=SCRIPTS,
-      long_description=long_description
+      long_description=long_description,
+      install_requires=[
+          "pyyaml",
+          ]
      )
