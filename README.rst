@@ -16,7 +16,7 @@ Quick install and how-to
 
 Local display of a Jupyter notebook running on a distant server
 
-#. Install the lattest version of ``stackyter`` on you local machine::
+#. Install the latest version of ``stackyter`` on you local machine::
 
      pip install stackyter
      
