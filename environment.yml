@@ -1,0 +1,20 @@
+# Notes for developers:
+# - maintain readability by adding each new entry according to which context it belongs
+# - unless it's not possible, privilege conda over pip
+# - add a new channel only if the package you want to add cannot be found in the ones currently used
+# - specify versions only if necessary (e.g. upstream bug) otherwise modernize the code
+name: stackyter-dev
+channels:
+  - conda-forge
+dependencies:
+  # Basic dependencies
+  - python
+  - pip
+  - pyyaml
+  # Development
+  - ruff
+  - setuptools_scm
+  # Documentation
+  - make
+  - sphinx
+  - sphinx_rtd_theme
