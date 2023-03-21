@@ -23,9 +23,9 @@ Local display of a Jupyter notebook running on a distant server
 #. Install `Jupyter <http://jupyter.org/>`_ on your distant host if not done yet
 #. Create a file with instructions to make Jupyter (and anything else
    you need) available (e.g, ``mysetup.sh``)
-#. Run ``stackyter.py`` on your local machine::
+#. Run ``stackyter`` on your local machine::
 	
-     stackyter.py --host thehost --user myusername --mysetup /path/on/the/host/mysetup.sh
+     stackyter --host thehost --user myusername --mysetup /path/on/the/host/mysetup.sh
 	
 #. Copy/paste the given URL into your local browser to display Jupyter
 
@@ -60,7 +60,7 @@ Usage
 
 .. code-block:: shell
    
-   stackyter.py [options]
+   stackyter [options]
 
 Then click on the green link given by ``stackyter``, as followed::
   
@@ -145,10 +145,10 @@ configuration dictionnaries:
 
 Here are a few example on how to use it::
 
-  stackyter.py  # 'default_config' in default file if it exists, default option values used otherwise
-  stackyter.py --config config1  # 'config1' in default file which must exist
-  stackyter.py --config config2 --configfile myfile.yaml  # 'config2' in 'myfile.yaml'
-  stackyter.py --configfile myfile.yaml  # 'default_config' in 'myfile.yaml'
+  stackyter  # 'default_config' in default file if it exists, default option values used otherwise
+  stackyter --config config1  # 'config1' in default file which must exist
+  stackyter --config config2 --configfile myfile.yaml  # 'config2' in 'myfile.yaml'
+  stackyter --configfile myfile.yaml  # 'default_config' in 'myfile.yaml'
 
 In principal, your default configuration file should look like that::
 
@@ -216,7 +216,7 @@ You only need to replace ``thehostname``, ``myusername``, and
 ``myusername@HOST`` by the appropriate values. You can then use the
 ``stackyter`` script as follows::
 
-  stackyter.py --host myjupyter
+  stackyter --host myjupyter
 
 Or put the value for that option (along with others) in your
 ``config.yaml`` file. 
@@ -229,7 +229,7 @@ using the ``--mysetup``, ``--runbefore``, and ``runafter``
 options. Given a setup file located on your distant host, you can
 simply do::
 
-  stackyter.py --mysetup /path/to/my/setup.sh (--username myusername)
+  stackyter --mysetup /path/to/my/setup.sh (--username myusername)
 
 Your local setup file will be sourced at connection as followed::
 
@@ -257,3 +257,31 @@ Help
 - Why ``stakyter``? For historical reason: ``stackyter`` = LSST
   ``stack`` + ``Jupyter``. It was initially intended for LSST members
   to easily use the LSST software stack and interact with data sets.
+
+Development contributions
+=========================
+
+Is it recommended to work from a virtual environment.
+
+The root of the repository hosts an ``environment.yml`` file to produce a
+``stackyter-dev`` conda environment,
+
+.. code-block::
+
+  conda env create -f environment.yml
+
+This environment comes with `Ruff <https://beta.ruff.rs/docs/>`_ installed,
+which you can use to check for syntax, style and general linting.
+
+Build of the documentation
+--------------------------
+
+You can build the documentation locally by doing,
+
+.. code-block::
+
+  cd doc
+  make html
+
+and check how it looks by opening ``docs/_build/html/index.html``
+with your favourite browser.
