@@ -1,1 +1,38 @@
-*.*~
+# Compiled files
+*.py[co]
+*.a
+*.o
+*.so
+__pycache__
+
+# Packages/installer info
+*.egg
+*.eggs
+*.egg-info
+dist
+build
+eggs
+parts
+bin
+var
+sdist
+develop-eggs
+.installed.cfg
+distribute-*.tar.gz
+
+# Other
+.*.swp
+*~
+\#*
+.\#*
+
+# Mac OSX
+.DS_Store
+
+# ipython notebook checkpoints
+.ipynb_checkpoints
+.cache*
+.cache
+
+# Sphinx
+doc/_build
