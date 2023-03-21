@@ -19,6 +19,9 @@ jobs:
         python-version: ["3.8", "3.9", "3.10", "3.11"]
         os: [ubuntu-latest, macos-latest]
     steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       - name: Python setup
         uses: actions/setup-python@v4
         with:
@@ -47,6 +50,9 @@ jobs:
         python-version: ["3.8", "3.9", "3.10", "3.11"]
         os: [ubuntu-latest, macos-latest]
     steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       - name: Python setup
         uses: actions/setup-python@v4
         with:
