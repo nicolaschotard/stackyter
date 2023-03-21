@@ -7,7 +7,7 @@ import subprocess
 from argparse import ArgumentParser
 from argparse import ArgumentDefaultsHelpFormatter
 import yaml
-import random 
+import random
 
 
 DEFAULT_CONFIG = os.getenv("HOME") + "/.stackyter-config.yaml"
@@ -28,25 +28,33 @@ def get_default_config(only_path=False):
         config = DEFAULT_CONFIG
     else:
         return None
-    return yaml.load(open(config, 'r'), Loader=yaml.SafeLoader) if not only_path else config
+    return (
+        yaml.load(open(config, "r"), Loader=yaml.SafeLoader)
+        if not only_path
+        else config
+    )
 
 
 def read_config(config, key=None):
     """Read a config file and return the right configuration."""
     print("INFO: Loading configuration from", config)
-    config = yaml.load(open(config, 'r'), Loader=yaml.SafeLoader)
+    config = yaml.load(open(config, "r"), Loader=yaml.SafeLoader)
     if key is not None:
         if key in config:
             print("INFO: Using the '%s' configuration" % key)
             config = config[key]
         else:
-            raise IOError("Configuration `%s` does not exist. Check your default file." % key)
+            raise IOError(
+                "Configuration `%s` does not exist. Check your default file." % key
+            )
     elif len(config) > 1:
-        if 'default_config' in config:
-            print("INFO: Using default configuration '%s'" % config['default_config'])
-            config = config[config['default_config']]
+        if "default_config" in config:
+            print("INFO: Using default configuration '%s'" % config["default_config"])
+            config = config[config["default_config"]]
         else:
-            raise IOError("You must define a 'default_config' in you configuration file.")
+            raise IOError(
+                "You must define a 'default_config' in you configuration file."
+            )
     else:
         config = config[list(config)[0]]
     return config
@@ -54,66 +62,125 @@ def read_config(config, key=None):
 
 def get_config(config, configfile):
     """Get the configuration for stackyter is any."""
-    configfile = get_default_config(only_path=True) if configfile is None else configfile
+    configfile = (
+        get_default_config(only_path=True) if configfile is None else configfile
+    )
     if config is not None:
         # Is there a configuration file?
         if configfile is None:
-            raise IOError("No (default) configuration file found or given. Check the doc.")
+            raise IOError(
+                "No (default) configuration file found or given. Check the doc."
+            )
         config = read_config(configfile, key=config)
     elif configfile is not None:
         config = read_config(configfile)
     return config
 
 
-if __name__ == '__main__':
+def main():
+
     description = """Run Jupyter on a distant host and display it localy."""
     prog = "stackyter.py"
     usage = """%s [options]""" % prog
 
-    parser = ArgumentParser(prog=prog, usage=usage, description=description,
-                            formatter_class=ArgumentDefaultsHelpFormatter)
+    parser = ArgumentParser(
+        prog=prog,
+        usage=usage,
+        description=description,
+        formatter_class=ArgumentDefaultsHelpFormatter,
+    )
 
     # General options
-    parser.add_argument('-c', '--config', default=None,
-                        help='Name of the configuration to use, taken from your default '
-                        'configuration file (~/.stackyter-config.yaml or $STACKYTERCONFIG). '
-                        "Default if to use the 'default_config' defined in this file. "
-                        'The content of the configuration file will be overwritten by any '
-                        'given command line options.')
-    parser.add_argument('-f', '--configfile', default=None,
-                        help='Configuration file containing a set of option values. The content '
-                        'of this file will be overwritten by any given command line options.')
-    parser.add_argument('-H', "--host", default=None,
-                        help="Name of the target host. Allows you to connect to any host "
-                        "on which Jupyter is available, or to avoid conflit with the "
-                        "content of your $HOME/.ssh/config.")
-    parser.add_argument('-u', '--username',
-                        help="Your user name on the host. If not given, ssh will try to "
-                        "figure it out from you ~/.ssh/config or will use your local user name.")
-    parser.add_argument('-J', '--jump', default=None,
-                        help="jump hosts or gateways in the form username@host. For serveral hops,"
-                             " give them ordered and separated by a coma.")
-    parser.add_argument('-w', "--workdir", default="$HOME",
-                        help="Your working directory on the remote host")
-    parser.add_argument('-j', "--jupyter", default="notebook",
-                        help="Either launch Jupyter notebook or Jupyter lab.")
-    parser.add_argument("--mysetup", default=None,
-                        help="Path to a setup file (on the host) that will be used to set up the "
-                        "working environment. A Python installation with Jupyter must be "
-                        "available to make this work.")
-    parser.add_argument("--runbefore", default=None,
-                        help="A list of extra commands to run BEFORE sourcing your setup file."
-                        " Coma separated for more than one commands, or a list in the config file.")
-    parser.add_argument("--runafter", default=None,
-                        help="A list of extra commands to run AFTER sourcing your setup file."
-                        " Coma separated for more than one commands, or a list in the config file.")
-    parser.add_argument('-C', '--compression', action='store_true', default=False,
-                        help='Activate ssh compression option (-C).')
-    parser.add_argument('-S', '--showconfig', action='store_true', default=False,
-                        help='Show all available configurations from your default file and exit.')
-    parser.add_argument('--localport', default=20001, type=int,
-                        help="Local port to use to connect to the distant machine."
-                        "The default value is 20001.")
+    parser.add_argument(
+        "-c",
+        "--config",
+        default=None,
+        help="Name of the configuration to use, taken from your default "
+        "configuration file (~/.stackyter-config.yaml or $STACKYTERCONFIG). "
+        "Default if to use the 'default_config' defined in this file. "
+        "The content of the configuration file will be overwritten by any "
+        "given command line options.",
+    )
+    parser.add_argument(
+        "-f",
+        "--configfile",
+        default=None,
+        help="Configuration file containing a set of option values. The content "
+        "of this file will be overwritten by any given command line options.",
+    )
+    parser.add_argument(
+        "-H",
+        "--host",
+        default=None,
+        help="Name of the target host. Allows you to connect to any host "
+        "on which Jupyter is available, or to avoid conflit with the "
+        "content of your $HOME/.ssh/config.",
+    )
+    parser.add_argument(
+        "-u",
+        "--username",
+        help="Your user name on the host. If not given, ssh will try to "
+        "figure it out from you ~/.ssh/config or will use your local user name.",
+    )
+    parser.add_argument(
+        "-J",
+        "--jump",
+        default=None,
+        help="jump hosts or gateways in the form username@host. For serveral hops,"
+        " give them ordered and separated by a coma.",
+    )
+    parser.add_argument(
+        "-w",
+        "--workdir",
+        default="$HOME",
+        help="Your working directory on the remote host",
+    )
+    parser.add_argument(
+        "-j",
+        "--jupyter",
+        default="notebook",
+        help="Either launch Jupyter notebook or Jupyter lab.",
+    )
+    parser.add_argument(
+        "--mysetup",
+        default=None,
+        help="Path to a setup file (on the host) that will be used to set up the "
+        "working environment. A Python installation with Jupyter must be "
+        "available to make this work.",
+    )
+    parser.add_argument(
+        "--runbefore",
+        default=None,
+        help="A list of extra commands to run BEFORE sourcing your setup file."
+        " Coma separated for more than one commands, or a list in the config file.",
+    )
+    parser.add_argument(
+        "--runafter",
+        default=None,
+        help="A list of extra commands to run AFTER sourcing your setup file."
+        " Coma separated for more than one commands, or a list in the config file.",
+    )
+    parser.add_argument(
+        "-C",
+        "--compression",
+        action="store_true",
+        default=False,
+        help="Activate ssh compression option (-C).",
+    )
+    parser.add_argument(
+        "-S",
+        "--showconfig",
+        action="store_true",
+        default=False,
+        help="Show all available configurations from your default file and exit.",
+    )
+    parser.add_argument(
+        "--localport",
+        default=20001,
+        type=int,
+        help="Local port to use to connect to the distant machine."
+        "The default value is 20001.",
+    )
 
     args = parser.parse_args()
     default_args = parser.parse_args(args=[])
@@ -122,8 +189,10 @@ if __name__ == '__main__':
     if args.showconfig:
         config = get_default_config(only_path=True)
         if config is not None:
-            config = open(config, 'r')
-            print("Your default configuration file contains the following configuration(s).")
+            config = open(config, "r")
+            print(
+                "Your default configuration file contains the following configuration(s)."
+            )
             print(config.read())
             config.close()
         else:
@@ -148,7 +217,9 @@ if __name__ == '__main__':
 
     # Do we have a valid Jupyter flavor
     if args.jupyter not in ("notebook", "lab"):
-        raise ValueError(f"Invalid Jupyter flavor '{args.jupyter}': expecting either 'notebook' or 'lab'")
+        raise ValueError(
+            f"Invalid Jupyter flavor '{args.jupyter}': expecting either 'notebook' or 'lab'"
+        )
 
     # Make sure that we have a list (even empty) for extra commands to run
     args.runbefore = string_to_list(args.runbefore)
@@ -162,10 +233,18 @@ if __name__ == '__main__':
     jumphost = f"-J {args.jump}" if args.jump else ""
 
     # Do we have to run something before sourcing the setup file ?
-    run_before = ''.join([run.replace("$", "\$") + "; " for run in args.runbefore]) if args.runbefore else ""
+    run_before = (
+        "".join([run.replace("$", "\$") + "; " for run in args.runbefore])
+        if args.runbefore
+        else ""
+    )
 
     # Do we have to run something after sourcing the setup file ?
-    run_after = ''.join([run.replace("$", "\$") + "; " for run in args.runafter]) if args.runafter else ""
+    run_after = (
+        "".join([run.replace("$", "\$") + "; " for run in args.runafter])
+        if args.runafter
+        else ""
+    )
 
     # Use the setup file given by the user to set up the working environment
     user_setup = f"source {args.mysetup}" if args.mysetup else ""
@@ -225,5 +304,11 @@ if __name__ == '__main__':
 
     # Establish the SSH tunnel and run the shell script
     cmd = f"ssh {jumphost} -X -Y {'-C' if args.compression else ''} -tt -L {args.localport}:localhost:{port} {args.username}{args.host}"
-    proc = subprocess.run(cmd, input=script.encode(), stderr=subprocess.STDOUT, shell=True)
+    proc = subprocess.run(
+        cmd, input=script.encode(), stderr=subprocess.STDOUT, shell=True
+    )
     sys.exit(proc.returncode)
+
+
+if __name__ == "__main__":
+    main()

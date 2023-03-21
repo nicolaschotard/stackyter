@@ -1,0 +1,99 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+    tags:
+      - "**"
+  pull_request:
+
+env:
+  GITHUB_PR_NUMBER: ${{ github.event.number }}
+
+jobs:
+  user-install:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        python-version: ["3.8", "3.9", "3.10", "3.11"]
+        os: [ubuntu-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Python setup
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+          check-latest: true
+      - if: ${{ runner.os == 'macOS' }}
+        name: Fix Python PATH on macOS
+        # See https://github.com/actions/setup-python/issues/132 and
+        # https://github.com/actions/setup-python/issues/132#issuecomment-779406058
+        # Login shells on macOS prepend system paths, so we need to
+        # prepend the python path from actions/setup-python.
+        run: |
+          tee -a ~/.bash_profile <<<'export PATH="$pythonLocation/bin:$PATH"'
+      - name: Install dependencies
+        run: |
+          python --version
+          pip install .
+          pip freeze
+          python -c 'import stackyter; print(stackyter.__version__)'
+          stackyter -h
+
+  developer-install:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        python-version: ["3.8", "3.9", "3.10", "3.11"]
+        os: [ubuntu-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Python setup
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+          check-latest: true
+      - if: ${{ runner.os == 'macOS' }}
+        name: Fix Python PATH on macOS
+        # See https://github.com/actions/setup-python/issues/132 and
+        # https://github.com/actions/setup-python/issues/132#issuecomment-779406058
+        # Login shells on macOS prepend system paths, so we need to
+        # prepend the python path from actions/setup-python.
+        run: |
+          tee -a ~/.bash_profile <<<'export PATH="$pythonLocation/bin:$PATH"'
+      - name: Install dependencies
+        run: |
+          python --version
+          pip install '.[all]'
+          pip freeze
+          python -c 'import stackyter; print(stackyter.__version__)'
+          stackyter -h
+
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.8"
+
+      - name: Install doc dependencies
+        run: |
+          sudo apt update --yes && sudo apt install --yes git build-essential
+          pip install -e .[docs]
+          git describe --tags
+          python -c 'import stackyter; print(stackyter.__version__)'
+
+      - name: Build docs
+        run: |
+          cd doc
+          make html

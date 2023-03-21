@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools", "setuptools_scm[toml]"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = 'stackyter'
+authors = [{ name = "Nicolas Chotard", email = "nchotard@in2p3.fr" }]
+description = "Local display of a jupyter notebook running on a remote server"
+keywords = ["jupyter", "remote"]
+readme = "README.rst"
+requires-python = ">=3.8"
+license = { file = "LICENSE" }
+classifiers = [
+    'Development Status :: 3 - Alpha',
+    'Intended Audience :: Science/Research',
+    'Topic :: Software Development :: Build Tools',
+    'License :: OSI Approved :: MIT License',
+    'Programming Language :: Python :: 3',
+    'Topic :: Scientific/Engineering :: Astronomy',
+]
+dependencies = ["pyyaml"]
+dynamic = ["version"]
+
+[project.optional-dependencies]
+dev = ["setuptools_scm[toml]", "ruff"]
+docs = ["sphinx", "sphinx_rtd_theme"]
+all = ["stackyter[dev]", "stackyter[docs]"]
+
+[tool.setuptools_scm]
+
+[project.urls]
+documentation = "https://stackyter.readthedocs.io/en/latest/"
+repository = "https://github.com/nicolaschotard/stackyter"
+
+[project.scripts]
+stackyter = "stackyter.stackyter:main"
