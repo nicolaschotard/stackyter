@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = 'stackyter'
 authors = [{ name = "Nicolas Chotard", email = "nchotard@in2p3.fr" }]
-description = "Local display of a jupyter notebook running on a remote server"
+description = "Local display of a jupyter notebook running on a remote server. See https://stackyter.readthedocs.io/en/latest/ for documentation."
 keywords = ["jupyter", "remote"]
 readme = "README.rst"
 requires-python = ">=3.8"
